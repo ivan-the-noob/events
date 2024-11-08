@@ -11,17 +11,17 @@
         
         <section class="display">
             <div class="navbar-container">
-                <div class="col-10 col-md-8">
+                <div class="col-10 col-md-10">
                 <nav class="navbar navbar-expand-lg navbar-light">
                     <div class="container">
                         <a class="navbar-brand d-none d-lg-block" href="#">
-                            <img src="assets/img/logo.png" alt="Logo" width="30" height="30">
+                            <img src="assets/logo.png" alt="Logo" width="30" height="30">
                         </a>
     
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                style="stroke: #fff; fill: none;">
+                                style="stroke: #000; fill: none;">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M4 6h16M4 12h16m-7 6h7"></path>
                             </svg>
@@ -42,23 +42,15 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="#contact-us">Contact Us</a>
                                 </li>
+                                <div class="d-flex gap-2 navbar-btn">
+                                    <button class="sign-in">Sign In</button>
+                                    <button class="book-event">Book Event</button>
+                                </div>
+                    
                             </ul>
-                            <div class="d-flex ml-auto">
-                                <?php if ($email): ?>
-                                    <div class="dropdown second-dropdown">
-                                        <button class="btn" type="button" id="dropdownMenuButton2"
-                                                data-bs-toggle="dropdown" aria-expanded="false">
-                                            <img src="assets/img/customer.jfif" alt="Profile Image" class="profile">
-                                        </button>
-                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                                            <li><a class="dropdown-item" href="features/users/web/api/dashboard.php">Profile</a></li>
-                                            <li><a class="dropdown-item" href="features/users/function/authentication/logout.php">Logout</a></li>
-                                        </ul>
-                                    </div>
-                                <?php endif; ?>
-                                <a href="features/users/web/api/login.php" class="btn-theme" type="button">Login</a>
-                            </div>
+                       
                         </div>
+                     
                     </div>
                 </nav>       
             </div>
@@ -66,7 +58,7 @@
             <div class="container d-flex justify-content-center">
                 <div class="row d-flex">
                     <div class="col-md-8 display-text">
-                        <h1 class="text-center">Celebrate Life's Moments with Our Exceptional Catering Services!</h1>
+                        <h1 class="text-center">Celebrate Life's Moments with Our Exceptional <span class="highlight">Catering</span> Services!</h1>
                         <p class="text-center">From weddings to birthdays, reunions, and baptisms, we can cater to all your special events with elegance and deliciousness</p>
                         <button>Book an event now</button>
                     </div>
@@ -74,49 +66,223 @@
                 </div>
             </div>
         </section>
+        <section class="slider-container">
+            <p class="slider-heading mb-0">Services we have</p>
+            <h1 class="slider-subheading">What We Offer</h1>
+            <div class="slider">
+              <button class="slider-btn prev">&lt;</button> <!-- Single prev button on the left -->
+              <div class="slider-wrapper">
+                <!-- Slide 1 -->
+                <div class="slider-item">
+                  <img src="assets/events/birthday.png" class="card-img-top" alt="Wedding Image">
+                  <div class="slider-text">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h3>Catering Services</h3>
+                            <button>Discover Packages</button>
+                        </div>
+                        <div class="col-md-6">
+                            <p>
+                                Turn your event into an unforgettable experience with our premium catering services. From intimate gatherings to large-scale celebrations, we bring creativity and elegance to every dish.
+                            </p>          
+                        </div>
+                    </div>
+                  </div>
+                </div>
+          
+                <!-- Slide 2 -->
+                <div class="slider-item">
+                  <img src="assets/events/birthday.png" class="card-img-top" alt="Corporate Event">
+                  <div class="slider-text">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h3>Corporate Events</h3>
+                            <button>Discover Packages</button>
+                        </div>
+                        <div class="col-md-6">
+                            <p>
+                                Elevate your corporate events with our top-notch services, tailored to impress clients, motivate teams, and celebrate milestones with professionalism and finesse.
+                              </p>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+          
+                <!-- Slide 3 -->
+                <div class="slider-item">
+                  <img src="assets/events/birthday.png" class="card-img-top" alt="Birthday Celebration">
+                  <div class="slider-text">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h3>Birthday Parties</h3>
+                            <button>Discover Packages</button>
+                        </div>
+                        <div class="col-md-6">
+                            <p>Make birthdays memorable with our themed decorations, delicious food, and entertainment options, creating joyful experiences for all ages.
+                              </p>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Slide 4 -->
+                
+              </div>
+              <button class="slider-btn next">&gt;</button> 
+            </div>
+        </section>   
         <section class="scope">
-            <h3 class="text-center mt-2">Scope of our services</h3>
+            <p class="scope-title text-center mb-0">Our Event Services</p>
+            <h3 class="text-center">Scope of our services</h3>
             <div class="container">
                 <div class="row">
-                    <div class="col-md-3">
+                    <!-- Card 1 -->
+                    <div class="col-12 col-md-3">
                         <div class="card">
-                            <img src="assets/events/wedding.jfif" class="card-img-top" alt="Wedding Image">
+                            <img src="assets/scope/wedding.png" class="card-img-top" alt="Wedding Image">
                             <div class="card-body">
+                                <div class="col-md-4">
+                                    <p class="event">Event</p>
+                                </div>
                                 <h5 class="card-title">Wedding</h5>
-                                <p class="card-text">This is a beautiful description of the wedding event. It's a special occasion filled with love and joy!</p>
+                                <p class="card-text">Celebrate your big day with a feast as unforgettable as your love story.</p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                
+                    <!-- Card 2 -->
+                    <div class="col-12 col-md-3">
                         <div class="card">
-                            <img src="assets/events/wedding.jfif" class="card-img-top" alt="Wedding Image">
+                            <img src="assets/scope/birthday.png" class="card-img-top" alt="Wedding Image">
                             <div class="card-body">
-                                <h5 class="card-title">Wedding</h5>
-                                <p class="card-text">This is a beautiful description of the wedding event. It's a special occasion filled with love and joy!</p>
+                                <div class="col-md-4">
+                                    <p class="event">Event</p>
+                                </div>
+                                <h5 class="card-title">Birthdays</h5>
+                                <p class="card-text">Celebrate your big day with a feast as unforgettable as your love story.</p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                
+                    <!-- Card 3 -->
+                    <div class="col-12 col-md-3">
                         <div class="card">
-                            <img src="assets/events/wedding.jfif" class="card-img-top" alt="Wedding Image">
+                            <img src="assets/scope/wedding.png" class="card-img-top" alt="Wedding Image">
                             <div class="card-body">
-                                <h5 class="card-title">Wedding</h5>
-                                <p class="card-text">This is a beautiful description of the wedding event. It's a special occasion filled with love and joy!</p>
+                                <div class="col-md-4">
+                                    <p class="event">Event</p>
+                                </div>
+                                <h5 class="card-title">Reunion</h5>
+                                <p class="card-text">Celebrate your big day with a feast as unforgettable as your love story.</p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <!-- Card 4 -->
+                    <div class="col-12 col-md-3">
                         <div class="card">
-                            <img src="assets/events/wedding.jfif" class="card-img-top" alt="Wedding Image">
+                            <img src="assets/scope/wedding.png" class="card-img-top" alt="Wedding Image">
                             <div class="card-body">
-                                <h5 class="card-title">Wedding</h5>
-                                <p class="card-text">This is a beautiful description of the wedding event. It's a special occasion filled with love and joy!</p>
+                                <div class="col-md-4">
+                                    <p class="event">Event</p>
+                                </div>
+                                <h5 class="card-title">Anniversaries</h5>
+                                <p class="card-text">Celebrate your big day with a feast as unforgettable as your love story.</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+        <section class="review">
+            <p class="review-title text-center mb-0">Customer Review</p>
+            <h3 class="text-center">What our customers say</h3>
+            <div class="slider">
+                <button class="slider-btn-prev">&lt;</button>
+                <div class="testimonial-slider-container">
+                    <!-- Slide 1 -->
+                    <div class="review-item">
+                        <div class="row reviews-item">
+                            <!-- Testimonial Text Section -->
+                            <div class="col-10 col-sm-12 col-md-6 d-flex flex-column mx-auto">
+                                <h4 class="text-center d-flex justify-content-center">
+                                    <span class="quote">"</span>first At Amiel's MOM, they cater a very excellent service! It's easy to use and scale, and is really handy to customize for any projects.
+                                </h4>
+                                <p class="text-start mt-2 pp">
+                                    Ac faucibus orci id quis consectetur laoreet sed. Enim congue molestie nam odio pulvinar ac ultrices. Elementum ut pellentesque volutpat mi.
+                                </p>
+                                <p class="text-start mt-2 pp"><strong class="text-start">Rachel Bright</strong><br>Customer Mom</p>
+                            </div>
         
+                            <!-- Testimonial Image Section -->
+                            <div class="col-12 col-sm-12 col-md-6">
+                                <div class="slider-image">
+                                    <img src="assets/review/review.png" alt="Testimonial Image" class="img-fluid">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <!-- Slide 2 -->
+                    <div class="review-item">
+                        <div class="row reviews-item">
+                            <!-- Testimonial Text Section -->
+                            <div class="col-10 col-sm-12 col-md-6 d-flex flex-column mx-auto">
+                                <h4 class="text-center d-flex justify-content-center">
+                                    <span class="quote">"</span>first At Amiel's MOM, they cater a very excellent service! It's easy to use and scale, and is really handy to customize for any projects.
+                                </h4>
+                                <p class="text-start mt-2 pp">
+                                    Ac faucibus orci id quis consectetur laoreet sed. Enim congue molestie nam odio pulvinar ac ultrices. Elementum ut pellentesque volutpat mi.
+                                </p>
+                                <p class="text-start mt-2 pp"><strong class="text-start">Rachel Bright</strong><br>Customer Mom</p>
+                            </div>
+        
+                            <!-- Testimonial Image Section -->
+                            <div class="col-12 col-sm-12 col-md-6">
+                                <div class="slider-image">
+                                    <img src="assets/review/review.png" alt="Testimonial Image" class="img-fluid">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <button class="slider-btn-next">&gt;</button>
+            </div>
+            <div class="pagination-dots">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+            </div>
+        </section>
+        
+        <script>
+           const sliderContainer = document.querySelector('.testimonial-slider-container'); 
+const dots = document.querySelectorAll('.pagination-dots .dot');
+let currentIndex = 0;
+
+document.querySelector('.slider-btn-next').addEventListener('click', () => {
+  if (currentIndex < dots.length - 1) currentIndex++;
+  updateSlider();
+});
+
+document.querySelector('.slider-btn-prev').addEventListener('click', () => {
+  if (currentIndex > 0) currentIndex--;
+  updateSlider();
+});
+
+dots.forEach((dot, index) => {
+  dot.addEventListener('click', () => {
+    currentIndex = index;
+    updateSlider();
+  });
+});
+
+function updateSlider() {
+  sliderContainer.style.transform = `translateX(-${currentIndex * 100}%)`;
+  dots.forEach(dot => dot.classList.remove('active'));
+  dots[currentIndex].classList.add('active');
+}
+         </script>
+
+      
+<script src="features/function/offer-slider.js"></script>     
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </html>
