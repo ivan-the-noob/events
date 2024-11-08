@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let currentIndex = 0;
 
     function updateSlider() {
-        sliderWrapper.style.transform = `translateX(-${currentIndex * 90}%)`;
+        sliderWrapper.style.transform = `translateX(-${currentIndex * 60}%)`;
 
         sliderItems.forEach(item => item.classList.remove('active'));
 
