@@ -72,11 +72,11 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+            <form action="../function/php/booking_function.php" method="POST">
                 <p class="calendar-title text-center mb-0">Customize your needs</p>
                 <h3 class="text-center calendar-h3">Fill out form</h3>
                 <div class="container">
                     <div class="row">
-                        <form action="../function/php/booking_function.php" method="POST"></form>
                         <div class="col-md-4">
                             <h5>Customer Info</h5>
                             <div class="form-group mt-4">
@@ -98,9 +98,8 @@
                             <h5 class="mb-4 events">Event Info</h5>
                             <div class="form-group mt-4">
                                 <label for="events-date" class="form-label">Events Date</label>
-                                <p class="get-date" name="date"><span id="modalDate"></span></p>
-                                <input type="hidden" id="events-date" name="events_date" value="">
-                            </div>                          
+                                <input type="text" id="events-date" name="events_date" value="" class="form-control" readonly> 
+                            </div>                        
                             <div class="form-group mt-4">
                                 <label for="guess-count" class="form-label">Guest Count</label>
                                 <input type="number" id="guess-count" name="guest_count" class="form-control" placeholder="Enter your text here" min="100" max="999" maxlength="3" required>
@@ -182,57 +181,57 @@
                                 <label class="form-label">Select Event Package Options</label>
                             
                                 <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="pax-50" name="event-options[]" value="50 Pax">
+                                    <input type="checkbox" class="form-check-input" id="pax-50" name="event_options[]" value="50 Pax">
                                     <label class="form-check-label" for="pax-50">50 Pax Package</label>
                                 </div>
                                 
                                 <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="pax-60" name="event-options[]" value="60 Pax">
+                                    <input type="checkbox" class="form-check-input" id="pax-60" name="event_options[]" value="60 Pax">
                                     <label class="form-check-label" for="pax-60">60 Pax Package</label>
                                 </div>
                                 
                                 <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="pax-70" name="event-options[]" value="70 Pax">
+                                    <input type="checkbox" class="form-check-input" id="pax-70" name="event_options[]" value="70 Pax">
                                     <label class="form-check-label" for="pax-70">70 Pax Package</label>
                                 </div>
                             
                                 <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="pax-80" name="event-options[]" value="80 Pax">
+                                    <input type="checkbox" class="form-check-input" id="pax-80" name="event_options[]" value="80 Pax">
                                     <label class="form-check-label" for="pax-80">80 Pax Package</label>
                                 </div>
                             
                                 <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="pax-100" name="event-options[]" value="100 Pax">
+                                    <input type="checkbox" class="form-check-input" id="pax-100" name="event_options[]" value="100 Pax">
                                     <label class="form-check-label" for="pax-100">100 Pax Package</label>
                                 </div>
                             
                                 <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="pax-150" name="event-options[]" value="150 Pax">
+                                    <input type="checkbox" class="form-check-input" id="pax-150" name="event_options[]" value="150 Pax">
                                     <label class="form-check-label" for="pax-150">150 Pax Package</label>
                                 </div>
                             
                                 <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="pax-200" name="event-options[]" value="200 Pax">
+                                    <input type="checkbox" class="form-check-input" id="pax-200" name="event_options[]" value="200 Pax">
                                     <label class="form-check-label" for="pax-200">200 Pax Package</label>
                                 </div>
                             
                                 <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="photobooth" name="event-options[]" value="Photobooth">
+                                    <input type="checkbox" class="form-check-input" id="photobooth" name="event_options[]" value="Photobooth">
                                     <label class="form-check-label" for="photobooth">Photobooth</label>
                                 </div>
                             
                                 <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="clowns" name="event-options[]" value="Clowns">
+                                    <input type="checkbox" class="form-check-input" id="clowns" name="event_options[]" value="Clowns">
                                     <label class="form-check-label" for="clowns">Clowns</label>
                                 </div>
                             
                                 <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="magicians" name="event-options[]" value="Magicians">
+                                    <input type="checkbox" class="form-check-input" id="magicians" name="event_options[]" value="Magicians">
                                     <label class="form-check-label" for="magicians">Magicians</label>
                                 </div>
                             
                                 <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="grazing-table" name="event-options[]" value="Grazing Table">
+                                    <input type="checkbox" class="form-check-input" id="grazing-table" name="event_options[]" value="Grazing Table">
                                     <label class="form-check-label" for="grazing-table">Grazing Table</label>
                                 </div>
                             </div>
@@ -245,22 +244,14 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-primary mt-4">Submit</button>
+              <button type="submit" class="btn btn-primary mt-4" name="submit">Submit</button>
             </div>
-        </form>
+            </form>
           </div>
         </div>
       </div>
 
-      <script>
-        const modalDate = document.getElementById('modalDate');
-        const hiddenDateInput = document.getElementById('events-date');
-
-        function setDate(selectedDate) {
-            modalDate.textContent = selectedDate;
-            hiddenDateInput.value = selectedDate;
-}
-      </script>
+    
       
 
            
