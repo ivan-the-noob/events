@@ -76,69 +76,97 @@
                 <h3 class="text-center calendar-h3">Fill out form</h3>
                 <div class="container">
                     <div class="row">
+                        <form action="../function/php/booking_function.php" method="POST"></form>
                         <div class="col-md-4">
                             <h5>Customer Info</h5>
                             <div class="form-group mt-4">
                                 <label for="full-name" class="form-label">Full Name</label>
-                                <input type="text" id="full-name" name="full-name" class="form-control" placeholder="Enter your text here">
+                                <input type="text" id="full-name" name="full_name" class="form-control" placeholder="Enter your text here">
                             </div>
                             <div class="form-group mt-4">
-                                <label for="Celebrant's Name" class="form-label">Celebrant's Name</label>
-                                <input type="text" id="Celebrant's Name" name="Celebrants-Name" class="form-control" placeholder="Enter your text here">
+                                <label for="celebrants-name" class="form-label">Celebrant's Name</label>
+                                <input type="text" id="celebrants-name" name="celebrants_name" class="form-control" placeholder="Enter your text here">
                             </div>
                             <div class="form-group mt-4">
                                 <label for="email" class="form-label">Email</label>
                                 <input type="email" id="email" name="email" class="form-control" placeholder="Enter your text here">
                             </div>
                             <div class="form-group mt-4">
-                                <label for="phoneNumber" class="form-label">Phone Number</label>
-                                <input type="tel" id="phoneNumber" name="phoneNumber" class="form-control" placeholder="Enter your text here">
+                                <label for="phone-number" class="form-label">Phone Number</label>
+                                <input type="number" id="phone-number" name="phone_number" class="form-control" placeholder="Enter your text here">
                             </div>
                             <h5 class="mb-4 events">Event Info</h5>
                             <div class="form-group mt-4">
                                 <label for="events-date" class="form-label">Events Date</label>
                                 <p class="get-date" name="date"><span id="modalDate"></span></p>
-                    
-                            </div>                            
+                                <input type="hidden" id="events-date" name="events_date" value="">
+                            </div>                          
                             <div class="form-group mt-4">
-                                <label for="guess-count" class="form-label">Guess Count</label>
-                                <input type="number" id="guess-count" name="guess-count" class="form-control" placeholder="Enter your text here">
+                                <label for="guess-count" class="form-label">Guest Count</label>
+                                <input type="number" id="guess-count" name="guest_count" class="form-control" placeholder="Enter your text here" min="100" max="999" maxlength="3" required>
                             </div>
                             <div class="form-group mt-4">
                                 <label for="event-duration" class="form-label">Event Duration</label>
-                                <input type="number" id="event-duration" name="event-duration" class="form-control" placeholder="Enter your text here">
+                                <select id="event-duration" name="event_duration" class="form-control">
+                                    <option value="" disabled selected>Select time duration</option>
+                                    <option value="3">3 hours</option>
+                                    <option value="5">5 hours</option>
+                                    <option value="8">8 hours</option>
+                                    <option value="16">16 hours</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-4 mt-4">
                             <div class="form-group mt-4">
                                 <label for="event-starttime" class="form-label">Event Start Time</label>
-                                <input type="number" id="event-starttime" name="event-starttime" class="form-control" placeholder="Enter your text here">
+                                <select id="event-starttime" name="event_starttime" class="form-control">
+                                    <option value="8">8:00 AM</option>
+                                    <option value="9">9:00 AM</option>
+                                    <option value="10">10:00 AM</option>
+                                    <option value="11">11:00 AM</option>
+                                    <option value="12">12:00 PM</option>
+                                    <option value="13">1:00 PM</option>
+                                    <option value="14">2:00 PM</option>
+                                    <option value="15">3:00 PM</option>
+                                    <option value="16">4:00 PM</option>
+                                    <option value="17">5:00 PM</option>
+                                    <option value="18">6:00 PM</option>
+                                    <option value="19">7:00 PM</option>
+                                    <option value="20">8:00 PM</option>
+                                    <option value="21">9:00 PM</option>
+                                    <option value="22">10:00 PM</option>
+                                    <option value="23">11:00 PM</option>
+                                </select>
                             </div>
+                              
                             <div class="form-group mt-4">
                                 <label for="event-endtime" class="form-label">Event End Time</label>
-                                <input type="number" id="event-endtime" name="event-endtime" class="form-control" placeholder="Enter your text here">
-                                <h5 class="mb-4 events">Event Selection</h5>
-                                <div class="form-group mt-4">
-                                    <label for="event-type" class="form-label">Type of Event</label>
-                                    <select id="event-type" name="event-type" class="form-control">
-                                        <option value="" disabled selected>Select an event start time</option>
-                                        <option value="Birthday Party">Birthday Party</option>
-                                        <option value="Wedding">Wedding</option>
-                                        <option value="Christmas Party">Christmas Party</option>
-                                        <option value="Year End Party">Year End Party</option>
-                                        <option value="Anniversaries">Anniversaries</option>
-                                        <option value="Family Gathering">Family Gathering</option>
-                                        <option value="Despedida">Despedida</option>
-                                        <option value="Reunions">Reunions</option>                                      
-                                    </select>
-                                </div>
+                                <input type="text" id="event-endtime" name="event_endtime" class="form-control" placeholder="End time" readonly>
+                            </div>
+                            <h5 class="mb-4 eventss">Event Selection</h5>
+                            <div class="form-group mt-4">
+                                <label for="event-type" class="form-label">Type of Event</label>
+                                <select id="event-type" name="event_type" class="form-control">
+                                    <option value="" disabled selected>Select an event start time</option>
+                                    <option value="Birthday Party">Birthday Party</option>
+                                    <option value="Wedding">Wedding</option>
+                                    <option value="Christmas Party">Christmas Party</option>
+                                    <option value="Year End Party">Year End Party</option>
+                                    <option value="Anniversaries">Anniversaries</option>
+                                    <option value="Family Gathering">Family Gathering</option>
+                                    <option value="Despedida">Despedida</option>
+                                    <option value="Reunions">Reunions</option>
+                                </select>
                             </div>
                         </div>
+                        <script>
+                            
+                        </script>
                         <div class="col-md-4">
                             <h5 class=" mb-4">Event Packages</h5>
                             <div class="form-group mt-4">
                                 <label for="event-package" class="form-label">Select Event Package</label>
-                                <select id="event-package" name="event-package" class="form-control">
+                                <select id="event-package" name="event_package" class="form-control">
                                     <option value="" disabled selected>Select a package</option>
                                     <option value="Package A">Package A</option>
                                     <option value="Package B">Package B</option>
@@ -150,9 +178,9 @@
                                     <option value="Other">Other</option>
                                 </select>
                             </div>
-                            <div class="form-group mt-4">
+                              <div class="form-group mt-4" id="event-options-group" style="display: none;">
                                 <label class="form-label">Select Event Package Options</label>
-                                
+                            
                                 <div class="form-check">
                                     <input type="checkbox" class="form-check-input" id="pax-50" name="event-options[]" value="50 Pax">
                                     <label class="form-check-label" for="pax-50">50 Pax Package</label>
@@ -208,6 +236,7 @@
                                     <label class="form-check-label" for="grazing-table">Grazing Table</label>
                                 </div>
                             </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -216,17 +245,29 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
+              <button type="submit" class="btn btn-primary mt-4">Submit</button>
             </div>
+        </form>
           </div>
         </div>
       </div>
+
+      <script>
+        const modalDate = document.getElementById('modalDate');
+        const hiddenDateInput = document.getElementById('events-date');
+
+        function setDate(selectedDate) {
+            modalDate.textContent = selectedDate;
+            hiddenDateInput.value = selectedDate;
+}
+      </script>
       
 
-    
            
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script src="../function/script/calendar.js"></script>
+<script src="../function/script/time-duration.js"></script> 
+<script src="../function/script/other-package.js"></script>
 </html>
