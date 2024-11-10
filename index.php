@@ -1,3 +1,8 @@
+<?php 
+    session_start();
+    $email = $_SESSION['email'] ?? '';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -43,9 +48,25 @@
                                     <a class="nav-link" href="#contact-us">Contact Us</a>
                                 </li>
                                 <div class="d-flex gap-2 navbar-btn">
-                                    <button class="sign-in">Sign In</button>
-                                    <button class="book-event">Book Event</button>
-                                </div>
+                              
+                                <?php if ($email): ?>
+                            <div class="dropdown second-dropdown">
+                                <button class="btn" type="button" id="dropdownMenuButton2"
+                                        data-bs-toggle="dropdown" aria-expanded="false" style="padding: 0; margin-top: 2px;">
+                                    <img src="assets/profile/user.png" alt="Profile Image" class="profile" style="width: 30px; height: 30px; margin-left: 5px; margin-right: 5px;">
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                                    <li><a class="dropdown-item" href="features/users/web/api/dashboard.php">Profile</a></li>
+                                    <li><a class="dropdown-item" href="features/users/function/authentication/logout.php">Logout</a></li>
+                                </ul>
+                            </div>
+
+
+                        <?php else: ?>
+                            <a href="features/users/web/login.php" class="sign-in">Sign In</a>
+                        <?php endif; ?>
+                                <a href="features/users/web/calendar.php" class="book-event">Book Event</a>
+                            </div>
                     
                             </ul>
                        
@@ -60,7 +81,7 @@
                     <div class="col-md-8 display-text">
                         <h1 class="text-center">Celebrate Life's Moments with Our Exceptional <span class="highlight">Catering</span> Services!</h1>
                         <p class="text-center">From weddings to birthdays, reunions, and baptisms, we can cater to all your special events with elegance and deliciousness</p>
-                        <button>Book an event now</button>
+                        <a href="features/users/web/calendar.php">Book an event now</a>
                     </div>
     
                 </div>
@@ -70,7 +91,7 @@
             <p class="slider-heading mb-0">Services we have</p>
             <h1 class="slider-subheading">What We Offer</h1>
             <div class="slider">
-              <button class="slider-btn prev">&lt;</button> <!-- Single prev button on the left -->
+              <button class="slider-btn prev">&lt;</button> 
               <div class="slider-wrapper">
                 <!-- Slide 1 -->
                 <div class="slider-item">

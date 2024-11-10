@@ -10,6 +10,8 @@
     --button-color: #FFA800;
     --background-color: #F5F0EB;
     --blue-color: #1A1872;
+    --hover-button: #f0b53f;
+
 }
 
 body{
@@ -116,6 +118,10 @@ body{
     line-height: 20px;
 }
 
+.sign-in{
+  text-decoration: none !important;
+}
+
 
 .navbar .book-event{
     border: 1px solid var(--button-color);
@@ -170,7 +176,7 @@ body{
  
 }
 
-.display-text button{
+.display-text a{
     border: none;
     padding: 8px 24px 8px 24px;
     border-radius: 20px;
@@ -181,6 +187,12 @@ body{
     font-weight: 600;
     font-size: 16px;
     line-height: 28px;
+    text-decoration: none;
+}
+
+.display-text a:hover{
+    background-color: var(--hover-button);
+    color: #000;
 }
 
 .slider-text p{
@@ -656,6 +668,17 @@ h3 {
   font-size: 14px;
   line-height: 28px;
 }
+
+.book-event{
+  text-decoration: none;
+}
+
+.book-event:hover{
+  color: #000 !important;
+  background-color: var(--hover-button);
+}
+
+
 
 .choose-us .chooseus-button .discover{
   background-color: transparent;
