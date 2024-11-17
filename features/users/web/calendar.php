@@ -181,9 +181,7 @@
                                 </select>
                             </div>
                         </div>
-                        <script>
-                            
-                        </script>
+
                         <div class="col-md-4">
                             <h5 class=" mb-4">Event Packages</h5>
                             <div class="form-group mt-4">

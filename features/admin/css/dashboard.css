@@ -162,95 +162,116 @@ body {
 }
 /*Navbar Section End*/
 
-/*Table Booking Section*/
-table{
-    border-radius: 24px !important;
-    
+/*Container Section*/
+
+.card {
+    border: 1px solid #ddd; 
+    border-radius: 20px; 
+    padding: 20px;
+    background-color: #fff; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out; 
 }
-th,tr{
-    background-color: #382D31 !important;
-    color: #fff !important;
+
+.card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5); 
+}
+
+.container .user-icon{
+    font-size: 30px !important;
+}
+
+.container .card p{
+    opacity: 80%;
+    font-size: 14px;
+}
+
+.chart-container {
+    padding: 20px;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    width: 100%;
+    display: flex;
+    flex-direction: column; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.chart-container:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+}
+
+.chart-title {
+    font-size: 18px; 
+    margin-bottom: 10px; 
+    color: #333; 
+    padding: 10px 0 0 10px;
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .chart-container {
+        width: 90%;
+        display: block; 
+        padding: 0;
+    }
+
+    .chart-title {
+        font-size: 16px;
+    }
+}
+
+.container h3{
+    font-weight: bold;
+}
+
+.system-name img{
+    width: 60%;
+    display: flex;
+    justify-content: center;
+    margin: auto;
+}
+
+.system-name h5{
+    margin-top: 30px;
+    font-size: 16px;
+    margin-bottom: 0;
     text-align: center;
 }
 
-.view{
-    background-color: #382D31;
-    color: #fff;
+.system-name p{
+    text-align: center;
 }
 
-.view:hover{
-    background-color: #000;
-    color: #fff;
+.total{
+    height: 15vh !important;
 }
 
-.form-select-sm{
-    width: 50%;
+
+.event-button button{
+    background-color: transparent;
+    border: none;
+    font-weight: bold;
+    font-size: 24px;
+    text-align: center;
+}
+
+.reminder-btn{
     display: flex;
-    margin: auto;
-}
-
-.container{
-    padding: 10px 100px 10px 100px;
-}
-
-.pagination .page-item {
-    margin: 0 5px; 
-    display: flex;
-  }
-
-  .pagination .page-link {
-    width: 40px;
-    height: 40px; 
-    line-height: 40px; 
-    text-align: center; 
-    border-radius: 50%; 
-    background-color: #f8f9fa; 
-    border: 1px solid #ddd; 
-    transition: background-color 0.3s, color 0.3s;
-  }
-
-  .pagination .page-link:hover {
-    background-color: #000; 
-    color: white;
-  }
-
-  .pagination .page-item.active .page-link {
-    background-color: #382D31;
-    color: white; 
-    border-color: #ddd;
-  }
-
-  .pagination a{
-    display: flex;
-    align-items: center;
     justify-content: center;
     margin: auto;
-  }
+    margin-top: 10px;
+    width: 100%;
+    border: 1px dashed rgb(161, 161, 240);
+    padding: 10px 50px;
+    border-radius: 10px;
+    background-color: #fff;
+    color: rgb(161, 161, 240);
+}
 
-  .page-item:first-child .page-link {
-    border-radius :50px;
-    width: 30px;
-    height :30px;
+table td{
+    opacity: 80%;
+}
 
-  }
-
-  .page-item:last-child .page-link {
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-  }
-
-  .container input{
-    background-color: silver;
-    font-weight: 500;
-  }
-
-  .events, .eventss{
-    margin-top: 50px;
-  }
-
-  .container label{
-    opacity: 90%;
-  }
-/*Table Booking Section End*/
+/*Container Section End*/
 
