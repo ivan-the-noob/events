@@ -34,15 +34,42 @@ session_start();
 <body>
     <!--Navigation Links-->
     <div class="navbar flex-column bg-white shadow-sm p-3 collapse d-md-flex" id="navbar">
-        <div class="navbar-links">
+    <div class="navbar-links">
             <a class="navbar-brand d-none d-md-block logo-container" href="#">
                 <img src="../../../assets/logo.png" alt="Logo">
             </a>
-            <a href="#dashboard" class="navbar-highlight">
+            <a href="dashboard.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
-                <span>Pending Booking</span>
+                <span>Dashboard</span>
             </a>
-            
+            <a href="#" class="navbar-highlight">
+                <i class="fa-solid fa-tachometer-alt"></i>
+                <span>Pending</span>
+            </a>
+            <a href="approve.php">
+                <i class="fa-solid fa-tachometer-alt"></i>
+                <span>Approved Booking</span>
+            </a>
+            <a href="cancel.php">
+                <i class="fa-solid fa-tachometer-alt"></i>
+                <span>Cancelled Booking</span>
+            </a>
+            <a href="packages.php">
+                <i class="fa-solid fa-tachometer-alt"></i>
+                <span>Event Packages</span>
+            </a>
+            <a href="unavailable.php">
+                <i class="fa-solid fa-tachometer-alt"></i>
+                <span>Unavailable</span>
+            </a>
+            <a href="history.php">
+                <i class="fa-solid fa-tachometer-alt"></i>
+                <span>History</span>
+            </a>
+            <a href="admin-user.php">
+                <i class="fa-solid fa-tachometer-alt"></i>
+                <span>Manage Admin Users</span>
+            </a>           
             </div>
 
         </div>

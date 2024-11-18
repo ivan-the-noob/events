@@ -247,6 +247,11 @@ body {
     height: 15vh !important;
 }
 
+.event-button{
+    display: flex;
+    align-items: center;
+}
+
 
 .event-button button{
     background-color: transparent;
@@ -254,6 +259,12 @@ body {
     font-weight: bold;
     font-size: 24px;
     text-align: center;
+   
+}
+
+.event-button i{
+    font-size :20px;
+    display: flex;
 }
 
 .reminder-btn{
@@ -272,6 +283,44 @@ body {
 table td{
     opacity: 80%;
 }
+
+.date{
+    font-size: 12px !important;
+}
+
+.date-detail{
+    font-weight: 600;
+}
+
+.reminder-notif{
+    background-color: #fff;
+    border: none;
+    border-radius: 50%;
+    padding: 10px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    width: 35px;
+    height: 35px;
+    
+}
+
+.reminder-notif i{
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.bg-warnings{
+    color: #FFC107 !important;
+    font-weight: 800;
+}
+
+.bg-declines{
+    color: red !important;
+    font-weight: 800 !important;
+}
+
 
 /*Container Section End*/
 

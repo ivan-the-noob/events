@@ -13,7 +13,7 @@ session_start();
     $query = "SELECT * FROM booking LIMIT $limit OFFSET $offset";
     $result = $conn->query($query);
 
-    $query = "SELECT * FROM booking WHERE status = 'declined'"; 
+    $query = "SELECT * FROM booking WHERE status = 'finished'"; 
     $result = $conn->query($query);
 ?>
 <!DOCTYPE html>
@@ -22,7 +22,7 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cancelled | Admin</title>
+    <title>History | Admin</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -50,26 +50,26 @@ session_start();
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Approved Booking</span>
             </a>
-            <a href="#" class="navbar-highlight">
+            <a href="cancel.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Cancelled Booking</span>
-            </a> 
+            </a>
             <a href="packages.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Event Packages</span>
-            </a>  
+            </a>
             <a href="unavailable.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Unavailable</span>
             </a>
-            <a href="history.php">
+            <a href="#"class="navbar-highlight">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>History</span>
-            </a>  
+            </a>
             <a href="admin-user.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Manage Admin Users</span>
-            </a>      
+            </a>           
             </div>
 
         </div>
@@ -99,23 +99,23 @@ session_start();
 
       
         <div class="container mt-4">
-            <h3>Cancelled Booking</h3>
+            <h3>History</h3>
             <div class="table-responsive">
                 <table class="table">
                     <thead class="table-booking">
                         <tr>
-                            <th scope="col">ID</th>
+                            <th scope="col">Date</th>
                             <th scope="col">Name</th>
                             <th scope="col">Type of Event</th>
                             <th scope="col">Info</th>
-                            <th scope="col">Actions</th>
+                            <th scope="col">Status</th>
 
                         </tr>
                     </thead>
                     <tbody>
                         <?php while ($row = $result->fetch_assoc()): ?>
                             <tr>
-                                <td><?php echo $row['id']; ?></td>
+                                <td><?php echo date("F j, Y", strtotime($row['events_date'])); ?></td>
                                 <td><?php echo htmlspecialchars($row['full_name']); ?></td>
                                 <td><?php echo htmlspecialchars($row['event_type']); ?></td>
                                 <td>
@@ -124,11 +124,11 @@ session_start();
                                     </button>
                                 </td>
                                 <td>
-                                <form method="POST" action="../function/php/pending.php" style="display:inline;">
-                                    <input type="hidden" name="booking_id" value="<?php echo $row['id']; ?>">
-                                    <input type="hidden" name="action" value="accept">
-                                    <button type="submit" class="btn btn-success">Approve</button>
-                                </form>
+                                <p class="done">Done</p>
+                                </td>
+
+                                
+
                             </tr>
 
                             <!-- Modal -->

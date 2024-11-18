@@ -252,5 +252,26 @@ th,tr{
   .container label{
     opacity: 90%;
   }
+
+  .add-btn{
+    background-color: #382D31;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 3px 20px;
+    font-size: 14px;
+  }
+  
 /*Table Booking Section End*/
+
+/*History Section*/
+.done{
+    color: green !important;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+/*History Section End*/
 

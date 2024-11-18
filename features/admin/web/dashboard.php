@@ -1,61 +1,16 @@
 <?php
     session_start();
     require '../../../db.php';
-    $query = "SELECT COUNT(*) AS total_users FROM users WHERE role = 'users'";
-$result = $conn->query($query);
-$row = $result->fetch_assoc();
-$total_users = $row['total_users'];
-
-// Fetch total admins with role 'admin'
-$query_admins = "SELECT COUNT(*) AS total_admin FROM users WHERE role = 'admin'";
-$result_admins = $conn->query($query_admins);
-$row_admins = $result_admins->fetch_assoc();
-$total_admin = $row_admins['total_admin'];
-
-// Function to get the latest 3 'Waiting' bookings
-function getLatestWaitingBookings($conn) {
-    $query = "SELECT * FROM booking WHERE status = 'Waiting' ORDER BY id DESC LIMIT 3";
-    $result = $conn->query($query);
-
-    if (!$result) {
-        die("Query failed: " . $conn->error);
-    }
-
-    return $result->fetch_all(MYSQLI_ASSOC);
-}
-
-// Function to get the latest 3 'Declined' bookings
-function getLatestDeclinedBookings($conn) {
-    $query = "SELECT * FROM booking WHERE status = 'Declined' ORDER BY id DESC LIMIT 3";
-    $result = $conn->query($query);
-
-    if (!$result) {
-        die("Query failed: " . $conn->error);
-    }
-
-    return $result->fetch_all(MYSQLI_ASSOC);
-}
-
-try {
-    // Database connection
-    $conn = new mysqli($servername, $username, $password, $dbname);
-    if ($conn->connect_error) {
-        throw new Exception("Connection failed: " . $conn->connect_error);
-    }
-
-    // Fetch the latest 'Waiting' bookings
-    $bookings_waiting = getLatestWaitingBookings($conn);
-
-    // Fetch the latest 'Declined' bookings
-    $bookings_declined = getLatestDeclinedBookings($conn);
-
-} catch (Exception $e) {
-    die("Error: " . $e->getMessage());
-}
-    
-
-    
-
+    include '../function/php/table-dashboard.php';
+    include '../function/php/reminder.php';
+    $queryWaiting = "SELECT COUNT(*) AS waiting_count FROM booking WHERE status = 'Waiting'";
+    $queryDeclined = "SELECT COUNT(*) AS declined_count FROM booking WHERE status = 'Declined'";
+    $resultWaiting = $conn->query($queryWaiting);
+    $resultDeclined = $conn->query($queryDeclined);
+    $rowWaiting = $resultWaiting->fetch_assoc();
+    $rowDeclined = $resultDeclined->fetch_assoc();
+    $waitingCount = $rowWaiting['waiting_count'];
+    $declinedCount = $rowDeclined['declined_count'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -83,7 +38,34 @@ try {
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Dashboard</span>
             </a>
-            
+            <a href="pending.php">
+                <i class="fa-solid fa-tachometer-alt"></i>
+                <span>Pending</span>
+            </a>
+            <a href="approve.php">
+                <i class="fa-solid fa-tachometer-alt"></i>
+                <span>Approved Booking</span>
+            </a>
+            <a href="cancel.php">
+                <i class="fa-solid fa-tachometer-alt"></i>
+                <span>Cancelled Booking</span>
+            </a>
+            <a href="packages.php">
+                <i class="fa-solid fa-tachometer-alt"></i>
+                <span>Event Packages</span>
+            </a>
+            <a href="unavailable.php">
+                <i class="fa-solid fa-tachometer-alt"></i>
+                <span>Unavailable</span>
+            </a>
+            <a href="history.php">
+                <i class="fa-solid fa-tachometer-alt"></i>
+                <span>History</span>
+            </a>  
+            <a href="admin-user.php">
+                <i class="fa-solid fa-tachometer-alt"></i>
+                <span>Manage Admin Users</span>
+            </a>         
             </div>
 
         </div>
@@ -105,7 +87,7 @@ try {
                             style="width: 40px; height: 40px; object-fit: cover;">
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="../../users/web/api/logout.php">Logout</a></li>
+                        <li><a class="dropdown-item" href="../../users/function/authentication/logout.php">Logout</a></li>
                     </ul>
                 </div>
             </div>
@@ -115,67 +97,65 @@ try {
         <div class="container mt-4">
             <h3>Dashboard</h3>
             <div class="row">
-                <div class="col-md-2 total">
-                    <div class="card p-0 mt-2">                        
-                        <div class="card-body">
-                            <div class="d-flex">
-                                <div class="col-md-12">
-                                    <p class="mb-1">Total Sales</p>
-                                    <h5>₱518, 024</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card p-0 mt-2">                        
-                        <div class="card-body">
-                            <div class="d-flex">
+                <div class="col-md-2">
+                        <div class="card p-0 mt-2">                        
+                            <div class="card-body">
+                                <div class="d-flex">
                                     <div class="col-md-12">
-                                        <p class="mb-1">Approved Book</p>
-                                        <h5>27</h5>
-                                    </div>
-                                </div>
-                            </div>                          
-                    </div>
-                    <div class="card p-0 mt-2 ">                        
-                        <div class="card-body">
-                            <div class="d-flex">
-                                    <div class="col-md-12">
-                                        <p class="mb-1">Cancelled Book</p>
-                                        <h5>4</h5>
+                                        <p class="mb-1">Total Sales</p>
+                                        <h5>₱518, 024</h5>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-5 mt-2">
+                        <div class="card p-0 mt-2">                        
+                            <div class="card-body">
+                                <div class="d-flex">
+                                    <div class="col-md-12">
+                                        <p class="mb-1">Approved Books</p>
+                                        <h5><?php echo $waitingCount; ?></h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card p-0 mt-2">                        
+                            <div class="card-body"> 
+                                <div class="d-flex">
+                                    <div class="col-md-12">
+                                        <p class="mb-1">Cancelled Books</p>
+                                        <h5><?php echo $declinedCount ?></h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                                       
+                </div> 
+                <div class="col-md-5 mt-2 d-flex justify-content-center">
                         <div class="chart-container">
                             <h5 class="chart-title">Monthly Sales</h5>
                             <canvas id="salesChart"></canvas>
                         </div>
-                    </div> 
-                    <div class="col-md-5 mt-2">
-                        <div class="chart-container">
-                            <h5 class="chart-title">Yearly Sales</h5>
-                            <canvas id="yearlySalesChart"></canvas>
-                        </div>
-                    </div>    
-                </div>  
-                <div class="row">
-                    <div class="col-md-9 mt-4">
-                        <h5>Approve Bookings</h5>
-                        <div class="card">
+                </div> 
+                <div class="col-md-5 mt-2  d-flex justify-content-center">
+                    <div class="chart-container">
+                        <h5 class="chart-title">Yearly Sales</h5>
+                        <canvas id="yearlySalesChart"></canvas>
+                    </div>
+                </div>
+                <div class="col-md-9 mt-4">
+                    <h5>Approve Bookings</h5>
+                    <div class="card">
                         <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Event Date</th>
-                                        <th>Event</th>
-                                        <th>Pax</th>
-                                        <th>Payment</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Event Date</th>
+                                    <th>Event</th>
+                                    <th>Pax</th>
+                                    <th>Payment</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                                 <?php foreach ($bookings_waiting as $booking): ?>
                                     <tr>
                                         <td><?php echo htmlspecialchars($booking['full_name']); ?></td>
@@ -183,63 +163,145 @@ try {
                                         <td><?php echo htmlspecialchars($booking['event_type']); ?></td>
                                         <td><?php echo htmlspecialchars($booking['guest_count']); ?></td>
                                         <td>₱100</td>
-                                        <td><?php echo htmlspecialchars($booking['status']); ?></td>
+                                        <td class="bg-warnings"><?php echo htmlspecialchars($booking['status']); ?></td>
                                     </tr>
                                 <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="col-md-3 mt-4">
-                        <h5 class="mt-0">Reminders</h5>
-                        <div class="card p-0">
-                            <div class="card-body d-flex justify-content-center gap-3">
-                                <div class="event-content">
-                                    <p class="mb-0">Ericka's 18th Birthday</p>
-                                    <p class="mb-0">1:00 PM - 6:00 PM</p>
-                                </div>
-                                <div class="event-button">
-                                    <button class="d-flex justfy-content-center mx-auto">:</button>
+                    <a href="approve.php" class="d-flex justify-content-center text-decoration-none mt-2">Show all</a>
+
+                    <h5 class="mt-4">Cancelled Bookings</h5>
+                    <div class="card">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Event Date</th>
+                                    <th>Event</th>
+                                    <th>Pax</th>
+                                    <th>Payment</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($bookings_declined as $booking): ?>
+                                    <tr>
+                                        <td><?php echo htmlspecialchars($booking['full_name']); ?></td>
+                                        <td><?php echo htmlspecialchars($booking['events_date']); ?></td>
+                                        <td><?php echo htmlspecialchars($booking['event_type']); ?></td>
+                                        <td><?php echo htmlspecialchars($booking['guest_count']); ?></td>
+                                        <td>₱100</td>
+                                        <td class="bg-declines"><?php echo htmlspecialchars($booking['status']); ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <a href="cancel.php" class="d-flex justify-content-center text-decoration-none mt-2">Show all</a>
+                </div>
+
+                <!-- Reminders -->
+                <div class="col-md-3 mt-4">
+                    <div class="d-flex justify-content-between mb-2">
+                        <h5 class="mt-0 d-flex align-items-center mb-0">Reminders</h5>
+                        <button class="reminder-notif">  <i class="fa-regular fa-bell fa-xl"></i></button>
+                    </div>
+                      <div class="card-container" style="height: 50vh; overflow-y: auto; padding: 10px;">                 
+                      <?php
+        if ($result->num_rows > 0):
+            while ($row = $result->fetch_assoc()):
+        ?>
+                <div class="col-md-12 mb-2">
+                    <div class="card p-0">
+                        <div class="card-body d-flex justify-content-between gap-3">
+                            <div class="event-content">
+                                <p class="mb-0 date-detail"><?php echo htmlspecialchars($row['description']); ?></p>
+                                <p class="mb-0 date"><?php echo htmlspecialchars(date('F j, Y', strtotime($row['date']))); ?></p>
+                                <div class="d-flex align-items-center gap-1">
+                                    <p class="mb-0 date"><?php echo htmlspecialchars(date('g:i A', strtotime($row['start_time']))); ?></p> - 
+                                    <p class="mb-0 date"><?php echo htmlspecialchars(date('g:i A', strtotime($row['finish_time']))); ?></p>
                                 </div>
                             </div>
-                        </div>
-                        <button class="reminder-btn">+ Add Reminder</button>
-                    </div>
-                        <div class="col-md-9 mt-3">
-                        <h5>Cancelled Bookings</h5>
-                            <div class="card">
-                            <table class="table">
-                        <thead class="">
-                            <tr>
-                                <th>Name</th>
-                                <th>Event Date</th>
-                                <th>Event</th>
-                                <th>Pax</th>
-                                <th>Payment</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <?php foreach ($bookings_declined as $booking): ?>
-                            <tr>
-                                <td><?php echo htmlspecialchars($booking['full_name']); ?></td>
-                                <td><?php echo htmlspecialchars($booking['events_date']); ?></td>
-                                <td><?php echo htmlspecialchars($booking['event_type']); ?></td>
-                                <td><?php echo htmlspecialchars($booking['guest_count']); ?></td>
-                                <td>₱100</td>
-                                <td><?php echo htmlspecialchars($booking['status']); ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                            <div class="event-button">
+                                <button class="d-flex justify-content-center mx-auto">
+                                    <i class="fa fa-ellipsis-vertical fa-xl"></i>
+                                </button>
                             </div>
-                        </div>  
-                
-                </div>          
-            </div> 
-             
-          
+                        </div>
+                    </div>
+                </div>
+        <?php
+            endwhile;
+        else:
+        ?>
+            <p>Empty Reminders.</p>
+        <?php
+        endif;
+        ?>
+                    <button class="reminder-btn mt-3" data-bs-toggle="modal" data-bs-target="#addReminderModal">+ Add Reminder</button>
+                </div>
+                      </div> 
+            </div>       
         </div>
+<!-- Add Reminder Modal -->
+<div class="modal fade" id="addReminderModal" tabindex="-1" aria-labelledby="addReminderModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST" action="../function/php/add_reminder.php">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addReminderModalLabel">Add Reminder</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <input type="text" class="form-control" id="description" name="description" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="date" name="date" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="start_time" class="form-label">Start Time</label>
+                        <select class="form-control" id="start_time" name="start_time" required>
+                            <?php
+                            for ($hour = 8; $hour <= 23; $hour++) {
+                                $formatted_time = date('h:i A', strtotime("$hour:00"));
+                                echo "<option value='" . date('H:i', strtotime("$hour:00")) . "'>$formatted_time</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="finish_time" class="form-label">Finish Time</label>
+                        <input type="time" class="form-control" id="finish_time" name="finish_time" readonly>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Reminder</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+     document.getElementById('start_time').addEventListener('change', function() {
+        const startTime = this.value; // Get selected start time (HH:MM)
+        const [hour, minute] = startTime.split(':').map(Number); // Split into hour and minute
+
+        const finishTime = new Date();
+        finishTime.setHours(hour + 5, minute); // Add 5 hours to the start time
+
+        // Correctly format finish time to HH:MM
+        const formattedFinishTime = finishTime.toTimeString().slice(0, 5); // Get HH:MM in 24-hour format
+        document.getElementById('finish_time').value = formattedFinishTime;
+    });
+</script>
+
+                
 
 
         
