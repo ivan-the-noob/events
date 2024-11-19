@@ -202,6 +202,8 @@ body{
 .fc-daygrid-day:hover {
     background-color: var(--blue-color);
 }
+
+
 .fc-daygrid-day-top a {
     color: white;
     text-decoration: none;
@@ -215,6 +217,10 @@ body{
 }
 .fc-daygrid-day:hover .fc-daygrid-day-top a {
     color: white;
+}
+
+.fc .fc-daygrid-day-number:hover{
+    background-color: #000 !important;
 }
 .fc-day-hidden {
     display: none;
@@ -273,7 +279,7 @@ body{
 }
 
 .form-check-input:checked {
-    background-color: var(--blue-color);
+    background-color: var(--blue-color) !important;
     border-color: var(--blue-color);
 }
 

@@ -6,6 +6,16 @@
     font-style: normal;
     margin: 0;
 }
+
+
+:root {
+    --button-color: #FFA800;
+    --background-color: #F5F0EB;
+    --blue-color: #100E44;
+    
+}
+
+
 body {
     margin: 0;
     padding: 0;
@@ -162,138 +172,170 @@ body {
 }
 /*Navbar Section End*/
 
-/*Table Booking Section*/
-table{
-    border-radius: 24px !important;
-    
-}
-th,tr{
-    background-color: #382D31 !important;
-    color: #fff !important;
+/*Body Section*/
+
+.calendar-title {
+    font-family: "Italianno", cursive;
+    font-weight: 400;
+    font-size: 32px;
+    color: var(--button-color);
+    margin-top: 2%;
     text-align: center;
-}
-
-.view{
-    background-color: #382D31;
-    color: #fff;
-}
-
-.view:hover{
-    background-color: #000;
-    color: #fff;
-}
-
-.form-select-sm{
-    width: 50%;
-    display: flex;
-    margin: auto;
-}
-
-.container{
-    padding: 10px 100px 10px 100px;
-}
-
-.pagination .page-item {
-    margin: 0 5px; 
-}
-.pg-btn{
-    margin-top: 2px !important;
-}
-
-  .pagination .page-link {
-    width: 30px;
-    height: 30px; 
-    text-align: center; 
-    border-radius: 50%; 
-    background-color: #f8f9fa; 
-    border: 1px solid #ddd; 
-    transition: background-color 0.3s, color 0.3s;
-  }
-
-  .pagination .page-link:hover {
-    background-color: #000; 
-    color: white;
-  }
-
-  .pagination .page-item.active .page-link {
-    background-color: #382D31;
-    color: white; 
-    border-color: #ddd;
-  }
-
-  .pagination a{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: auto;
-  }
-
-  .page-item:first-child .page-link {
-    border-radius :50px;
-    width: 25px;
-    height :25px;
-
-  }
-
-  .page-item:last-child .page-link {
-    border-radius: 50%;
-    width: 25px;
-    height: 25px;
-  }
-
-  .page-links{
-    width: 25px;
-    height: 25px; 
-    text-align: center; 
-    border-radius: 50%; 
-    background-color: #f8f9fa; 
-    border: 1px solid #ddd; 
-    transition: background-color 0.3s, color 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-  }
-
-  .container input{
-    background-color: silver;
-    font-weight: 500;
-  }
-
-  .container label{
-    opacity: 90%;
-  }
-
-  .add-btn{
-    background-color: #382D31;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    padding: 3px 20px;
-    font-size: 14px;
-  }
-
-  .search{
-    background-color: #fff !important;
-    border: 1px solid #808080;
-    border-radius: 20px;
-    padding: 5px;
-  }
-
-  .pagination a{
-    color:#382D31;
+    line-height: 40px;
   }
   
-/*Table Booking Section End*/
+  .calendar-h3 {
+    font-family: "Inter", sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    margin-bottom: 5%;
+    color: #100E44;
+    line-height: 38px;
+  }
 
-/*History Section*/
-.done{
-    color: green !important;
-    font-weight: 600;
+/*Body Section End*/
+
+/* Calendar Section */
+.container-calendar{
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    margin: auto;
+    justify-content: center;
+}
+
+
+#calendar{
+    height: 100%;
+    width: 70%;
+
+}
+
+.fc-view-harness .fc-view-harness-active{
+    background-color: #FFFFFF;
+}
+
+.fc-daygrid-day-events{
+    display: none;
+}
+
+.fc .fc-daygrid-day-top{
+    position: relative;
+    bottom: 10px;
+}
+
+.calendar-container {
+    width: 70%;
+    margin: 0 auto;
+    padding-bottom: 30px;
+}
+
+.fc-toolbar-title{
+    padding-top: 15px;
+    font-size: 20px !important;
+}
+.fc-daygrid-day {
+    position: relative;
+    cursor: pointer;
+}
+.fc-daygrid-day:hover {
+    background-color: var(--blue-color);
+}
+.fc-daygrid-day-top a {
+    color: white;
+    text-decoration: none;
     display: flex;
     justify-content: center;
+    margin: auto;
+    font-weight: bold;
+    font-size: 25px;
+    height: 80px;
     align-items: center;
-    text-align: center;
-  }
-/*History Section End*/
+}
+.fc-daygrid-day:hover .fc-daygrid-day-top a {
+    color: white;
+}
 
+.fc .fc-daygrid-day-frame:hover{
+    background-color: #100E44;
+}
+.fc-day-hidden {
+    display: none;
+}
+.fc-toolbar-chunk {
+    color: var(--blue-color);
+}
+.fc-scrollgrid-sync-inner a {
+    color: var(--blue-color);
+    text-decoration: none;
+}
+
+.fc-day, .fc-day-sat, .fc-day-past, .fc-daygrid-day{
+    height: 5vh;
+}
+
+/*Calendar Section End*/
+
+/*Modal Section*/
+
+.custom-modal{
+    max-width: 70%;
+    width: 90%;
+    display: flex;
+}
+
+.modal-dialog h5{
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 24px;
+    color: #101012;
+}
+
+.modal-dialog label{
+    color: #1E1E1E;
+    font-weight: 400;
+}
+
+.modal-dialog .form-control{
+    width: 90%;
+    padding: 10px 16px;
+    border: 1px solid #D9D9D9;
+    border-radius: 10px;
+}
+
+.modal-dialog .events{
+    margin-top: 40px;
+}
+
+.modal-dialog .eventss{
+    margin-top: 80px;
+}
+
+.modal-dialog .form-check-label{
+    font-size: 16px;
+}
+
+.form-check-input:checked {
+    background-color: var(--blue-color);
+    border-color: var(--blue-color);
+}
+
+.modal-dialog .get-date{
+    padding: 10px 16px;
+    border: 1px solid #D9D9D9;
+    border-radius: 10px;
+    width: 90%;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+
+/*Modal Section End*/

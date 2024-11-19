@@ -42,6 +42,10 @@ session_start();
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Dashboard</span>
             </a>
+            <a href="calendar.php">
+                <i class="fa-solid fa-tachometer-alt"></i>
+                <span>Calendar</span>
+            </a>
             <a href="pending.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Pending</span>

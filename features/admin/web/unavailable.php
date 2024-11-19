@@ -24,7 +24,7 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>History | Admin</title>
+    <title>Unavailable | Admin</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -43,6 +43,10 @@ session_start();
             <a href="dashboard.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Dashboard</span>
+            </a>
+            <a href="calendar.php">
+                <i class="fa-solid fa-tachometer-alt"></i>
+                <span>Calendar</span>
             </a>
             <a href="pending.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
