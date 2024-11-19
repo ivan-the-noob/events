@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($user['role'] === 'users') {
                 header("Location: ../../../index.php");
             } else {
-                header("Location: ../../../../features/admin/web/api/admin.php");
+                header("Location: ../../../features/admin/web/dashboard.php");
             }
             exit();
         } else {

@@ -1,5 +1,9 @@
 <?php
-session_start();
+ session_start();
+ if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'admin') {
+     header('Location: ../../users/web/login.php');
+     exit(); 
+ }
     require '../../../db.php';
 
     $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
@@ -98,7 +102,7 @@ session_start();
                             style="width: 40px; height: 40px; object-fit: cover;">
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="../../users/web/api/logout.php">Logout</a></li>
+                    <li><a class="dropdown-item" href="../../users/function/authentication/logout.php">Logout</a></li>
                     </ul>
                 </div>
             </div>
@@ -108,9 +112,12 @@ session_start();
         <div class="container mt-4">
             <div class="d-flex justify-content-between mb-2">
                 <h3>Admin</h3>
+                <div class="d-flex gap-2">
                 <button class="add-btn" data-bs-toggle="modal" data-bs-target="#addModal">
                     + Add
                 </button>
+                <input type="text" class="search" placeholder="Search.." id="searchInput">
+                </div>
                 <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">

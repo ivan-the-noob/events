@@ -1,5 +1,9 @@
 <?php
-session_start();
+ session_start();
+ if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'admin') {
+     header('Location: ../../users/web/login.php');
+     exit(); 
+ }
     require '../../../db.php';
 
     $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
@@ -97,7 +101,7 @@ session_start();
                             style="width: 40px; height: 40px; object-fit: cover;">
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="../../users/web/api/logout.php">Logout</a></li>
+                    <li><a class="dropdown-item" href="../../users/function/authentication/logout.php">Logout</a></li>
                     </ul>
                 </div>
             </div>
@@ -107,8 +111,11 @@ session_start();
         <div class="container mt-4">
             <div class="d-flex justify-content-between mb-2">
                 <h3>Event Packages</h3>
-                <button class="btn btn-primary add-btn" data-bs-toggle="modal" data-bs-target="#eventPackagesModal">+ Add</button>
-            </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-primary add-btn" data-bs-toggle="modal" data-bs-target="#eventPackagesModal">+ Add</button>
+                    <input type="text" class="search" placeholder="Search.." id="searchInput">
+                </div>
+        </div>
             <div class="table-responsive">
             <table class="table">
     <thead>
@@ -145,7 +152,7 @@ session_start();
             </div>
 
             <div class="modal fade" id="eventPackagesModal" tabindex="-1" aria-labelledby="eventPackagesModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="eventPackagesModalLabel">Add Event Package</h5>
@@ -178,29 +185,28 @@ session_start();
             </div>
 
 
-            <nav>
-            <ul class="pagination d-flex justify-content-end">
-                    <?php
-                        if ($total_pages > 3) {
-                            if ($page > 1) {
-                                echo '<li class="page-item"><a class="page-link" href="?page=' . ($page - 1) . '">&laquo;</a></li>';
-                            }
-                            $start = max(1, $page - 1);
-                            $end = min($total_pages, $start + 2);
-                            for ($i = $start; $i <= $end; $i++) {
-                                echo '<li class="page-item ' . ($i == $page ? 'active' : '') . '"><a class="page-link" href="?page=' . $i . '">' . $i . '</a></li>';
-                            }
-                            if ($page < $total_pages) {
-                                echo '<li class="page-item"><a class="page-link" href="?page=' . ($page + 1) . '">&raquo;</a></li>';
-                            }
-                        } else {
-                            for ($i = 1; $i <= $total_pages; $i++) {
-                                echo '<li class="page-item ' . ($i == $page ? 'active' : '') . '"><a class="page-link" href="?page=' . $i . '">' . $i . '</a></li>';
-                            }
-                        }
-                    ?>
+            <nav aria-label="Page navigation">
+                <ul class="pagination d-flex justify-content-end">
+                    <?php if ($page > 1): ?>
+                        <li class="page-item pg-btn"><a class="page-links" href="?page=<?php echo $page - 1; ?>">&laquo;</a></li>
+                    <?php else: ?>
+                        <li class="page-item pg-btn disabled"><span class="page-links">&laquo;</span></li>
+                    <?php endif; ?>
+
+                    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                        <li class="page-item <?php echo ($i == $page) ? 'active' : ''; ?>">
+                            <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                        </li>
+                    <?php endfor; ?>
+
+                    <?php if ($page < $total_pages): ?>
+                        <li class="page-item pg-btn"><a class="page-links" href="?page=<?php echo $page + 1; ?>">&raquo;</a></li>
+                    <?php else: ?>
+                        <li class="page-item pg-btn disabled"><span class="page-links">&raquo;</span></li>
+                    <?php endif; ?>
                 </ul>
             </nav>
+
         </div>
         <?php $conn->close(); ?>
 
