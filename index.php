@@ -10,6 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="features/users/css/index.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDmgygVeipMUsrtGeZPZ9UzXRmcVdheIqw&libraries=places"></script>
     <title>Document</title>
 </head>
 <body>
@@ -32,8 +33,8 @@
                             </svg>
                         </button>
     
-                        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-                            <ul class="navbar-nav"> 
+                        <div class="collapse navbar-collapse justify-content-center align-items-center" id="navbarNav">
+                            <ul class="navbar-nav d-flex align-items-center "> 
                                 <li class="nav-item">
                                     <a class="nav-link" href="#">Home</a>
                                 </li>
@@ -79,7 +80,7 @@
             <div class="container d-flex justify-content-center">
                 <div class="row d-flex">
                     <div class="col-md-8 display-text">
-                        <h1 class="text-center">Celebrate Life's Moments with Our Exceptional <span class="highlight">Catering</span> Services!</h1>
+                        <h1 class="text-center">Celebrate your events with us at <span class="highlight">"Amiel's MOM Events Place!"</span></h1>
                         <p class="text-center">From weddings to birthdays, reunions, and baptisms, we can cater to all your special events with elegance and deliciousness</p>
                         <a href="features/users/web/calendar.php">Book an event now</a>
                     </div>
@@ -408,7 +409,7 @@
                         <h2 class="text-center">Book your event today</h2>
                         <p class="text-center lets">Let's make your ocassion unforgettable</p>
                         <button class="d-flex mx-auto book">Book an event now</button>
-                        <img src="assets/logo.png" class="d-flex mx-auto logo">
+                        <div id="map"></div>
                     </div>
                     <div class="footer-back">
                         <div class="container">
@@ -424,9 +425,10 @@
                     </div>
                 </div>
             </footer>
+          
 
-
-<script src="features/function/review.js"></script>  
+<script src="features/function/review.js"></script> 
+<script src="features/function/map.js"></script>   
 <script src="features/function/offer-slider.js"></script>     
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </html>

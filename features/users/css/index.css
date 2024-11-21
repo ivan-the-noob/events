@@ -7,10 +7,11 @@
 }
 
 :root {
-    --button-color: #FFA800;
+    --button-color: #8D3D2C;
     --background-color: #F5F0EB;
-    --blue-color: #1A1872;
-    --hover-button: #f0b53f;
+    --blue-color: #000;
+    --hover-button: #9e4935;
+    --text-color: #F66B8D;
 
 }
 
@@ -33,6 +34,11 @@ body{
     width: 80px;
     height: 50px;
 }
+.navbar-btn{
+  margin: 10px;
+}
+
+
 .navbar-toggler{
     border: none;
 }
@@ -85,7 +91,7 @@ body{
 }
 
 .navbar a:hover{
-  color: orange;
+  color: var(--hover-button)
 }
 
 .dropdown button{
@@ -125,9 +131,9 @@ body{
 
 .navbar .book-event{
     border: 1px solid var(--button-color);
-    padding: 5px 24px 5px 24px;
+    padding: 12px 24px 12px 24px;
     background-color: var(--button-color);
-    color: #000;
+    color: #fff;
     border-radius: 24px;
     display: flex;
     align-items: center;
@@ -181,7 +187,7 @@ body{
     padding: 8px 24px 8px 24px;
     border-radius: 20px;
     background-color: var(--button-color);
-    color: #000;
+    color: #fff;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); 
     transition: box-shadow 0.3s ease;
     font-weight: 600;
@@ -192,7 +198,7 @@ body{
 
 .display-text a:hover{
     background-color: var(--hover-button);
-    color: #000;
+    color: #fff;
 }
 
 .slider-text p{
@@ -204,7 +210,7 @@ body{
 }
 
 .highlight{
-    color: var(--button-color);
+    color: var(--text-color);
 }
 
 /*Display Section End*/
@@ -249,7 +255,7 @@ body{
   }
 
   .slider-text h3{
-    color: #100E44;
+    color: #000;
     font-weight: 700;
     font-size: 24px;
     line-height: 29.05px;
@@ -271,7 +277,7 @@ body{
     transform: translateY(-50%);
     background-color: transparent;
     color: #000;
-    border: 1px solid #100E44;
+    border: 1px solid #000;
     padding: 5px 10px;
     cursor: pointer;
     font-size: 18px;
@@ -282,7 +288,7 @@ body{
   }
 
   .slider-btn:hover{
-    background-color: #100E44;
+    background-color: #000;
     color: #fff;
   }
   
@@ -316,7 +322,7 @@ body{
     font-size: 25px;
     height: 6vh;
     margin-top: 5%;
-    color: var(--button-color);
+    color: var(--text-color);
   }
 
   .slider-subheading{
@@ -324,7 +330,7 @@ body{
     font-weight: 700;
     font-size: 25px;
     margin-bottom: 5%;
-    color: #100E44; 
+    color: #190E0B;
   }
 
   .slider-item {
@@ -367,12 +373,12 @@ body{
     font-size: 25px;
     height: 6vh;
     margin-top: 5%;
-    color: var(--button-color);
+    color: #190E0B;
 
 }
 
 .scope .card-title{
-  color: #100E44 !important;
+  color: #190E0B !important;
   font-weight: 600 !important;
 }
 
@@ -382,7 +388,7 @@ body{
     font-weight: 700;
     font-size: 25px;
     margin-bottom: 5%;
-    color: #100E44;
+    color: #000;
 
 }
 
@@ -403,9 +409,9 @@ body{
 }
 
 .event{
-    background-color: #FFDC99;
+    background-color: #FEDAE3;
     padding: 2px 10px 2px 10px;
-    color: #100E44;
+    color: #000;
     border-radius: 12px;
     font-size: 12px;
     font-weight: 500;
@@ -426,7 +432,7 @@ body{
     font-family: "Italianno", cursive;
     font-weight: 600;
     font-size: 25px;
-    color: var(--button-color);
+    color: var(--text-color);
     margin-top: 5%;
     text-align: center;
 }
@@ -436,7 +442,7 @@ h3 {
     font-weight: 700;
     font-size: 25px;
     margin-bottom: 5%;
-    color: #100E44;
+    color: #190E0B;
 }
 
 /* Slider Styles */
@@ -496,7 +502,7 @@ h3 {
     transform: translateY(-50%);
     background-color: transparent;
     color: #000;
-    border: 1px solid #100E44;
+    border: 1px solid #000;
     padding: 5px 10px;
     cursor: pointer;
     font-size: 18px;
@@ -544,7 +550,7 @@ h3 {
   font-family: "Italianno", cursive;
   font-weight: 600;
   font-size: 25px;
-  color: var(--button-color);
+  color: var(--text-color);
   margin-top: 5%;
   text-align: center;
 }
@@ -554,13 +560,13 @@ h3 {
   font-weight: 700;
   font-size: 25px;
   margin-bottom: 5%;
-  color: #100E44;
+  color: #000;
 }
 
 .extra-events h5{
   height: 29px;
   font-weight: 700;
-  color: #100E44;
+  color: #000;
 }
 
 .extra-events .card {
@@ -581,7 +587,7 @@ h3 {
 }
 
 .extra-events .badge-event{
-  background-color: #D0DBF8;
+  background-color: #FDC3B6;
   padding: 2px 10px 2px 10px;
   border-radius: 12px;
   width: 53px;
@@ -592,7 +598,7 @@ h3 {
 }
 
 .extra-events .badge-additional{
-  background-color: #FFDC99;
+  background-color: #FEDAE3;
   padding: 2px 10px 2px 10px;
   border-radius: 12px;
   width: 53px;
@@ -605,7 +611,7 @@ h3 {
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;
-  color: #100E44;
+  color: #000;
 }
 
 /*Extra Events Section End*/
@@ -621,7 +627,7 @@ h3 {
   font-family: "Italianno", cursive;
   font-weight: 600;
   font-size: 25px;
-  color: var(--button-color);
+  color: var(--text-color);
   margin-top: 5%;
   text-align: center;
 }
@@ -635,7 +641,7 @@ h3 {
   font-weight: 700;
   font-size: 25px;
   margin-bottom: 5%;
-  color: #100E44;
+  color: #000;
 }
 
 .choose-us .card .container{
@@ -644,7 +650,7 @@ h3 {
 
 .choose-p{
   font-weight: 500;
-  color: #100E44;
+  color: #000;
   line-height: 30px;
   font-size: 20px;
 }
@@ -654,14 +660,14 @@ h3 {
   font-weight: 400;
   font-size: 16px;
   line-height: 28px;
-  color: #100E44;
+  color: #000;
 }
 
 .choose-us .chooseus-button .book-event{
   min-height: 44px;
   border-radius: 24px;
   border: 1px solid var(--button-color);
-  color: #000;
+  color: #fff;
   padding: 8px 24px 8px 24px;
   background-color: var(--button-color);
   font-weight: 600;
@@ -674,7 +680,7 @@ h3 {
 }
 
 .book-event:hover{
-  color: #000 !important;
+  color: #fff !important;
   background-color: var(--hover-button);
 }
 
@@ -682,11 +688,11 @@ h3 {
 
 .choose-us .chooseus-button .discover{
   background-color: transparent;
-  border: 1px solid #100E44;
+  border: 1px solid #000;
   padding: 8px 24px 8px 24px;
   border-radius: 24px;
   min-height: 44px;
-  color: #100E44;
+  color: #000;
   font-weight: 600;
   font-size: 14px;
   line-height: 28px;
@@ -705,7 +711,7 @@ h3 {
   font-family: "Italianno", cursive;
   font-weight: 600;
   font-size: 25px;
-  color: var(--button-color);
+  color: var(--text-color);
   margin-top: 5%;
   text-align: center;
 }
@@ -717,7 +723,7 @@ h3 {
   font-weight: 700;
   font-size: 25px;
   margin-bottom: 5%;
-  color: #100E44;
+  color: #000;
 }
 
 .howitworks .card{
@@ -736,7 +742,7 @@ h3 {
   font-size: 20px;
   font-weight: 800;
   line-height: 28px;
-  color: #100E44;
+  color: #000;
 }
 
 .howitworks .card .card-text{
@@ -758,7 +764,7 @@ footer .footer-title {
   font-family: "Italianno", cursive;
   font-weight: 600;
   font-size: 25px;
-  color: var(--button-color);
+  color: var(--text-color);
   text-align: center;
 }
 
@@ -770,6 +776,17 @@ footer h2 {
   font-size: 40px;
   margin-bottom: 2% !important;
   color: #FFFFFF !important;
+}
+
+#map {
+  height: 50vh; 
+  width: 40%;
+  z-index: 999;
+  display: flex;
+  margin: auto;
+  border: 1px solid var(--text-color);
+  border-radius: 24px;
+  margin-top: 10px;
 }
 
 .footer-front {
@@ -812,7 +829,7 @@ footer .lets{
 
 footer .book{
   background-color: var(--button-color);
-  color: #000;
+  color: #fff;
   padding: 8px 24px 8px 24px;
   border: none;
   font-weight: 600;
@@ -830,7 +847,7 @@ footer .book{
 }
 
 .footer-back{
-  background-color: #100E44;
+  background-color: #000;
   color: #fff;
   height: 200px;
   display: flex;
