@@ -1,26 +1,26 @@
 <?php
- session_start();
- if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'admin') {
-     header('Location: ../../users/web/login.php');
-     exit(); 
- }
-    require '../../../db.php';
+session_start();
+if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'admin') {
+    header('Location: ../../users/web/login.php');
+    exit();
+}
+require '../../../db.php';
 
-    $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-    $limit = 5;
-    $offset = ($page - 1) * $limit;
-    $total_query = "SELECT COUNT(*) as total FROM booking";
-    $total_result = $conn->query($total_query);
-    $total_row = $total_result->fetch_assoc();
-    $total_records = $total_row['total'];
-    $total_pages = ceil($total_records / $limit); 
-    $query = "SELECT * FROM booking LIMIT $limit OFFSET $offset";
-    $result = $conn->query($query);
+$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+$limit = 5;
+$offset = ($page - 1) * $limit;
+$total_query = "SELECT COUNT(*) as total FROM booking";
+$total_result = $conn->query($total_query);
+$total_row = $total_result->fetch_assoc();
+$total_records = $total_row['total'];
+$total_pages = ceil($total_records / $limit);
+$query = "SELECT * FROM booking LIMIT $limit OFFSET $offset";
+$result = $conn->query($query);
 
-    $query = "SELECT * FROM unavailable_days";
-    $result = $conn->query($query);
+$query = "SELECT * FROM unavailable_days";
+$result = $conn->query($query);
 
-   
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -40,7 +40,7 @@
 <body>
     <!--Navigation Links-->
     <div class="navbar flex-column bg-white shadow-sm p-3 collapse d-md-flex" id="navbar">
-    <div class="navbar-links">
+        <div class="navbar-links">
             <a class="navbar-brand d-none d-md-block logo-container" href="#">
                 <img src="../../../assets/logo.png" alt="Logo">
             </a>
@@ -68,7 +68,7 @@
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Event Packages</span>
             </a>
-            <a href="#"class="navbar-highlight">
+            <a href="#" class="navbar-highlight">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Unavailable</span>
             </a>
@@ -76,13 +76,17 @@
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>History</span>
             </a>
+            <a href="events_list.php">
+                <i class="fa-solid fa-tachometer-alt"></i>
+                <span>Events List</span>
+            </a>
             <a href="admin-user.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Manage Admin Users</span>
-            </a>           
-            </div>
-
+            </a>
         </div>
+
+    </div>
     </div>
     <div class="content flex-grow-1">
         <div class="header">
@@ -101,56 +105,58 @@
                             style="width: 40px; height: 40px; object-fit: cover;">
                     </button>
                     <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="../../users/function/authentication/logout.php">Logout</a></li>
+                        <li><a class="dropdown-item" href="../../users/function/authentication/logout.php">Logout</a>
+                        </li>
                     </ul>
                 </div>
             </div>
         </div>
 
-      
+
         <div class="container mt-4">
             <div class="d-flex justify-content-between mb-2">
                 <h3>Unavailable Days</h3>
                 <div class="d-flex gap-2">
-                    <button class="btn btn-primary add-btn" data-bs-toggle="modal" data-bs-target="#unavailableDaysModal">+ Add</button>
+                    <button class="btn btn-primary add-btn" data-bs-toggle="modal"
+                        data-bs-target="#unavailableDaysModal">+ Add</button>
                     <input type="text" class="search" placeholder="Search.." id="searchInput">
                 </div>
             </div>
             <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">Date</th>
-                        <th scope="col">Reason</th>
-                        <th scope="col">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    while ($row = $result->fetch_assoc()):
-                    ?>
+                <table class="table">
+                    <thead>
                         <tr>
-                            <td><?php echo date("F j, Y", strtotime($row['date'])); ?></td>
-                            <td><?php echo htmlspecialchars($row['reason']); ?></td>
-                            <td>
-                                <button class="btn btn-warning edit-btn" 
-                                        data-id="<?php echo $row['id']; ?>" 
-                                        data-date="<?php echo $row['date']; ?>" 
-                                        data-reason="<?php echo htmlspecialchars($row['reason']); ?>" 
-                                        data-bs-toggle="modal" 
-                                        data-bs-target="#unavailableDaysModal">Edit</button>
-                                <form method="POST" action="../function/php/unavailable.php" style="display:inline;">
-                                    <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                                    <button type="submit" name="action" value="delete" class="btn btn-danger">Delete</button>
-                                </form>
-                            </td>
+                            <th scope="col">Date</th>
+                            <th scope="col">Reason</th>
+                            <th scope="col">Actions</th>
                         </tr>
-                    <?php endwhile; ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <?php
+                        while ($row = $result->fetch_assoc()):
+                        ?>
+                            <tr>
+                                <td><?php echo date("F j, Y", strtotime($row['date'])); ?></td>
+                                <td><?php echo htmlspecialchars($row['reason']); ?></td>
+                                <td>
+                                    <button class="btn btn-warning edit-btn" data-id="<?php echo $row['id']; ?>"
+                                        data-date="<?php echo $row['date']; ?>"
+                                        data-reason="<?php echo htmlspecialchars($row['reason']); ?>" data-bs-toggle="modal"
+                                        data-bs-target="#unavailableDaysModal">Edit</button>
+                                    <form method="POST" action="../function/php/unavailable.php" style="display:inline;">
+                                        <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                                        <button type="submit" name="action" value="delete"
+                                            class="btn btn-danger">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php endwhile; ?>
+                    </tbody>
+                </table>
             </div>
 
-            <div class="modal fade" id="unavailableDaysModal" tabindex="-1" aria-labelledby="unavailableDaysModalLabel" aria-hidden="true">
+            <div class="modal fade" id="unavailableDaysModal" tabindex="-1" aria-labelledby="unavailableDaysModalLabel"
+                aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -159,19 +165,22 @@
                         </div>
                         <form method="POST" action="../function/php/unavailable.php">
                             <div class="modal-body">
-                                <input type="hidden" name="id" id="unavailableDayId"> <!-- Hidden input for Edit/Update -->
+                                <input type="hidden" name="id" id="unavailableDayId">
+                                <!-- Hidden input for Edit/Update -->
                                 <div class="mb-3">
                                     <label for="unavailableDate" class="form-label">Date</label>
                                     <input type="date" class="form-control" id="unavailableDate" name="date" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="reason" class="form-label">Reason</label>
-                                    <textarea class="form-control" id="reason" name="reason" rows="3" required></textarea>
+                                    <textarea class="form-control" id="reason" name="reason" rows="3"
+                                        required></textarea>
                                 </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="submit" name="action" value="add" class="btn btn-primary">Save</button>
-                                <button type="submit" name="action" value="edit" class="btn btn-success d-none" id="editBtn">Update</button>
+                                <button type="submit" name="action" value="edit" class="btn btn-success d-none"
+                                    id="editBtn">Update</button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                             </div>
                         </form>
@@ -180,25 +189,25 @@
             </div>
 
             <nav>
-            <ul class="pagination d-flex justify-content-end">
+                <ul class="pagination d-flex justify-content-end">
                     <?php
-                        if ($total_pages > 3) {
-                            if ($page > 1) {
-                                echo '<li class="page-item"><a class="page-link" href="?page=' . ($page - 1) . '">&laquo;</a></li>';
-                            }
-                            $start = max(1, $page - 1);
-                            $end = min($total_pages, $start + 2);
-                            for ($i = $start; $i <= $end; $i++) {
-                                echo '<li class="page-item ' . ($i == $page ? 'active' : '') . '"><a class="page-link" href="?page=' . $i . '">' . $i . '</a></li>';
-                            }
-                            if ($page < $total_pages) {
-                                echo '<li class="page-item"><a class="page-link" href="?page=' . ($page + 1) . '">&raquo;</a></li>';
-                            }
-                        } else {
-                            for ($i = 1; $i <= $total_pages; $i++) {
-                                echo '<li class="page-item ' . ($i == $page ? 'active' : '') . '"><a class="page-link" href="?page=' . $i . '">' . $i . '</a></li>';
-                            }
+                    if ($total_pages > 3) {
+                        if ($page > 1) {
+                            echo '<li class="page-item"><a class="page-link" href="?page=' . ($page - 1) . '">&laquo;</a></li>';
                         }
+                        $start = max(1, $page - 1);
+                        $end = min($total_pages, $start + 2);
+                        for ($i = $start; $i <= $end; $i++) {
+                            echo '<li class="page-item ' . ($i == $page ? 'active' : '') . '"><a class="page-link" href="?page=' . $i . '">' . $i . '</a></li>';
+                        }
+                        if ($page < $total_pages) {
+                            echo '<li class="page-item"><a class="page-link" href="?page=' . ($page + 1) . '">&raquo;</a></li>';
+                        }
+                    } else {
+                        for ($i = 1; $i <= $total_pages; $i++) {
+                            echo '<li class="page-item ' . ($i == $page ? 'active' : '') . '"><a class="page-link" href="?page=' . $i . '">' . $i . '</a></li>';
+                        }
+                    }
                     ?>
                 </ul>
             </nav>
@@ -206,8 +215,8 @@
         <?php $conn->close(); ?>
 
         <?php
-                                    if (isset($_SESSION['status_message'])) {
-                                        echo "<script>
+        if (isset($_SESSION['status_message'])) {
+            echo "<script>
                                             Swal.fire({
                                                 icon: 'success',
                                                 title: 'Success!',
@@ -216,36 +225,36 @@
                                                 timer: 1500
                                             });
                                         </script>";
-                                        unset($_SESSION['status_message']);
-                                    }
-                                    ?>
-        </body>
-        <script>
-            document.querySelectorAll('.edit-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    const id = this.getAttribute('data-id');
-                    const date = this.getAttribute('data-date');
-                    const reason = this.getAttribute('data-reason');
+            unset($_SESSION['status_message']);
+        }
+        ?>
+</body>
+<script>
+    document.querySelectorAll('.edit-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            const date = this.getAttribute('data-date');
+            const reason = this.getAttribute('data-reason');
 
-                    document.getElementById('unavailableDayId').value = id;
-                    document.getElementById('unavailableDate').value = date;
-                    document.getElementById('reason').value = reason;
+            document.getElementById('unavailableDayId').value = id;
+            document.getElementById('unavailableDate').value = date;
+            document.getElementById('reason').value = reason;
 
-                    document.getElementById('editBtn').classList.remove('d-none');
-                });
-            });
+            document.getElementById('editBtn').classList.remove('d-none');
+        });
+    });
 
-            // Reset Modal on Close
-            document.getElementById('unavailableDaysModal').addEventListener('hidden.bs.modal', function() {
-                document.getElementById('unavailableDayId').value = '';
-                document.getElementById('unavailableDate').value = '';
-                document.getElementById('reason').value = '';
-                document.getElementById('editBtn').classList.add('d-none');
-            });
-        </script>
-        
-       
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="../function/script/status.js"></script>
+    // Reset Modal on Close
+    document.getElementById('unavailableDaysModal').addEventListener('hidden.bs.modal', function() {
+        document.getElementById('unavailableDayId').value = '';
+        document.getElementById('unavailableDate').value = '';
+        document.getElementById('reason').value = '';
+        document.getElementById('editBtn').classList.add('d-none');
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../function/script/status.js"></script>
 
 </html>

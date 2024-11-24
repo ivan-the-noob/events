@@ -6,6 +6,11 @@ if (!(isset($_SESSION['email']) && $_SESSION['role'] === 'users')) {
     header('Location: ../../../features/users/web/login.php');
     exit;
 }
+
+
+require '../../../db.php';
+$query = "SELECT id, type_of_event FROM event_list";
+$result = $conn->query($query);
 ?>
 
 <!DOCTYPE html>
@@ -201,14 +206,18 @@ if (!(isset($_SESSION['email']) && $_SESSION['role'] === 'users')) {
                                     <div class="form-group mt-4">
                                         <label for="event-type" class="form-label">Type of Event</label>
                                         <select id="event-type" name="event_type" class="form-control">
-                                            <option value="" disabled selected>Select an event</option>
-                                            <option value="Kiddie Party">Kiddie Party</option>
-                                            <option value="Adult Birthday party">Adult Birthday party</option>
-                                            <option value="Debut">Debut</option>
-                                            <option value="Wedding">Wedding</option>
-                                            <option value="Christening">Christening</option>
-                                            <option value="Despedida">Despedida</option>
-                                            <option value="Christmas Year End party">Christmas / Year End party</option>
+                                            <?php
+                                            // Check if there are results and populate options
+                                            if ($result && $result->num_rows > 0) {
+                                                while ($row = $result->fetch_assoc()) {
+                                                    // Format the event name for JS compatibility (replace spaces and remove special characters)
+                                                    $eventTypeFormatted = strtolower(str_replace([' ', '/'], ['-', ''], $row['type_of_event']));
+                                                    echo '<option value="' . htmlspecialchars($row['id']) . '" data-type="' . $eventTypeFormatted . '">' . htmlspecialchars($row['type_of_event']) . '</option>';
+                                                }
+                                            } else {
+                                                echo '<option value="" disabled>No events available</option>';
+                                            }
+                                            ?>
                                         </select>
                                     </div>
                                 </div>

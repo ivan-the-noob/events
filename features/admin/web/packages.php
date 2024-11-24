@@ -1,26 +1,26 @@
 <?php
- session_start();
- if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'admin') {
-     header('Location: ../../users/web/login.php');
-     exit(); 
- }
-    require '../../../db.php';
+session_start();
+if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'admin') {
+    header('Location: ../../users/web/login.php');
+    exit();
+}
+require '../../../db.php';
 
-    $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-    $limit = 5;
-    $offset = ($page - 1) * $limit;
-    $total_query = "SELECT COUNT(*) as total FROM booking";
-    $total_result = $conn->query($total_query);
-    $total_row = $total_result->fetch_assoc();
-    $total_records = $total_row['total'];
-    $total_pages = ceil($total_records / $limit); 
-    $query = "SELECT * FROM booking LIMIT $limit OFFSET $offset";
-    $result = $conn->query($query);
+$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+$limit = 5;
+$offset = ($page - 1) * $limit;
+$total_query = "SELECT COUNT(*) as total FROM booking";
+$total_result = $conn->query($total_query);
+$total_row = $total_result->fetch_assoc();
+$total_records = $total_row['total'];
+$total_pages = ceil($total_records / $limit);
+$query = "SELECT * FROM booking LIMIT $limit OFFSET $offset";
+$result = $conn->query($query);
 
-    $query = "SELECT * FROM event_packages";
-    $result = $conn->query($query);
+$query = "SELECT * FROM event_packages";
+$result = $conn->query($query);
 
-   
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -40,7 +40,7 @@
 <body>
     <!--Navigation Links-->
     <div class="navbar flex-column bg-white shadow-sm p-3 collapse d-md-flex" id="navbar">
-    <div class="navbar-links">
+        <div class="navbar-links">
             <a class="navbar-brand d-none d-md-block logo-container" href="#">
                 <img src="../../../assets/logo.png" alt="Logo">
             </a>
@@ -64,7 +64,7 @@
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Cancelled Booking</span>
             </a>
-            <a href="#"class="navbar-highlight">
+            <a href="#" class="navbar-highlight">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Event Packages</span>
             </a>
@@ -76,13 +76,17 @@
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>History</span>
             </a>
+            <a href="events_list.php">
+                <i class="fa-solid fa-tachometer-alt"></i>
+                <span>Events List</span>
+            </a>
             <a href="admin-user.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Manage Admin Users</span>
-            </a>           
-            </div>
-
+            </a>
         </div>
+
+    </div>
     </div>
     <div class="content flex-grow-1">
         <div class="header">
@@ -101,57 +105,62 @@
                             style="width: 40px; height: 40px; object-fit: cover;">
                     </button>
                     <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="../../users/function/authentication/logout.php">Logout</a></li>
+                        <li><a class="dropdown-item" href="../../users/function/authentication/logout.php">Logout</a>
+                        </li>
                     </ul>
                 </div>
             </div>
         </div>
 
-      
+
         <div class="container mt-4">
             <div class="d-flex justify-content-between mb-2">
                 <h3>Event Packages</h3>
                 <div class="d-flex gap-2">
-                    <button class="btn btn-primary add-btn" data-bs-toggle="modal" data-bs-target="#eventPackagesModal">+ Add</button>
+                    <button class="btn btn-primary add-btn" data-bs-toggle="modal"
+                        data-bs-target="#eventPackagesModal">+ Add</button>
                     <input type="text" class="search" placeholder="Search.." id="searchInput">
                 </div>
-        </div>
+            </div>
             <div class="table-responsive">
-            <table class="table">
-    <thead>
-        <tr>
-            <th scope="col">Package Name</th>
-            <th scope="col">Description</th>
-            <th scope="col">Price</th>
-            <th scope="col">Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-            <?php while ($row = $result->fetch_assoc()): ?>
-                <tr>
-                    <td><?php echo htmlspecialchars($row['package_name']); ?></td>
-                    <td><?php echo htmlspecialchars($row['description']); ?></td>
-                    <td><?php echo number_format($row['price'], 2); ?></td>
-                    <td>
-                        <button class="btn btn-warning edit-btn" 
-                                data-id="<?php echo $row['id']; ?>" 
-                                data-package_name="<?php echo htmlspecialchars($row['package_name']); ?>" 
-                                data-description="<?php echo htmlspecialchars($row['description']); ?>" 
-                                data-price="<?php echo $row['price']; ?>" 
-                                data-bs-toggle="modal" 
-                                data-bs-target="#eventPackagesModal">Edit</button>
-                        <form method="POST" action="../function/php/event_packages.php" style="display:inline;">
-                            <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                            <button type="submit" name="action" value="delete" class="btn btn-danger">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-            <?php endwhile; ?>
-        </tbody>
-    </table>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Type of Event</th>
+                            <th scope="col">Package Name</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php while ($row = $result->fetch_assoc()): ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($row['type_of_event']); ?></td>
+                                <td><?php echo htmlspecialchars($row['package_name']); ?></td>
+                                <td><?php echo htmlspecialchars($row['description']); ?></td>
+                                <td><?php echo number_format($row['price'], 2); ?></td>
+                                <td>
+                                    <button class="btn btn-warning edit-btn" data-id="<?php echo $row['id']; ?>"
+                                        data-package_name="<?php echo htmlspecialchars($row['type_of_event']); ?>"
+                                        data-package_name="<?php echo htmlspecialchars($row['package_name']); ?>"
+                                        data-description="<?php echo htmlspecialchars($row['description']); ?>"
+                                        data-price="<?php echo $row['price']; ?>" data-bs-toggle="modal"
+                                        data-bs-target="#eventPackagesModal">Edit</button>
+                                    <form method="POST" action="../function/php/event_packages.php" style="display:inline;">
+                                        <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                                        <button type="submit" name="action" value="delete"
+                                            class="btn btn-danger">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php endwhile; ?>
+                    </tbody>
+                </table>
             </div>
 
-            <div class="modal fade" id="eventPackagesModal" tabindex="-1" aria-labelledby="eventPackagesModalLabel" aria-hidden="true">
+            <div class="modal fade" id="eventPackagesModal" tabindex="-1" aria-labelledby="eventPackagesModalLabel"
+                aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -162,21 +171,30 @@
                             <div class="modal-body">
                                 <input type="hidden" name="id" id="eventPackageId">
                                 <div class="mb-3">
+                                    <label for="type_of_event" class="form-label">Type of Event</label>
+                                    <input type="text" class="form-control" id="type_of_event" name="package_name"
+                                        required>
+                                </div>
+                                <div class="mb-3">
                                     <label for="packageName" class="form-label">Package Name</label>
-                                    <input type="text" class="form-control" id="packageName" name="package_name" required>
+                                    <input type="text" class="form-control" id="packageName" name="package_name"
+                                        required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="description" class="form-label">Description</label>
-                                    <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                                    <textarea class="form-control" id="description" name="description" rows="3"
+                                        required></textarea>
                                 </div>
                                 <div class="mb-3">
                                     <label for="price" class="form-label">Price</label>
-                                    <input type="number" class="form-control" id="price" name="price" step="0.01" required>
+                                    <input type="number" class="form-control" id="price" name="price" step="0.01"
+                                        required>
                                 </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="submit" name="action" value="add" class="btn btn-primary">Save</button>
-                                <button type="submit" name="action" value="edit" class="btn btn-success d-none" id="editBtn">Update</button>
+                                <button type="submit" name="action" value="edit" class="btn btn-success d-none"
+                                    id="editBtn">Update</button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                             </div>
                         </form>
@@ -188,7 +206,8 @@
             <nav aria-label="Page navigation">
                 <ul class="pagination d-flex justify-content-end">
                     <?php if ($page > 1): ?>
-                        <li class="page-item pg-btn"><a class="page-links" href="?page=<?php echo $page - 1; ?>">&laquo;</a></li>
+                        <li class="page-item pg-btn"><a class="page-links" href="?page=<?php echo $page - 1; ?>">&laquo;</a>
+                        </li>
                     <?php else: ?>
                         <li class="page-item pg-btn disabled"><span class="page-links">&laquo;</span></li>
                     <?php endif; ?>
@@ -200,7 +219,8 @@
                     <?php endfor; ?>
 
                     <?php if ($page < $total_pages): ?>
-                        <li class="page-item pg-btn"><a class="page-links" href="?page=<?php echo $page + 1; ?>">&raquo;</a></li>
+                        <li class="page-item pg-btn"><a class="page-links" href="?page=<?php echo $page + 1; ?>">&raquo;</a>
+                        </li>
                     <?php else: ?>
                         <li class="page-item pg-btn disabled"><span class="page-links">&raquo;</span></li>
                     <?php endif; ?>
@@ -211,8 +231,8 @@
         <?php $conn->close(); ?>
 
         <?php
-                                    if (isset($_SESSION['status_message'])) {
-                                        echo "<script>
+        if (isset($_SESSION['status_message'])) {
+            echo "<script>
                                             Swal.fire({
                                                 icon: 'success',
                                                 title: 'Success!',
@@ -221,39 +241,39 @@
                                                 timer: 1500
                                             });
                                         </script>";
-                                        unset($_SESSION['status_message']);
-                                    }
-                                    ?>
-        </body>
-        <script>
-            document.querySelectorAll('.edit-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    const id = this.getAttribute('data-id');
-                    const packageName = this.getAttribute('data-package_name');
-                    const description = this.getAttribute('data-description');
-                    const price = this.getAttribute('data-price');
+            unset($_SESSION['status_message']);
+        }
+        ?>
+</body>
+<script>
+    document.querySelectorAll('.edit-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            const packageName = this.getAttribute('data-package_name');
+            const description = this.getAttribute('data-description');
+            const price = this.getAttribute('data-price');
 
-                    document.getElementById('eventPackageId').value = id;
-                    document.getElementById('packageName').value = packageName;
-                    document.getElementById('description').value = description;
-                    document.getElementById('price').value = price;
+            document.getElementById('eventPackageId').value = id;
+            document.getElementById('packageName').value = packageName;
+            document.getElementById('description').value = description;
+            document.getElementById('price').value = price;
 
-                    document.getElementById('editBtn').classList.remove('d-none');
-                });
-            });
+            document.getElementById('editBtn').classList.remove('d-none');
+        });
+    });
 
-            document.getElementById('eventPackagesModal').addEventListener('hidden.bs.modal', function() {
-                document.getElementById('eventPackageId').value = '';
-                document.getElementById('packageName').value = '';
-                document.getElementById('description').value = '';
-                document.getElementById('price').value = '';
-                document.getElementById('editBtn').classList.add('d-none');
-            });
-        </script>
+    document.getElementById('eventPackagesModal').addEventListener('hidden.bs.modal', function() {
+        document.getElementById('eventPackageId').value = '';
+        document.getElementById('packageName').value = '';
+        document.getElementById('description').value = '';
+        document.getElementById('price').value = '';
+        document.getElementById('editBtn').classList.add('d-none');
+    });
+</script>
 
-        
-       
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="../function/script/status.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../function/script/status.js"></script>
 
 </html>

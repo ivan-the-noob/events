@@ -1,20 +1,20 @@
 <?php
- session_start();
- if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'admin') {
-     header('Location: ../../users/web/login.php');
-     exit(); 
- }
+session_start();
+if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'admin') {
+    header('Location: ../../users/web/login.php');
+    exit();
+}
 require '../../../db.php';
 
 $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-$limit = 5; 
-$offset = ($page - 1) * $limit;  
+$limit = 5;
+$offset = ($page - 1) * $limit;
 
 $total_query = "SELECT COUNT(*) as total FROM booking";
 $total_result = $conn->query($total_query);
 $total_row = $total_result->fetch_assoc();
 $total_records = $total_row['total'];
-$total_pages = ceil($total_records / $limit);  
+$total_pages = ceil($total_records / $limit);
 
 $query = "SELECT * FROM booking LIMIT $limit OFFSET $offset";
 $result = $conn->query($query);
@@ -40,7 +40,7 @@ $declined_result = $conn->query($declined_query);
 <body>
     <!--Navigation Links-->
     <div class="navbar flex-column bg-white shadow-sm p-3 collapse d-md-flex" id="navbar">
-    <div class="navbar-links">
+        <div class="navbar-links">
             <a class="navbar-brand d-none d-md-block logo-container" href="#">
                 <img src="../../../assets/logo.png" alt="Logo">
             </a>
@@ -63,11 +63,11 @@ $declined_result = $conn->query($declined_query);
             <a href="#" class="navbar-highlight">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Cancelled Booking</span>
-            </a> 
+            </a>
             <a href="packages.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Event Packages</span>
-            </a>  
+            </a>
             <a href="unavailable.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Unavailable</span>
@@ -75,14 +75,18 @@ $declined_result = $conn->query($declined_query);
             <a href="history.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>History</span>
-            </a>  
+            </a>
+            <a href="events_list.php">
+                <i class="fa-solid fa-tachometer-alt"></i>
+                <span>Events List</span>
+            </a>
             <a href="admin-user.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Manage Admin Users</span>
-            </a>      
-            </div>
-
+            </a>
         </div>
+
+    </div>
     </div>
     <div class="content flex-grow-1">
         <div class="header">
@@ -101,97 +105,102 @@ $declined_result = $conn->query($declined_query);
                             style="width: 40px; height: 40px; object-fit: cover;">
                     </button>
                     <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="../../users/function/authentication/logout.php">Logout</a></li>
+                        <li><a class="dropdown-item" href="../../users/function/authentication/logout.php">Logout</a>
+                        </li>
                     </ul>
                 </div>
             </div>
         </div>
 
-      
+
         <div class="container mt-4">
             <div class="d-flex justify-content-between mb-2">
-            <h3>Cancelled Booking</h3>
-            <input type="text" class="search" placeholder="Search.." id="searchInput">
+                <h3>Cancelled Booking</h3>
+                <input type="text" class="search" placeholder="Search.." id="searchInput">
             </div>
-            
+
             <div class="table-responsive">
-            <table class="table" id="bookingTable">
-            <thead class="table-booking">
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Type of Event</th>
-                    <th scope="col">Reason</th>
-                </tr>
-            </thead>
-            <tbody id="tableBody">
-                <?php while ($row = $result->fetch_assoc()): ?>
-                    <tr>
-                        <td><?php echo $row['id']; ?></td>
-                        <td><?php echo htmlspecialchars($row['full_name']); ?></td>
-                        <td><?php echo htmlspecialchars($row['event_type']); ?></td>
-                        <td><p>Dummy Reason.</p></td>
-                    </tr>                   
-                <?php endwhile; ?>
-            </tbody>
-        </table>
+                <table class="table" id="bookingTable">
+                    <thead class="table-booking">
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Type of Event</th>
+                            <th scope="col">Reason</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <?php while ($row = $result->fetch_assoc()): ?>
+                            <tr>
+                                <td><?php echo $row['id']; ?></td>
+                                <td><?php echo htmlspecialchars($row['full_name']); ?></td>
+                                <td><?php echo htmlspecialchars($row['event_type']); ?></td>
+                                <td>
+                                    <p>Dummy Reason.</p>
+                                </td>
+                            </tr>
+                        <?php endwhile; ?>
+                    </tbody>
+                </table>
             </div>
 
             <script>
                 const searchInput = document.getElementById('searchInput');
-    const tableBody = document.getElementById('tableBody');
-    const rows = tableBody.getElementsByTagName('tr');
+                const tableBody = document.getElementById('tableBody');
+                const rows = tableBody.getElementsByTagName('tr');
 
-    // Listen for input in the search field and trigger table filtering
-    searchInput.addEventListener('input', function () {
-        const searchTerm = searchInput.value.toLowerCase();
+                // Listen for input in the search field and trigger table filtering
+                searchInput.addEventListener('input', function() {
+                    const searchTerm = searchInput.value.toLowerCase();
 
-        // Loop through table rows
-        for (let row of rows) {
-            const cells = row.getElementsByTagName('td');
-            let rowText = '';
-            
-            // Loop through each cell in the row and concatenate the text content
-            for (let cell of cells) {
-                rowText += cell.textContent.toLowerCase() + ' ';
-            }
+                    // Loop through table rows
+                    for (let row of rows) {
+                        const cells = row.getElementsByTagName('td');
+                        let rowText = '';
 
-            // If the row's text content matches the search term, display it; otherwise, hide it
-            if (rowText.includes(searchTerm)) {
-                row.style.display = ''; // Show row
-            } else {
-                row.style.display = 'none'; // Hide row
-            }
-        }
-    });
+                        // Loop through each cell in the row and concatenate the text content
+                        for (let cell of cells) {
+                            rowText += cell.textContent.toLowerCase() + ' ';
+                        }
+
+                        // If the row's text content matches the search term, display it; otherwise, hide it
+                        if (rowText.includes(searchTerm)) {
+                            row.style.display = ''; // Show row
+                        } else {
+                            row.style.display = 'none'; // Hide row
+                        }
+                    }
+                });
             </script>
             <nav aria-label="Page navigation">
-            <ul class="pagination d-flex justify-content-end">
-                <?php if ($page > 1): ?>
-                    <li class="page-item pg-btn"><a class="page-links" href="?page=<?php echo $page - 1; ?>">&laquo;</a></li>
-                <?php else: ?>
-                    <li class="page-item pg-btn disabled"><span class="page-links">&laquo;</span></li>
-                <?php endif; ?>
+                <ul class="pagination d-flex justify-content-end">
+                    <?php if ($page > 1): ?>
+                        <li class="page-item pg-btn"><a class="page-links" href="?page=<?php echo $page - 1; ?>">&laquo;</a>
+                        </li>
+                    <?php else: ?>
+                        <li class="page-item pg-btn disabled"><span class="page-links">&laquo;</span></li>
+                    <?php endif; ?>
 
-                <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                    <li class="page-item <?php echo ($i == $page) ? 'active' : ''; ?>">
-                        <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
-                    </li>
-                <?php endfor; ?>
+                    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                        <li class="page-item <?php echo ($i == $page) ? 'active' : ''; ?>">
+                            <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                        </li>
+                    <?php endfor; ?>
 
-                <?php if ($page < $total_pages): ?>
-                    <li class="page-item pg-btn"><a class="page-links" href="?page=<?php echo $page + 1; ?>">&raquo;</a></li>
-                <?php else: ?>
-                    <li class="page-item pg-btn disabled"><span class="page-links">&raquo;</span></li>
-                <?php endif; ?>
-            </ul>
+                    <?php if ($page < $total_pages): ?>
+                        <li class="page-item pg-btn"><a class="page-links" href="?page=<?php echo $page + 1; ?>">&raquo;</a>
+                        </li>
+                    <?php else: ?>
+                        <li class="page-item pg-btn disabled"><span class="page-links">&raquo;</span></li>
+                    <?php endif; ?>
+                </ul>
             </nav>
         </div>
         <?php $conn->close(); ?>
 
         <?php
-                                    if (isset($_SESSION['status_message'])) {
-                                        echo "<script>
+        if (isset($_SESSION['status_message'])) {
+            echo "<script>
                                             Swal.fire({
                                                 icon: 'success',
                                                 title: 'Success!',
@@ -200,14 +209,14 @@ $declined_result = $conn->query($declined_query);
                                                 timer: 1500
                                             });
                                         </script>";
-                                        unset($_SESSION['status_message']);
-                                    }
-                                    ?>
-        </body>
+            unset($_SESSION['status_message']);
+        }
+        ?>
+</body>
 
-        
-       
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="../function/script/status.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../function/script/status.js"></script>
 
 </html>

@@ -1,20 +1,20 @@
 <?php
-    session_start();
-    if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'admin') {
-        header('Location: ../../users/web/login.php');
-        exit(); 
-    }
-    require '../../../db.php';
-    include '../function/php/table-dashboard.php';
-    include '../function/php/reminder.php';
-    $queryWaiting = "SELECT COUNT(*) AS waiting_count FROM booking WHERE status = 'Waiting'";
-    $queryDeclined = "SELECT COUNT(*) AS declined_count FROM booking WHERE status = 'Declined'";
-    $resultWaiting = $conn->query($queryWaiting);
-    $resultDeclined = $conn->query($queryDeclined);
-    $rowWaiting = $resultWaiting->fetch_assoc();
-    $rowDeclined = $resultDeclined->fetch_assoc();
-    $waitingCount = $rowWaiting['waiting_count'];
-    $declinedCount = $rowDeclined['declined_count'];
+session_start();
+if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'admin') {
+    header('Location: ../../users/web/login.php');
+    exit();
+}
+require '../../../db.php';
+include '../function/php/table-dashboard.php';
+include '../function/php/reminder.php';
+$queryWaiting = "SELECT COUNT(*) AS waiting_count FROM booking WHERE status = 'Waiting'";
+$queryDeclined = "SELECT COUNT(*) AS declined_count FROM booking WHERE status = 'Declined'";
+$resultWaiting = $conn->query($queryWaiting);
+$resultDeclined = $conn->query($queryDeclined);
+$rowWaiting = $resultWaiting->fetch_assoc();
+$rowDeclined = $resultDeclined->fetch_assoc();
+$waitingCount = $rowWaiting['waiting_count'];
+$declinedCount = $rowDeclined['declined_count'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -69,14 +69,18 @@
             <a href="history.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>History</span>
-            </a>  
+            </a>
+            <a href="events_list.php">
+                <i class="fa-solid fa-tachometer-alt"></i>
+                <span>Events List</span>
+            </a>
             <a href="admin-user.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Manage Admin Users</span>
-            </a>         
-            </div>
-
+            </a>
         </div>
+
+    </div>
     </div>
     <div class="content flex-grow-1">
         <div class="header">
@@ -95,54 +99,55 @@
                             style="width: 40px; height: 40px; object-fit: cover;">
                     </button>
                     <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="../../users/function/authentication/logout.php">Logout</a></li>
+                        <li><a class="dropdown-item" href="../../users/function/authentication/logout.php">Logout</a>
+                        </li>
                     </ul>
                 </div>
             </div>
         </div>
 
-      
+
         <div class="container mt-4">
             <h3>Dashboard</h3>
             <div class="row">
                 <div class="col-md-2">
-                        <div class="card p-0 mt-2">                        
-                            <div class="card-body">
-                                <div class="d-flex">
-                                    <div class="col-md-12">
-                                        <p class="mb-1">Total Sales</p>
-                                        <h5>₱518, 024</h5>
-                                    </div>
+                    <div class="card p-0 mt-2">
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <div class="col-md-12">
+                                    <p class="mb-1">Total Sales</p>
+                                    <h5>₱518, 024</h5>
                                 </div>
                             </div>
                         </div>
-                        <div class="card p-0 mt-2">                        
-                            <div class="card-body">
-                                <div class="d-flex">
-                                    <div class="col-md-12">
-                                        <p class="mb-1">Approved Books</p>
-                                        <h5><?php echo $waitingCount; ?></h5>
-                                    </div>
+                    </div>
+                    <div class="card p-0 mt-2">
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <div class="col-md-12">
+                                    <p class="mb-1">Approved Books</p>
+                                    <h5><?php echo $waitingCount; ?></h5>
                                 </div>
                             </div>
                         </div>
-                        <div class="card p-0 mt-2">                        
-                            <div class="card-body"> 
-                                <div class="d-flex">
-                                    <div class="col-md-12">
-                                        <p class="mb-1">Cancelled Books</p>
-                                        <h5><?php echo $declinedCount ?></h5>
-                                    </div>
+                    </div>
+                    <div class="card p-0 mt-2">
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <div class="col-md-12">
+                                    <p class="mb-1">Cancelled Books</p>
+                                    <h5><?php echo $declinedCount ?></h5>
                                 </div>
                             </div>
-                        </div>                                       
-                </div> 
+                        </div>
+                    </div>
+                </div>
                 <div class="col-md-5 mt-2 d-flex justify-content-center">
-                        <div class="chart-container">
-                            <h5 class="chart-title">Monthly Sales</h5>
-                            <canvas id="salesChart"></canvas>
-                        </div>
-                </div> 
+                    <div class="chart-container">
+                        <h5 class="chart-title">Monthly Sales</h5>
+                        <canvas id="salesChart"></canvas>
+                    </div>
+                </div>
                 <div class="col-md-5 mt-2  d-flex justify-content-center">
                     <div class="chart-container">
                         <h5 class="chart-title">Yearly Sales</h5>
@@ -213,111 +218,119 @@
                 <div class="col-md-3 mt-4">
                     <div class="d-flex justify-content-between mb-2">
                         <h5 class="mt-0 d-flex align-items-center mb-0">Reminders</h5>
-                        <button class="reminder-notif">  <i class="fa-regular fa-bell fa-xl"></i></button>
+                        <button class="reminder-notif"> <i class="fa-regular fa-bell fa-xl"></i></button>
                     </div>
-                      <div class="card-container" style="height: 50vh; overflow-y: auto; padding: 10px;">                 
-                      <?php
-        if ($result->num_rows > 0):
-            while ($row = $result->fetch_assoc()):
-        ?>
-                <div class="col-md-12 mb-2">
-                    <div class="card p-0">
-                        <div class="card-body d-flex justify-content-between gap-3">
-                            <div class="event-content">
-                                <p class="mb-0 date-detail"><?php echo htmlspecialchars($row['description']); ?></p>
-                                <p class="mb-0 date"><?php echo htmlspecialchars(date('F j, Y', strtotime($row['date']))); ?></p>
-                                <div class="d-flex align-items-center gap-1">
-                                    <p class="mb-0 date"><?php echo htmlspecialchars(date('g:i A', strtotime($row['start_time']))); ?></p> - 
-                                    <p class="mb-0 date"><?php echo htmlspecialchars(date('g:i A', strtotime($row['finish_time']))); ?></p>
+                    <div class="card-container" style="height: 50vh; overflow-y: auto; padding: 10px;">
+                        <?php
+                        if ($result->num_rows > 0):
+                            while ($row = $result->fetch_assoc()):
+                        ?>
+                                <div class="col-md-12 mb-2">
+                                    <div class="card p-0">
+                                        <div class="card-body d-flex justify-content-between gap-3">
+                                            <div class="event-content">
+                                                <p class="mb-0 date-detail"><?php echo htmlspecialchars($row['description']); ?>
+                                                </p>
+                                                <p class="mb-0 date">
+                                                    <?php echo htmlspecialchars(date('F j, Y', strtotime($row['date']))); ?></p>
+                                                <div class="d-flex align-items-center gap-1">
+                                                    <p class="mb-0 date">
+                                                        <?php echo htmlspecialchars(date('g:i A', strtotime($row['start_time']))); ?>
+                                                    </p> -
+                                                    <p class="mb-0 date">
+                                                        <?php echo htmlspecialchars(date('g:i A', strtotime($row['finish_time']))); ?>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="event-button">
+                                                <button class="d-flex justify-content-center mx-auto">
+                                                    <i class="fa fa-ellipsis-vertical fa-xl"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+                            <?php
+                            endwhile;
+                        else:
+                            ?>
+                            <p>Empty Reminders.</p>
+                        <?php
+                        endif;
+                        ?>
+                        <button class="reminder-btn mt-3" data-bs-toggle="modal" data-bs-target="#addReminderModal">+
+                            Add Reminder</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Add Reminder Modal -->
+        <div class="modal fade" id="addReminderModal" tabindex="-1" aria-labelledby="addReminderModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form method="POST" action="../function/php/add_reminder.php">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addReminderModalLabel">Add Reminder</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <input type="text" class="form-control" id="description" name="description" required>
                             </div>
-                            <div class="event-button">
-                                <button class="d-flex justify-content-center mx-auto">
-                                    <i class="fa fa-ellipsis-vertical fa-xl"></i>
-                                </button>
+                            <div class="mb-3">
+                                <label for="date" class="form-label">Date</label>
+                                <input type="date" class="form-control" id="date" name="date" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="start_time" class="form-label">Start Time</label>
+                                <select class="form-control" id="start_time" name="start_time" required>
+                                    <?php
+                                    for ($hour = 8; $hour <= 23; $hour++) {
+                                        $formatted_time = date('h:i A', strtotime("$hour:00"));
+                                        echo "<option value='" . date('H:i', strtotime("$hour:00")) . "'>$formatted_time</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="finish_time" class="form-label">Finish Time</label>
+                                <input type="time" class="form-control" id="finish_time" name="finish_time" readonly>
                             </div>
                         </div>
-                    </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save Reminder</button>
+                        </div>
+                    </form>
                 </div>
-        <?php
-            endwhile;
-        else:
-        ?>
-            <p>Empty Reminders.</p>
-        <?php
-        endif;
-        ?>
-                    <button class="reminder-btn mt-3" data-bs-toggle="modal" data-bs-target="#addReminderModal">+ Add Reminder</button>
-                </div>
-                      </div> 
-            </div>       
+            </div>
         </div>
-<!-- Add Reminder Modal -->
-<div class="modal fade" id="addReminderModal" tabindex="-1" aria-labelledby="addReminderModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form method="POST" action="../function/php/add_reminder.php">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addReminderModalLabel">Add Reminder</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="description" class="form-label">Description</label>
-                        <input type="text" class="form-control" id="description" name="description" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="date" class="form-label">Date</label>
-                        <input type="date" class="form-control" id="date" name="date" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="start_time" class="form-label">Start Time</label>
-                        <select class="form-control" id="start_time" name="start_time" required>
-                            <?php
-                            for ($hour = 8; $hour <= 23; $hour++) {
-                                $formatted_time = date('h:i A', strtotime("$hour:00"));
-                                echo "<option value='" . date('H:i', strtotime("$hour:00")) . "'>$formatted_time</option>";
-                            }
-                            ?>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="finish_time" class="form-label">Finish Time</label>
-                        <input type="time" class="form-control" id="finish_time" name="finish_time" readonly>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save Reminder</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
-<script>
-     document.getElementById('start_time').addEventListener('change', function() {
-        const startTime = this.value; // Get selected start time (HH:MM)
-        const [hour, minute] = startTime.split(':').map(Number); // Split into hour and minute
+        <script>
+            document.getElementById('start_time').addEventListener('change', function() {
+                const startTime = this.value; // Get selected start time (HH:MM)
+                const [hour, minute] = startTime.split(':').map(Number); // Split into hour and minute
 
-        const finishTime = new Date();
-        finishTime.setHours(hour + 5, minute); // Add 5 hours to the start time
+                const finishTime = new Date();
+                finishTime.setHours(hour + 5, minute); // Add 5 hours to the start time
 
-        // Correctly format finish time to HH:MM
-        const formattedFinishTime = finishTime.toTimeString().slice(0, 5); // Get HH:MM in 24-hour format
-        document.getElementById('finish_time').value = formattedFinishTime;
-    });
-</script>
-
-                
+                // Correctly format finish time to HH:MM
+                const formattedFinishTime = finishTime.toTimeString().slice(0, 5); // Get HH:MM in 24-hour format
+                document.getElementById('finish_time').value = formattedFinishTime;
+            });
+        </script>
 
 
-        
-        </body>      
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="../function/script/month-chart.js"></script>
-        <script src="../function/script/year-chart.js"></script>
-        <script src="../function/script/status.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../function/script/month-chart.js"></script>
+<script src="../function/script/year-chart.js"></script>
+<script src="../function/script/status.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </html>

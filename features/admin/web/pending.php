@@ -1,9 +1,9 @@
 <?php
- session_start();
- if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'admin') {
-     header('Location: ../../users/web/login.php');
-     exit(); 
- }
+session_start();
+if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'admin') {
+    header('Location: ../../users/web/login.php');
+    exit();
+}
 require '../../../db.php';
 
 // Pagination settings
@@ -42,7 +42,7 @@ $result = $conn->query($query);
 <body>
     <!--Navigation Links-->
     <div class="navbar flex-column bg-white shadow-sm p-3 collapse d-md-flex" id="navbar">
-    <div class="navbar-links">
+        <div class="navbar-links">
             <a class="navbar-brand d-none d-md-block logo-container" href="#">
                 <img src="../../../assets/logo.png" alt="Logo">
             </a>
@@ -78,13 +78,18 @@ $result = $conn->query($query);
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>History</span>
             </a>
+            <a href="events_list.php">
+                <i class="fa-solid fa-tachometer-alt"></i>
+                <span>Events List</span>
+            </a>
             <a href="admin-user.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Manage Admin Users</span>
-            </a>           
-            </div>
+            </a>
 
         </div>
+
+    </div>
     </div>
     <div class="content flex-grow-1">
         <div class="header">
@@ -103,13 +108,14 @@ $result = $conn->query($query);
                             style="width: 40px; height: 40px; object-fit: cover;">
                     </button>
                     <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="../../users/function/authentication/logout.php">Logout</a></li>
+                        <li><a class="dropdown-item" href="../../users/function/authentication/logout.php">Logout</a>
+                        </li>
                     </ul>
                 </div>
             </div>
         </div>
 
-      
+
         <div class="container mt-4">
             <div class="d-flex justify-content-between mb-2">
                 <h3>Pending Booking</h3>
@@ -133,21 +139,19 @@ $result = $conn->query($query);
                                 <td><?php echo htmlspecialchars($row['full_name']); ?></td>
                                 <td><?php echo htmlspecialchars($row['event_type']); ?></td>
                                 <td>
-                                    <button type="button" class="btn view" 
-                                            data-bs-toggle="modal" 
-                                            data-bs-target="#infoModal" 
-                                            data-id="<?php echo $row['id']; ?>"
-                                            data-full-name="<?php echo htmlspecialchars($row['full_name']); ?>"
-                                            data-event-type="<?php echo htmlspecialchars($row['event_type']); ?>"
-                                            data-email="<?php echo htmlspecialchars($row['email']); ?>"
-                                            data-phone="<?php echo htmlspecialchars($row['phone_number']); ?>"
-                                            data-events-date="<?php echo htmlspecialchars($row['events_date']); ?>"
-                                            data-guest-count="<?php echo htmlspecialchars($row['guest_count']); ?>"
-                                            data-event-duration="<?php echo htmlspecialchars($row['event_duration']); ?>"
-                                            data-event-starttime="<?php echo htmlspecialchars($row['event_starttime']); ?>"
-                                            data-event-endtime="<?php echo htmlspecialchars($row['event_endtime']); ?>"
-                                            data-event-package="<?php echo htmlspecialchars($row['event_package']); ?>"
-                                            data-event-options="<?php echo htmlspecialchars($row['event_options']); ?>">
+                                    <button type="button" class="btn view" data-bs-toggle="modal"
+                                        data-bs-target="#infoModal" data-id="<?php echo $row['id']; ?>"
+                                        data-full-name="<?php echo htmlspecialchars($row['full_name']); ?>"
+                                        data-event-type="<?php echo htmlspecialchars($row['event_type']); ?>"
+                                        data-email="<?php echo htmlspecialchars($row['email']); ?>"
+                                        data-phone="<?php echo htmlspecialchars($row['phone_number']); ?>"
+                                        data-events-date="<?php echo htmlspecialchars($row['events_date']); ?>"
+                                        data-guest-count="<?php echo htmlspecialchars($row['guest_count']); ?>"
+                                        data-event-duration="<?php echo htmlspecialchars($row['event_duration']); ?>"
+                                        data-event-starttime="<?php echo htmlspecialchars($row['event_starttime']); ?>"
+                                        data-event-endtime="<?php echo htmlspecialchars($row['event_endtime']); ?>"
+                                        data-event-package="<?php echo htmlspecialchars($row['event_package']); ?>"
+                                        data-event-options="<?php echo htmlspecialchars($row['event_options']); ?>">
                                         View
                                     </button>
                                 </td>
@@ -167,143 +171,146 @@ $result = $conn->query($query);
                         <?php endwhile; ?>
                     </tbody>
                 </table>
-</div>
-
-<!-- Modal (OUTSIDE THE TABLE) -->
-<div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="infoModalLabel">Event Details</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <h5>Customer Info</h5>
-                            <div class="form-group mt-1">
-                                <label for="modal-full-name" class="form-label">Full Name</label>
-                                <input type="text" id="modal-full-name" class="form-control" readonly>
-                            </div>
-                            <div class="form-group mt-1">
-                                <label for="modal-email" class="form-label">Email</label>
-                                <input type="email" id="modal-email" class="form-control" readonly>
-                            </div>
-                            <div class="form-group mt-1">
-                                <label for="modal-phone-number" class="form-label">Phone Number</label>
-                                <input type="number" id="modal-phone-number" class="form-control" readonly>
+
+            <!-- Modal (OUTSIDE THE TABLE) -->
+            <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="infoModalLabel">Event Details</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <h5>Customer Info</h5>
+                                        <div class="form-group mt-1">
+                                            <label for="modal-full-name" class="form-label">Full Name</label>
+                                            <input type="text" id="modal-full-name" class="form-control" readonly>
+                                        </div>
+                                        <div class="form-group mt-1">
+                                            <label for="modal-email" class="form-label">Email</label>
+                                            <input type="email" id="modal-email" class="form-control" readonly>
+                                        </div>
+                                        <div class="form-group mt-1">
+                                            <label for="modal-phone-number" class="form-label">Phone Number</label>
+                                            <input type="number" id="modal-phone-number" class="form-control" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mt-0">
+                                        <h5>Event Info</h5>
+                                        <div class="form-group mt-1">
+                                            <label for="modal-event-type" class="form-label">Type of Event</label>
+                                            <input type="text" id="modal-event-type" class="form-control" readonly>
+                                        </div>
+                                        <div class="form-group mt-1">
+                                            <label for="modal-events-date" class="form-label">Events Date</label>
+                                            <input type="text" id="modal-events-date" class="form-control" readonly>
+                                        </div>
+                                        <div class="form-group mt-1">
+                                            <label for="modal-guest-count" class="form-label">Guest Count</label>
+                                            <input type="number" id="modal-guest-count" class="form-control" readonly>
+                                        </div>
+                                        <div class="form-group mt-1">
+                                            <label for="modal-event-duration" class="form-label">Event Duration</label>
+                                            <input type="text" id="modal-event-duration" class="form-control" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h5>Event Packages</h5>
+                                        <div class="form-group mt-1">
+                                            <label for="modal-event-package" class="form-label">Event Package</label>
+                                            <input type="text" id="modal-event-package" class="form-control" readonly>
+                                        </div>
+                                        <div class="form-group mt-1">
+                                            <label for="modal-event-options" class="form-label">Event Options</label>
+                                            <input type="text" id="modal-event-options" class="form-control" readonly>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-4 mt-0">
-                            <h5>Event Info</h5>
-                            <div class="form-group mt-1">
-                                <label for="modal-event-type" class="form-label">Type of Event</label>
-                                <input type="text" id="modal-event-type" class="form-control" readonly>
-                            </div>
-                            <div class="form-group mt-1">
-                                <label for="modal-events-date" class="form-label">Events Date</label>
-                                <input type="text" id="modal-events-date" class="form-control" readonly>
-                            </div>
-                            <div class="form-group mt-1">
-                                <label for="modal-guest-count" class="form-label">Guest Count</label>
-                                <input type="number" id="modal-guest-count" class="form-control" readonly>
-                            </div>
-                            <div class="form-group mt-1">
-                                <label for="modal-event-duration" class="form-label">Event Duration</label>
-                                <input type="text" id="modal-event-duration" class="form-control" readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <h5>Event Packages</h5>
-                            <div class="form-group mt-1">
-                                <label for="modal-event-package" class="form-label">Event Package</label>
-                                <input type="text" id="modal-event-package" class="form-control" readonly>
-                            </div>
-                            <div class="form-group mt-1">
-                                <label for="modal-event-options" class="form-label">Event Options</label>
-                                <input type="text" id="modal-event-options" class="form-control" readonly>
-                            </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-    // Add event listener to all view buttons
-    document.querySelectorAll('.btn.view').forEach(button => {
-        button.addEventListener('click', event => {
-            const modal = document.querySelector('#infoModal');
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    // Add event listener to all view buttons
+                    document.querySelectorAll('.btn.view').forEach(button => {
+                        button.addEventListener('click', event => {
+                            const modal = document.querySelector('#infoModal');
 
-            // Get data attributes
-            const id = button.dataset.id;
-            const fullName = button.dataset.fullName;
-            const eventType = button.dataset.eventType;
-            const email = button.dataset.email;
-            const phone = button.dataset.phone;
-            const eventsDate = button.dataset.eventsDate;
-            const guestCount = button.dataset.guestCount;
-            const eventDuration = button.dataset.eventDuration;
-            const eventPackage = button.dataset.eventPackage;
-            const eventOptions = button.dataset.eventOptions;
+                            // Get data attributes
+                            const id = button.dataset.id;
+                            const fullName = button.dataset.fullName;
+                            const eventType = button.dataset.eventType;
+                            const email = button.dataset.email;
+                            const phone = button.dataset.phone;
+                            const eventsDate = button.dataset.eventsDate;
+                            const guestCount = button.dataset.guestCount;
+                            const eventDuration = button.dataset.eventDuration;
+                            const eventPackage = button.dataset.eventPackage;
+                            const eventOptions = button.dataset.eventOptions;
 
-            // Populate modal inputs
-            modal.querySelector('#modal-full-name').value = fullName;
-            modal.querySelector('#modal-email').value = email;
-            modal.querySelector('#modal-phone-number').value = phone;
-            modal.querySelector('#modal-event-type').value = eventType;
-            modal.querySelector('#modal-events-date').value = eventsDate;
-            modal.querySelector('#modal-guest-count').value = guestCount;
-            modal.querySelector('#modal-event-duration').value = `${eventDuration} hours`;
-            modal.querySelector('#modal-event-package').value = eventPackage;
-            modal.querySelector('#modal-event-options').value = eventOptions;
-        });
-    });
-});
-</script>
+                            // Populate modal inputs
+                            modal.querySelector('#modal-full-name').value = fullName;
+                            modal.querySelector('#modal-email').value = email;
+                            modal.querySelector('#modal-phone-number').value = phone;
+                            modal.querySelector('#modal-event-type').value = eventType;
+                            modal.querySelector('#modal-events-date').value = eventsDate;
+                            modal.querySelector('#modal-guest-count').value = guestCount;
+                            modal.querySelector('#modal-event-duration').value =
+                                `${eventDuration} hours`;
+                            modal.querySelector('#modal-event-package').value = eventPackage;
+                            modal.querySelector('#modal-event-options').value = eventOptions;
+                        });
+                    });
+                });
+            </script>
 
-<nav aria-label="Page navigation">
-            <ul class="pagination d-flex justify-content-end">
-                <?php if ($page > 1): ?>
-                    <li class="page-item pg-btn"><a class="page-links" href="?page=<?php echo $page - 1; ?>">&laquo;</a></li>
-                <?php else: ?>
-                    <li class="page-item pg-btn disabled"><span class="page-links">&laquo;</span></li>
-                <?php endif; ?>
+            <nav aria-label="Page navigation">
+                <ul class="pagination d-flex justify-content-end">
+                    <?php if ($page > 1): ?>
+                        <li class="page-item pg-btn"><a class="page-links" href="?page=<?php echo $page - 1; ?>">&laquo;</a>
+                        </li>
+                    <?php else: ?>
+                        <li class="page-item pg-btn disabled"><span class="page-links">&laquo;</span></li>
+                    <?php endif; ?>
 
-                <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                    <li class="page-item <?php echo ($i == $page) ? 'active' : ''; ?>">
-                        <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
-                    </li>
-                <?php endfor; ?>
+                    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                        <li class="page-item <?php echo ($i == $page) ? 'active' : ''; ?>">
+                            <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                        </li>
+                    <?php endfor; ?>
 
-                <?php if ($page < $total_pages): ?>
-                    <li class="page-item pg-btn"><a class="page-links" href="?page=<?php echo $page + 1; ?>">&raquo;</a></li>
-                <?php else: ?>
-                    <li class="page-item pg-btn disabled"><span class="page-links">&raquo;</span></li>
-                <?php endif; ?>
-            </ul>
+                    <?php if ($page < $total_pages): ?>
+                        <li class="page-item pg-btn"><a class="page-links" href="?page=<?php echo $page + 1; ?>">&raquo;</a>
+                        </li>
+                    <?php else: ?>
+                        <li class="page-item pg-btn disabled"><span class="page-links">&raquo;</span></li>
+                    <?php endif; ?>
+                </ul>
             </nav>
 
 
-            
-           
+
+
 
             <div id="modalsContainer"></div>
-           
+
         </div>
-        
+
         <?php $conn->close(); ?>
 
         <?php
-            if (isset($_SESSION['status_message'])) {
-                echo "<script>
+        if (isset($_SESSION['status_message'])) {
+            echo "<script>
                     Swal.fire({
                         icon: 'success',
                         title: 'Success!',
@@ -312,60 +319,64 @@ $result = $conn->query($query);
                         timer: 1500
                     });
                 </script>";
-                unset($_SESSION['status_message']);
-            }
-            ?>
-        </body>
+            unset($_SESSION['status_message']);
+        }
+        ?>
+</body>
 
-        
-       
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="../function/script/status.js"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <style>
-            
-        </style>
-       <script>
-$(document).ready(function () {
-    function fetchResults(page = 1) {
-        var searchQuery = $('#searchInput').val();
-        $.ajax({
-            url: '../function/php/search/search_pending.php',
-            type: 'POST',
-            dataType: 'json',
-            data: { search: searchQuery, page: page },
-            success: function (response) {
-                $('tbody').html(response.rows);
 
-                $('.pagination').html(response.pagination);
 
-                $('#modalsContainer').html(response.modals);
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../function/script/status.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<style>
 
-                reinitializeModals();
-            }
+</style>
+<script>
+    $(document).ready(function() {
+        function fetchResults(page = 1) {
+            var searchQuery = $('#searchInput').val();
+            $.ajax({
+                url: '../function/php/search/search_pending.php',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    search: searchQuery,
+                    page: page
+                },
+                success: function(response) {
+                    $('tbody').html(response.rows);
+
+                    $('.pagination').html(response.pagination);
+
+                    $('#modalsContainer').html(response.modals);
+
+                    reinitializeModals();
+                }
+            });
+        }
+
+        $('#searchInput').on('keyup', function() {
+            fetchResults(1);
         });
-    }
 
-    $('#searchInput').on('keyup', function () {
+        window.fetchPage = function(page) {
+            fetchResults(page);
+        };
+
+        function reinitializeModals() {
+            $('button[data-bs-toggle="modal"]').each(function() {
+                const targetModal = $(this).data('bs-target');
+                const modalInstance = bootstrap.Modal.getOrCreateInstance(document.querySelector(
+                    targetModal));
+                $(this).off('click').on('click', function() {
+                    modalInstance.show();
+                });
+            });
+        }
+
         fetchResults(1);
     });
-
-    window.fetchPage = function (page) {
-        fetchResults(page);
-    };
-
-    function reinitializeModals() {
-        $('button[data-bs-toggle="modal"]').each(function () {
-            const targetModal = $(this).data('bs-target');
-            const modalInstance = bootstrap.Modal.getOrCreateInstance(document.querySelector(targetModal));
-            $(this).off('click').on('click', function () {
-                modalInstance.show();
-            });
-        });
-    }
-
-    fetchResults(1);
-});
 </script>
 
 
