@@ -219,9 +219,6 @@ body{
     color: white;
 }
 
-.fc .fc-daygrid-day-number:hover{
-    background-color: #000 !important;
-}
 .fc-day-hidden {
     display: none;
 }
@@ -242,7 +239,7 @@ body{
 /*Modal Section*/
 
 .custom-modal{
-    max-width: 70%;
+    max-width: 100%;
     width: 90%;
     display: flex;
 }

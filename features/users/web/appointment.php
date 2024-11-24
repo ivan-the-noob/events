@@ -133,6 +133,10 @@
                         <p class="mb-1"><span class="info-label">Type of Event:</span></p>
                         <p><?php echo htmlspecialchars($booking['event_type']); ?></p>
                     </div>
+                    <div class="d-flex justify-content-between">
+                        <p class="mb-1"><span class="info-label">Total Payment</span></p>
+                        <p>₱<?php echo number_format(htmlspecialchars($booking['cost']), 2); ?></p>
+                    </div>
                 </div>
             </div>
         <?php endforeach; ?>
