@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 25, 2024 at 03:32 AM
+-- Generation Time: Nov 25, 2024 at 12:55 AM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.1.25
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -57,11 +57,36 @@ INSERT INTO `booking` (`id`, `status`, `full_name`, `celebrants_name`, `email`, 
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `event_list`
+--
+
+CREATE TABLE `event_list` (
+  `id` int(11) NOT NULL,
+  `type_of_event` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `event_list`
+--
+
+INSERT INTO `event_list` (`id`, `type_of_event`) VALUES
+(7, 'Kiddie Party'),
+(8, 'Adult Birthday Party'),
+(9, 'Debut'),
+(10, 'Wedding'),
+(11, 'Christening'),
+(12, 'Despedida'),
+(14, 'Christmas Year End party');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `event_packages`
 --
 
 CREATE TABLE `event_packages` (
   `id` int(11) NOT NULL,
+  `type_of_event` varchar(255) NOT NULL,
   `package_name` varchar(100) NOT NULL,
   `description` text NOT NULL,
   `price` decimal(10,2) NOT NULL
@@ -71,8 +96,8 @@ CREATE TABLE `event_packages` (
 -- Dumping data for table `event_packages`
 --
 
-INSERT INTO `event_packages` (`id`, `package_name`, `description`, `price`) VALUES
-(2, 'Package B', 'bla bla bla', 124.00);
+INSERT INTO `event_packages` (`id`, `type_of_event`, `package_name`, `description`, `price`) VALUES
+(2, '', 'Package B', 'bla bla bla', 124.00);
 
 -- --------------------------------------------------------
 
@@ -116,7 +141,8 @@ CREATE TABLE `unavailable_days` (
 INSERT INTO `unavailable_days` (`id`, `date`, `reason`) VALUES
 (1, '2024-11-21', 'boss?!'),
 (8, '2024-11-26', 'Trip ko lang bat ba'),
-(9, '2024-11-28', 'ewan ko');
+(9, '2024-11-28', 'ewan ko'),
+(10, '2024-11-30', './.');
 
 -- --------------------------------------------------------
 
@@ -153,9 +179,9 @@ ALTER TABLE `booking`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `event_packages`
+-- Indexes for table `event_list`
 --
-ALTER TABLE `event_packages`
+ALTER TABLE `event_list`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -188,10 +214,10 @@ ALTER TABLE `booking`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
 
 --
--- AUTO_INCREMENT for table `event_packages`
+-- AUTO_INCREMENT for table `event_list`
 --
-ALTER TABLE `event_packages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+ALTER TABLE `event_list`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `reminders`
@@ -203,7 +229,7 @@ ALTER TABLE `reminders`
 -- AUTO_INCREMENT for table `unavailable_days`
 --
 ALTER TABLE `unavailable_days`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `users`
