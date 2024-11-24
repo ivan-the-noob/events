@@ -8,6 +8,12 @@ document.addEventListener('DOMContentLoaded', async function () {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         unavailableDays = await response.json();
+
+        unavailableDays = unavailableDays.map(date => {
+            const dateObj = new Date(date);
+            dateObj.setDate(dateObj.getDate() - 1); 
+            return dateObj.toISOString().split('T')[0]; 
+        });
     } catch (error) {
         console.error('Error fetching unavailable days:', error);
     }
