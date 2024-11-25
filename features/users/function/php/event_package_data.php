@@ -80,12 +80,12 @@
     </div>
     
     <div class="form-check">
-        <input type="radio" class="form-check-input" id="adult-pax-150" name="event_options[]" value="150 Pax" data-cost="55000">
+        <input type="radio" class="form-check-input" id="adult-pax-150" name="event_options[]" value="150 Pax" data-cost="60000">
         <label class="form-check-label" for="pax-150">150 Pax Package</label>
     </div>
     
     <div class="form-check">
-        <input type="radio" class="form-check-input" id="adult-pax-200" name="event_options[]" value="200 Pax" data-cost="65000">
+        <input type="radio" class="form-check-input" id="adult-pax-200" name="event_options[]" value="200 Pax" data-cost="75000">
         <label class="form-check-label" for="pax-200">200 Pax Package</label>
     </div>
 
