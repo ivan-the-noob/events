@@ -1,14 +1,13 @@
 document.addEventListener('DOMContentLoaded', async function () {
     const calendarEl = document.getElementById('calendar');
 
-    // Fetch unavailable days dynamically from the PHP endpoint
     let unavailableDays = [];
     try {
         const response = await fetch('../function/php/unavailable.php');
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        unavailableDays = await response.json(); // Fetch unavailable days as an array
+        unavailableDays = await response.json();
     } catch (error) {
         console.error('Error fetching unavailable days:', error);
     }
@@ -22,18 +21,27 @@ document.addEventListener('DOMContentLoaded', async function () {
             const selectedDate = info.date.toISOString().split('T')[0];
             const today = new Date().toISOString().split('T')[0];
 
-            // Check if the date is in the past or is unavailable
-            if (selectedDate < today || unavailableDays.includes(selectedDate)) {
-                info.el.style.backgroundColor = '#D3D3D3'; // Grey background for past or unavailable dates
+            if (selectedDate < today) {
+                info.el.style.backgroundColor = 'white'; 
+                info.el.style.opacity = 0.2; 
                 info.el.style.cursor = 'not-allowed';
 
-                // Disable click on these date cells
+                info.el.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                });
+            } 
+            else if (unavailableDays.includes(selectedDate)) {
+                info.el.style.backgroundColor = '#FFBFBD'; 
+                info.el.style.setProperty('color', '#FFBFBD', 'important');
+                info.el.style.opacity = 1; 
+                info.el.style.cursor = 'not-allowed';
+
                 info.el.addEventListener('click', (e) => {
                     e.stopPropagation();
                     e.preventDefault();
                 });
             } else {
-                // Continue with bookings logic if the date is not in the past or unavailable
                 try {
                     const response = await fetch(`../function/php/check_date_availability.php?date=${selectedDate}`);
                     if (!response.ok) {
@@ -43,23 +51,24 @@ document.addEventListener('DOMContentLoaded', async function () {
                     const result = await response.json();
 
                     if (result.bookings >= 2) {
-                        info.el.style.backgroundColor = '#FFBFBD'; // Red for fully booked
+                        info.el.style.backgroundColor = '#D2B48C';
                         info.el.style.cursor = 'not-allowed';
+                        info.el.style.setProperty('color', 'white', 'important');
 
                         info.el.addEventListener('click', (e) => {
                             e.stopPropagation();
                             e.preventDefault();
                         });
                     } else {
-                        info.el.style.backgroundColor = '#DDFFCC'; // Greenish for available dates
+                        info.el.style.backgroundColor = '#FFFFFF'; 
 
                         info.el.addEventListener('mouseenter', function () {
-                            info.el.style.backgroundColor = '#100E44'; // Dark blue on hover
+                            info.el.style.backgroundColor = '#100E44'; 
                             info.el.style.color = '#FFFFFF'; 
                         });
 
                         info.el.addEventListener('mouseleave', function () {
-                            info.el.style.backgroundColor = '#DDFFCC'; // Reset greenish
+                            info.el.style.backgroundColor = '#FFFFFF'; 
                             info.el.style.color = ''; 
                         });
 

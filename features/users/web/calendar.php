@@ -81,10 +81,29 @@
     <section class="body">
         <p class="calendar-title text-center mb-0">Book your event today</p>
         <h3 class="text-center calendar-h3">Let's Plan Your Perfect Event</h3>
-        <div class="container">
-            <div class="container-calendar">
-                <div id="calendar" class="calendar"></div>
+          <div class="container">
+          <div class="container-calendar d-flex flex-column flex-lg-row gap-3">
+            
+            <div class="card calendar-card">
+            <div class="card-body">
+                <div class="cont-avail d-flex align-items-center gap-3 mb-2">
+                    <div class="available"></div>
+                    <p class="mb-0">Available</p>
+                </div>
+                <div class="cont-unavail d-flex align-items-center gap-3 mb-2">
+                    <div class="booked"></div>
+                    <p class="mb-0">Booked</p>
+                </div>
+                <div class="cont-unavailable d-flex align-items-center gap-3 mb-2">
+                    <div class="unavailable"></div>
+                    <p class="mb-0">Unavailable</p>
+                </div>  
             </div>
+        </div>
+    <div id="calendar" class="calendar flex-grow-1"></div>
+
+    
+</div>
           </div>
     </section>
 

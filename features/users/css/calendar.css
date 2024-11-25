@@ -166,11 +166,7 @@ body{
 }
 
 
-#calendar{
-    height: 100%;
-    width: 70%;
 
-}
 
 .fc-view-harness .fc-view-harness-active{
     background-color: #FFFFFF;
@@ -233,6 +229,39 @@ body{
 .fc-day, .fc-day-sat, .fc-day-past, .fc-daygrid-day{
     height: 5vh;
 }
+
+.available{
+    width: 30px;
+    height: 30px;
+    background-color: #FFFFFF;
+    border: 1px solid #000;
+}
+
+.booked{
+    width: 30px;
+    height: 30px;
+    background-color: #D2B48C;
+    border: 1px solid #000;
+}
+.unavailable{
+    width: 30px;
+    height: 30px;
+    background-color: #FFBFBD;
+    border: 1px solid #000;
+}
+
+
+.calendar-card{
+    height: 150px;
+    margin-top: 62px;
+    width: auto;
+    max-width: 50%;
+    padding: 10px;
+}
+
+
+
+
 
 /*Calendar Section End*/
 
