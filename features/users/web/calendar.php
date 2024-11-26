@@ -240,7 +240,7 @@ if (!(isset($_SESSION['email']) && $_SESSION['role'] === 'users')) {
                                 
                                     <input type="hidden" id="event-cost" name="cost" value="">
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4 justify-content-between">
                                     <h5 class="mb-4">Total Payment</h5>
                                     <div class="card">
                                         <div class="card-body">
@@ -249,7 +249,7 @@ if (!(isset($_SESSION['email']) && $_SESSION['role'] === 'users')) {
                                                 <p id="event_type"></p>
                                             </div>
                                             <div class="d-flex justify-content-between">
-                                                <p id="event_package"></p>
+                                                <div id="event_package"></div>
                                             </div>
                                             <hr>
                                             <div class="d-flex justify-content-between">
@@ -259,11 +259,10 @@ if (!(isset($_SESSION['email']) && $_SESSION['role'] === 'users')) {
                                         </div>
                                     </div>
                                 </div>
+                                
                         </div>
                 </div>
-                <script>
-              
-                </script>
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary" name="submit">Book Appointment</button>

@@ -14,7 +14,6 @@ body {
 
 /*Navbar Section*/
 .navbar {
-    height: 100vh;
     background-color: #FFFFFF;
     display: flex;
     flex-direction: column;
@@ -52,6 +51,9 @@ body {
     border-radius: 10px;
 }
 
+.dropup ul{
+    width: 100%;
+}
 .navbar-brand {
     padding: 0 !important;
 }
