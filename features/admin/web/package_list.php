@@ -17,7 +17,7 @@ $total_pages = ceil($total_records / $limit);
 $query = "SELECT * FROM booking LIMIT $limit OFFSET $offset";
 $result = $conn->query($query);
 
-$query = "SELECT * FROM event_list";
+$query = "SELECT * FROM event_packages";
 $result = $conn->query($query);
 
 
@@ -28,7 +28,7 @@ $result = $conn->query($query);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event List | Admin</title>
+    <title>Package List | Admin</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -76,11 +76,11 @@ $result = $conn->query($query);
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>History</span>
             </a>
-            <a href="#" class="navbar-highlight">
+            <a href="events_list.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Events List</span>
             </a>
-            <a href="package_list.php">
+            <a href="#" class="navbar-highlight">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Package List</span>
             </a>
@@ -92,7 +92,6 @@ $result = $conn->query($query);
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Extra</span>
             </a>
-            
             <a href="admin-user.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Manage Admin Users</span>
@@ -128,7 +127,7 @@ $result = $conn->query($query);
 
         <div class="container mt-4">
             <div class="d-flex justify-content-between mb-2">
-                <h3>Event List</h3>
+                <h3>Package List</h3>
                 <div class="d-flex gap-2">
                     <button class="btn btn-primary add-btn" data-bs-toggle="modal" data-bs-target="#events_list">+
                         Add</button>
@@ -136,31 +135,49 @@ $result = $conn->query($query);
                 </div>
             </div>
             <div class="table-responsive">
-                <table class="table">
-                    <thead>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Event Name</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php 
+                    $query = "SELECT * FROM event_packages";
+                    $result = $conn->query($query);
+                    ?>
+                    <?php while ($row = $result->fetch_assoc()): ?>
                         <tr>
-                            <th scope="col">Event Name</th>
-                            <th scope="col">Actions</th>
+                            <td><?php echo htmlspecialchars($row['type_of_event'], ENT_QUOTES, 'UTF-8'); ?></td>
+                            <td><?php echo htmlspecialchars($row['description'], ENT_QUOTES, 'UTF-8'); ?></td>
+                            <td>₱<?php echo number_format(htmlspecialchars($row['price'], ENT_QUOTES, 'UTF-8'), 0, '.', ','); ?></td>
+                            <td>
+                                <button 
+                                    class="btn btn-warning edit-btn" 
+                                    data-id="<?php echo $row['id']; ?>" 
+                                    data-event_name="<?php echo htmlspecialchars($row['type_of_event'], ENT_QUOTES, 'UTF-8'); ?>" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#events_list">
+                                    Edit
+                                </button>
+                                
+                                <!-- Delete Form -->
+                                <form method="POST" action="../function/php/event_packages.php" style="display:inline;">
+                                    <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                                    <button type="submit" name="action" value="delete" class="btn btn-danger">
+                                        Delete
+                                    </button>
+                                </form>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <?php while ($row = $result->fetch_assoc()): ?>
-                            <tr>
-                                <td><?php echo htmlspecialchars($row['type_of_event']); ?></td>
-                                <td>
-                                    <button class="btn btn-warning edit-btn" data-id="<?php echo $row['id']; ?>"
-                                        data-event_name="<?php echo htmlspecialchars($row['type_of_event']); ?>"
-                                        data-bs-toggle="modal" data-bs-target="#events_list">Edit</button>
-                                    <form method="POST" action="../function/php/event_list.php" style="display:inline;">
-                                        <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                                        <button type="submit" name="action" value="delete"
-                                            class="btn btn-danger">Delete</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        <?php endwhile; ?>
-                    </tbody>
-                </table>
+                    <?php endwhile; ?>
+                </tbody>
+            </table>
+
+
 
                 <div class="modal fade" id="events_list" tabindex="-1" aria-labelledby="events_listLabel"
                     aria-hidden="true">
@@ -171,24 +188,47 @@ $result = $conn->query($query);
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
-                            <form method="POST" action="../function/php/event_list.php">
+                            <form method="POST" action="../function/php/event_packages.php">
                                 <div class="modal-body">
-                                    <input type="hidden" name="id" id="eventPackageId">
+                                    <input type="hidden" name="id" id="packageId">
                                     <div class="mb-3">
-                                        <label for="eventName" class="form-label">Event Name</label>
-                                        <input type="text" class="form-control" id="eventName" name="type_of_event"
-                                            required>
+                                        <label for="packageName" class="form-label">Event</label>
+                                        <select class="form-control" id="packageName" name="type_of_event" required>
+                                            <option value="" disabled selected>Select an event</option>
+                                            <?php
+                                            require '../../../db.php';
+                                            $query = "SELECT id, type_of_event FROM event_list";
+                                            $result = $conn->query($query);
+                                            if ($result && $result->num_rows > 0) {
+                                                while ($row = $result->fetch_assoc()) {
+                                                    $eventTypeFormatted = strtolower(str_replace([' ', '/'], ['-', ''], $row['type_of_event']));
+                                                    echo '<option value="' . htmlspecialchars($row['type_of_event']) . '" data-type="' . $eventTypeFormatted . '">' 
+                                                        . htmlspecialchars($row['type_of_event']) 
+                                                        . '</option>';
+                                                }
+                                            } else {
+                                                echo '<option value="" disabled>No events available</option>';
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="description" class="form-label">Description</label>
+                                        <textarea class="form-control" id="description" name="description" required></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="price" class="form-label">Price</label>
+                                        <input type="number" step="0.01" class="form-control" id="price" name="price" required>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="submit" name="action" value="add"
-                                        class="btn btn-primary">Save</button>
-                                    <button type="submit" name="action" value="edit" class="btn btn-success d-none"
-                                        id="editBtn">Update</button>
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" name="action" value="add" class="btn btn-primary">Save</button>
+                                    <button type="submit" name="action" value="edit" class="btn btn-success d-none" id="editPackageBtn">Update</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                 </div>
                             </form>
+
                         </div>
                     </div>
                 </div>

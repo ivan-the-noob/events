@@ -7,10 +7,6 @@ if (!(isset($_SESSION['email']) && $_SESSION['role'] === 'users')) {
     exit;
 }
 
-
-require '../../../db.php';
-$query = "SELECT id, type_of_event FROM event_list";
-$result = $conn->query($query);
 ?>
 
 <!DOCTYPE html>
@@ -206,13 +202,14 @@ $result = $conn->query($query);
                                     <div class="form-group mt-4">
                                         <label for="event-type" class="form-label">Type of Event</label>
                                         <select id="event-type" name="event_type" class="form-control">
+                                            <option value="" disabled selected>Select an event</option>
                                             <?php
-                                            // Check if there are results and populate options
+                                            require '../../../db.php';
+                                            $query = "SELECT id, type_of_event FROM event_list";
+                                            $result = $conn->query($query);
                                             if ($result && $result->num_rows > 0) {
                                                 while ($row = $result->fetch_assoc()) {
-                                                    // Format the event name for JS compatibility (replace spaces and remove special characters)
-                                                    $eventTypeFormatted = strtolower(str_replace([' ', '/'], ['-', ''], $row['type_of_event']));
-                                                    echo '<option value="' . htmlspecialchars($row['id']) . '" data-type="' . $eventTypeFormatted . '">' . htmlspecialchars($row['type_of_event']) . '</option>';
+                                                    echo '<option value="' . htmlspecialchars($row['type_of_event']) . '">' . htmlspecialchars($row['type_of_event']) . '</option>';
                                                 }
                                             } else {
                                                 echo '<option value="" disabled>No events available</option>';
@@ -220,166 +217,36 @@ $result = $conn->query($query);
                                             ?>
                                         </select>
                                     </div>
-                                </div>
+                                    </div>
 
                                 <div class="col-md-3">
-                                    <h5 class=" mb-4">Event Packages</h5>
-                                    <div class="form-group mt-4" id="kiddie-party-options" style="display: none;">
-                                        <label for="kiddie-party-package" class="form-label">Select Event
-                                            Package</label>
-                                        <select id="kiddie-party-package" name="event_package" class="form-control">
-                                            <option value="" disabled selected>Select a package</option>
-                                            <option value="Package A (Kiddie Party, 50 pax)" data-cost="25000">Package A
-                                                (Kiddie Party, 50 pax)</option>
-                                            <option value="Package B (Kiddie Party, 60 pax)" data-cost="30000">Package B
-                                                (Kiddie Party, 60 pax)</option>
-                                            <option value="Package C (Kiddie Party, 80 pax)" data-cost="40000">Package C
-                                                (Kiddie Party, 80 pax)</option>
-                                            <option value="Package D (Kiddie Party, 100 pax)" data-cost="45000">Package
-                                                D (Kiddie Party, 100 pax)</option>
-                                            <option value="Other-kiddie-party" id="Other-kiddie-party">Other</option>
-                                        </select>
+                                    
+                                    <div class="">
+                                        <h5 class="mb-4">Event Packages</h5>
+                                        <div class="form-group mt-4" id="event-package-options" style="display: none;">
+                                            <label for="event-package" class="form-label">Select Event Package</label>
+                                            <select id="event-package" name="event_package" class="form-control">
+                                                <option value="" disabled selected>Select a package</option>
+                                              
+                                            </select>
+                                        </div>
                                     </div>
-
-                                    <!-- Adult Birthday Packages -->
-                                    <div class="form-group mt-4" id="adult-birthday-party-options"
-                                        style="display: none;">
-                                        <label for="adult-birthday-package" class="form-label">Select Event
-                                            Package</label>
-                                        <select id="adult-birthday-package" name="event_package" class="form-control">
-                                            <option value="" disabled selected>Select a package</option>
-                                            <option value="Package A (Adult Birthday Party, 50 pax)" data-cost="25000">
-                                                Package A (Adult Birthday Party, 50 pax)</option>
-                                            <option value="Package B (Adult Birthday Party, 60 pax)" data-cost="30000">
-                                                Package B (Adult Birthday Party, 60 pax)</option>
-                                            <option value="Package C (Adult Birthday Party, 80 pax)" data-cost="35000">
-                                                Package C (Adult Birthday Party, 80 pax)</option>
-                                            <option value="Package D (Adult Birthday Party, 100 pax)" data-cost="40000">
-                                                Package D (Adult Birthday Party, 100 pax)</option>
-                                            <option value="Other-adult-birthday-party" id="Other-adult-birthday-party">
-                                                Other</option>
-                                        </select>
+                                    <div class="form-group mt-4 custom-package-options" style="display: none;">
+                                        <label class="custom-package-label"> Customize your Package</label>
+                                        <div class="form-check-group">
+                                        </div>
+                                        <div class="form-group " id="extra-options-container"></div>   
                                     </div>
-
-                                    <!-- Debut Packages -->
-                                    <div class="form-group mt-4" id="debut-options" style="display: none;">
-                                        <label for="debut-packages" class="form-label">Select Event Package</label>
-                                        <select id="debut-packages" name="event_package" class="form-control">
-                                            <option value="" disabled selected>Select a package</option>
-                                            <option value="Package A (Debut Party, 50 pax)" data-cost="25000">Package A
-                                                (Debut Party, 50 pax)</option>
-                                            <option value="Package B (Debut Party, 60 pax)" data-cost="30000">Package B
-                                                (Debut Party, 60 pax)</option>
-                                            <option value="Package C (Debut Party, 80 pax)" data-cost="40000">Package C
-                                                (Debut Party, 80 pax)</option>
-                                            <option value="Package D (Debut Party, 100 pax)" data-cost="45000">Package D
-                                                (Debut Party, 100 pax)</option>
-                                            <option value="Other-debut" id="Other-debut">Other</option>
-                                        </select>
-                                    </div>
-                                    <!-- Wedding Packages -->
-                                    <div class="form-group mt-4" id="wedding-options" style="display: none;">
-                                        <label for="wedding-package" class="form-label">Select Event Package</label>
-                                        <select id="wedding-package" name="event_package" class="form-control">
-                                            <option value="" disabled selected>Select a package</option>
-                                            <option value="Package A (Wedding Party, 50 pax)" data-cost="30000">Package
-                                                A (Wedding Party, 50 pax)</option>
-                                            <option value="Package B (Wedding Party, 60 pax)" data-cost="35000">Package
-                                                B (Wedding Party, 60 pax)</option>
-                                            <option value="Package C (Wedding Party, 80 pax)" data-cost="45000">Package
-                                                C (Wedding Party, 80 pax)</option>
-                                            <option value="Package D (Wedding Party, 100 pax)" data-cost="55000">Package
-                                                D (Wedding Party, 100 pax)</option>
-                                            <option value="Other-wedding" id="Other-wedding">Other</option>
-                                        </select>
-                                    </div>
-
-                                    <!-- Christening Packages -->
-                                    <div class="form-group mt-4" id="christening-options" style="display: none;">
-                                        <label for="christening-package" class="form-label">Select Event Package</label>
-                                        <select id="christening-package" name="event_package" class="form-control">
-                                            <option value="" disabled selected>Select a package</option>
-                                            <option value="Package A (Christening Party, 50 pax)" data-cost="20000">
-                                                Package A (Christening Party, 50 pax)</option>
-                                            <option value="Package B (Christening Party, 60 pax)" data-cost="25000">
-                                                Package B (Christening Party, 60 pax)</option>
-                                            <option value="Package C (Christening Party, 80 pax)" data-cost="35000">
-                                                Package C (Christening Party, 80 pax)</option>
-                                            <option value="Package D (Christening Party, 100 pax)" data-cost="40000">
-                                                Package D (Christening Party, 100 pax)</option>
-                                            <option value="Other-christening" id="Other-christening">Other</option>
-                                        </select>
-                                    </div>
-
-                                    <!-- Despedida Packages -->
-                                    <div class="form-group mt-4" id="despedida-options" style="display: none;">
-                                        <label for="despedida-package" class="form-label">Select Event Package</label>
-                                        <select id="despedida-package" name="event_package" class="form-control">
-                                            <option value="" disabled selected>Select a package</option>
-                                            <option value="Package A (Despedida Party, 50 pax)" data-cost="20000">
-                                                Package A (Despedida Party, 50 pax)</option>
-                                            <option value="Package B (Despedida Party, 60 pax)" data-cost="25000">
-                                                Package B (Despedida Party, 60 pax)</option>
-                                            <option value="Package C (Despedida Party, 80 pax)" data-cost="35000">
-                                                Package C (Despedida Party, 80 pax)</option>
-                                            <option value="Package D (Despedida Party, 100 pax)" data-cost="40000">
-                                                Package D (Despedida Party, 100 pax)</option>
-                                            <option value="Other-despedida" id="Other-despedida">Other</option>
-                                        </select>
-                                    </div>
-
-                                    <!-- Christmas Party Packages -->
-                                    <div class="form-group mt-4" id="christmas-year-end-party-options"
-                                        style="display: none;">
-                                        <label for="christmas-party-package" class="form-label">Select Event
-                                            Package</label>
-                                        <select id="christmas-party-package" name="event_package" class="form-control">
-                                            <option value="" disabled selected>Select a package</option>
-                                            <option value="Package A (Christmas Party, 50 pax)" data-cost="20000">
-                                                Package A (Christmas Party, 50 pax)</option>
-                                            <option value="Package B (Christmas Party, 60 pax)" data-cost="25000">
-                                                Package B (Christmas Party, 60 pax)</option>
-                                            <option value="Package C (Christmas Party, 80 pax)" data-cost="35000">
-                                                Package C (Christmas Party, 80 pax)</option>
-                                            <option value="Package D (Christmas Party, 100 pax)" data-cost="40000">
-                                                Package D (Christmas Party, 100 pax)</option>
-                                            <option value="Other christmas-year-end-party"
-                                                id="Other christmas-year-end-party">Other</option>
-                                        </select>
-                                    </div>
+                                
                                     <input type="hidden" id="event-cost" name="cost" value="">
-                                    <script>
-                                        document.getElementById('event-type').addEventListener('change', function() {
-                                            let eventType = this.value;
-                                            let costField = document.getElementById('event-cost');
-                                            let packageSelect = document.querySelector(
-                                                `#${eventType.toLowerCase().replace(/\s/g, '-')}-options select`
-                                            );
-
-                                            if (packageSelect) {
-                                                packageSelect.addEventListener('change', function() {
-                                                    let selectedOption = this.options[this.selectedIndex];
-                                                    let cost = selectedOption ? selectedOption.getAttribute(
-                                                        'data-cost') : 0;
-                                                    costField.value = cost;
-                                                });
-                                            }
-                                        });
-                                    </script>
-
-                                    <?php
-                                    include '../function/php/script-event.php';
-                                    include '../function/php/event_package_data.php';
-                                    ?>
                                 </div>
                                 <div class="col-md-4">
-                                    <h5 class=" mb-4">Total Payment</h5>
-
+                                    <h5 class="mb-4">Total Payment</h5>
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="d-flex justify-content-between">
                                                 <p>Event Type: </p>
-                                                <p id="event_type">Kiddie Party</p>
+                                                <p id="event_type"></p>
                                             </div>
                                             <div class="d-flex justify-content-between">
                                                 <p id="event_package"></p>
@@ -391,14 +258,12 @@ $result = $conn->query($query);
                                             </div>
                                         </div>
                                     </div>
-
-
                                 </div>
-
-
-                            </div>
                         </div>
                 </div>
+                <script>
+              
+                </script>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary" name="submit">Book Appointment</button>
@@ -421,5 +286,6 @@ $result = $conn->query($query);
     <script src="../function/script/calendar.js"></script>
     <script src="../function/script/time-duration.js"></script>
     <script src="../function/script/payment.js"></script>
+    <script src="../function/script/event_function.js"></script>
 
 </html>

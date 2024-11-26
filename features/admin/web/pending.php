@@ -82,6 +82,18 @@ $result = $conn->query($query);
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Events List</span>
             </a>
+            <a href="package_list.php">
+                <i class="fa-solid fa-tachometer-alt"></i>
+                <span>Package List</span>
+            </a>
+            <a href="pax.php">
+                <i class="fa-solid fa-tachometer-alt"></i>
+                <span>Pax</span>
+            </a>
+            <a href="extra.php">
+                <i class="fa-solid fa-tachometer-alt"></i>
+                <span>Extra</span>
+            </a>
             <a href="admin-user.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Manage Admin Users</span>

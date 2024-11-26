@@ -35,6 +35,7 @@
         <input type="checkbox" class="form-check-input" id="kiddie-photobooth" name="event_options[]" value="Photobooth" data-cost="3000">
         <label class="form-check-label" for="photobooth">Photobooth</label>
     </div>
+</div>
 
     <div class="form-check">
         <input type="checkbox" class="form-check-input" id="kiddie-clowns" name="event_options[]" value="Clowns" data-cost="2000">
@@ -50,7 +51,7 @@
         <input type="checkbox" class="form-check-input" id="kiddie-catering" name="event_options[]" value="Catering" data-cost="13000">
         <label class="form-check-label" for="catering">Catering</label>
     </div>
-    
+
 </div>
 
 

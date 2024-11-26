@@ -17,7 +17,7 @@ $total_pages = ceil($total_records / $limit);
 $query = "SELECT * FROM booking LIMIT $limit OFFSET $offset";
 $result = $conn->query($query);
 
-$query = "SELECT * FROM event_list";
+$query = "SELECT * FROM extra";
 $result = $conn->query($query);
 
 
@@ -28,7 +28,7 @@ $result = $conn->query($query);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event List | Admin</title>
+    <title>Extra | Admin</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -76,7 +76,7 @@ $result = $conn->query($query);
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>History</span>
             </a>
-            <a href="#" class="navbar-highlight">
+            <a href="#">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Events List</span>
             </a>
@@ -88,11 +88,10 @@ $result = $conn->query($query);
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Pax</span>
             </a>
-            <a href="extra.php">
+            <a href="#" class="navbar-highlight">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Extra</span>
             </a>
-            
             <a href="admin-user.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Manage Admin Users</span>
@@ -128,7 +127,7 @@ $result = $conn->query($query);
 
         <div class="container mt-4">
             <div class="d-flex justify-content-between mb-2">
-                <h3>Event List</h3>
+                <h3>Extra</h3>
                 <div class="d-flex gap-2">
                     <button class="btn btn-primary add-btn" data-bs-toggle="modal" data-bs-target="#events_list">+
                         Add</button>
@@ -136,32 +135,41 @@ $result = $conn->query($query);
                 </div>
             </div>
             <div class="table-responsive">
-                <table class="table">
-                    <thead>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Event Name</th>
+                        <th scope="col">Extra Name</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php while ($row = $result->fetch_assoc()): ?>
                         <tr>
-                            <th scope="col">Event Name</th>
-                            <th scope="col">Actions</th>
+                            <td><?php echo htmlspecialchars($row['type_of_event']); ?></td>
+                            <td><?php echo htmlspecialchars($row['extra_name']); ?></td>
+                            <td>₱<?php echo number_format(htmlspecialchars($row['price'], ENT_QUOTES, 'UTF-8'), 0, '.', ','); ?></td>
+                            <td>
+                                <button class="btn btn-warning edit-btn" 
+                                    data-id="<?php echo $row['id']; ?>"
+                                    data-event_name="<?php echo htmlspecialchars($row['type_of_event']); ?>"
+                                    data-extra_name="<?php echo htmlspecialchars($row['extra_name']); ?>"
+                                    data-price="<?php echo htmlspecialchars($row['price']); ?>"
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#events_list">Edit</button>
+                                <form method="POST" action="../function/php/extra.php" style="display:inline;">
+                                    <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                                    <button type="submit" name="action" value="delete" class="btn btn-danger">Delete</button>
+                                </form>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <?php while ($row = $result->fetch_assoc()): ?>
-                            <tr>
-                                <td><?php echo htmlspecialchars($row['type_of_event']); ?></td>
-                                <td>
-                                    <button class="btn btn-warning edit-btn" data-id="<?php echo $row['id']; ?>"
-                                        data-event_name="<?php echo htmlspecialchars($row['type_of_event']); ?>"
-                                        data-bs-toggle="modal" data-bs-target="#events_list">Edit</button>
-                                    <form method="POST" action="../function/php/event_list.php" style="display:inline;">
-                                        <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                                        <button type="submit" name="action" value="delete"
-                                            class="btn btn-danger">Delete</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        <?php endwhile; ?>
-                    </tbody>
-                </table>
+                    <?php endwhile; ?>
+                </tbody>
+            </table>
 
+
+                <!-- Modal for Add/Edit Event -->
                 <div class="modal fade" id="events_list" tabindex="-1" aria-labelledby="events_listLabel"
                     aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
@@ -171,13 +179,35 @@ $result = $conn->query($query);
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
-                            <form method="POST" action="../function/php/event_list.php">
+                            <form method="POST" action="../function/php/extra.php">
                                 <div class="modal-body">
                                     <input type="hidden" name="id" id="eventPackageId">
+                                    <div class="form-group mt-4">
+                                        <label for="event-type" class="form-label">Type of Event</label>
+                                        <select id="event-type" name="event_type" class="form-control">
+                                            <option value="" disabled selected>Select an event</option>
+                                            <?php
+                                            require '../../../db.php';
+                                            $query = "SELECT id, type_of_event FROM event_list";
+                                            $result = $conn->query($query);
+                                            if ($result && $result->num_rows > 0) {
+                                                while ($row = $result->fetch_assoc()) {
+                                                    echo '<option value="' . htmlspecialchars($row['type_of_event']) . '">' . htmlspecialchars($row['type_of_event']) . '</option>';
+                                                }
+                                            } else {
+                                                echo '<option value="" disabled>No events available</option>';
+                                            }
+                                            ?>
+                                        </select>
+
+                                    </div>
                                     <div class="mb-3">
-                                        <label for="eventName" class="form-label">Event Name</label>
-                                        <input type="text" class="form-control" id="eventName" name="type_of_event"
-                                            required>
+                                        <label for="extra-name" class="form-label">Extra Name</label>
+                                        <input type="text" class="form-control" id="extra-name" name="extra_name" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="price" class="form-label">Price</label>
+                                        <input type="number" class="form-control" id="price" name="price" required>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
@@ -195,25 +225,6 @@ $result = $conn->query($query);
 
                 <nav aria-label="Page navigation">
                     <ul class="pagination d-flex justify-content-end">
-                        <?php if ($page > 1): ?>
-                            <li class="page-item pg-btn"><a class="page-links"
-                                    href="?page=<?php echo $page - 1; ?>">&laquo;</a></li>
-                        <?php else: ?>
-                            <li class="page-item pg-btn disabled"><span class="page-links">&laquo;</span></li>
-                        <?php endif; ?>
-
-                        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                            <li class="page-item <?php echo ($i == $page) ? 'active' : ''; ?>">
-                                <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
-                            </li>
-                        <?php endfor; ?>
-
-                        <?php if ($page < $total_pages): ?>
-                            <li class="page-item pg-btn"><a class="page-links"
-                                    href="?page=<?php echo $page + 1; ?>">&raquo;</a></li>
-                        <?php else: ?>
-                            <li class="page-item pg-btn disabled"><span class="page-links">&raquo;</span></li>
-                        <?php endif; ?>
                     </ul>
                 </nav>
 
@@ -222,20 +233,21 @@ $result = $conn->query($query);
                         button.addEventListener('click', function() {
                             const id = this.getAttribute('data-id');
                             const eventName = this.getAttribute('data-event_name');
+                            const pax = this.getAttribute('data-pax');
+                            const price = this.getAttribute('data-price');
+                            const extraName = this.getAttribute('data-extra_name'); 
 
                             document.getElementById('eventPackageId').value = id;
-                            document.getElementById('eventName').value = eventName;
+                            document.getElementById('event-type').value = eventName;
+                            document.getElementById('pax').value = pax;
+                            document.getElementById('price').value = price;
+                            document.getElementById('extra-name').value = extraName; 
 
                             document.getElementById('editBtn').classList.remove('d-none');
                         });
                     });
-
-                    document.getElementById('events_list').addEventListener('hidden.bs.modal', function() {
-                        document.getElementById('eventPackageId').value = '';
-                        document.getElementById('eventName').value = '';
-                        document.getElementById('editBtn').classList.add('d-none');
-                    });
                 </script>
+
 
 
 
