@@ -64,10 +64,7 @@ $result = $conn->query($query);
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Cancelled Booking</span>
             </a>
-            <a href="packages.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
-                <span>Event Packages</span>
-            </a>
+
             <a href="unavailable.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Unavailable</span>

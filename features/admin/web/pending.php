@@ -66,10 +66,7 @@ $result = $conn->query($query);
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Cancelled Booking</span>
             </a>
-            <a href="packages.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
-                <span>Event Packages</span>
-            </a>
+
             <a href="unavailable.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Unavailable</span>
@@ -78,22 +75,18 @@ $result = $conn->query($query);
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>History</span>
             </a>
-            <a href="events_list.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
-                <span>Events List</span>
-            </a>
-            <a href="package_list.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
-                <span>Package List</span>
-            </a>
-            <a href="pax.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
-                <span>Pax</span>
-            </a>
-            <a href="extra.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
-                <span>Extra</span>
-            </a>
+            <div class="dropdown dropup">
+                <a href="#" class="navbar-highlight dropdown-toggle" id="eventsListDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fa-solid fa-tachometer-alt"></i>
+                    <span>Events List</span>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="eventsListDropdown">
+                    <li><a class="dropdown-item" href="events_list.php">Events List</a></li>
+                    <li><a class="dropdown-item" href="package_list.php">Package List</a></li>
+                    <li><a class="dropdown-item" href="extra.php">Extra</a></li>
+                    <li><a class="dropdown-item" href="pax.php">Pax</a></li>
+                </ul>
+            </div>
             <a href="admin-user.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Manage Admin Users</span>
