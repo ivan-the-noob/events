@@ -129,90 +129,88 @@ $result = $conn->query($query);
             </div>
             <div class="table-responsive">
             <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Event Name</th>
-                            <th scope="col">Pax</th>
-                            <th scope="col">Price</th>
-                            <th scope="col">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php while ($row = $result->fetch_assoc()): ?>
-                            <tr>
-                                <td><?php echo htmlspecialchars($row['type_of_event']); ?></td>
-                                <td><?php echo htmlspecialchars($row['pax']); ?></td>
-                                <td>₱<?php echo number_format(htmlspecialchars($row['price'], ENT_QUOTES, 'UTF-8'), 0, '.', ','); ?></td>
-                                <td>
-                                    <button class="btn btn-warning edit-btn" data-id="<?php echo $row['id']; ?>"
-                                        data-event_name="<?php echo htmlspecialchars($row['type_of_event']); ?>"
-                                        data-pax="<?php echo htmlspecialchars($row['pax']); ?>"
-                                        data-price="<?php echo htmlspecialchars($row['price']); ?>"
-                                        data-bs-toggle="modal" data-bs-target="#events_list">Edit</button>
-                                    <form method="POST" action="../function/php/pax.php" style="display:inline;">
-                                        <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                                        <button type="submit" name="action" value="delete"
-                                            class="btn btn-danger">Delete</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        <?php endwhile; ?>
-                    </tbody>
-                </table>
+    <thead>
+        <tr>
+            <th scope="col">Event Name</th>
+            <th scope="col">Pax</th>
+            <th scope="col">Price</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php while ($row = $result->fetch_assoc()): ?>
+            <tr>
+                <td><?php echo htmlspecialchars($row['type_of_event']); ?></td>
+                <td><?php echo htmlspecialchars($row['pax']); ?></td>
+                <td>₱<?php echo number_format(htmlspecialchars($row['price'], ENT_QUOTES, 'UTF-8'), 0, '.', ','); ?></td>
+                <td>
+                    <button 
+                        class="btn btn-warning edit-btn" 
+                        data-id="<?php echo $row['id']; ?>"
+                        data-event_name="<?php echo htmlspecialchars($row['type_of_event']); ?>"
+                        data-pax="<?php echo htmlspecialchars($row['pax']); ?>"
+                        data-price="<?php echo htmlspecialchars($row['price']); ?>"
+                        data-bs-toggle="modal" 
+                        data-bs-target="#events_list">
+                        Edit
+                    </button>
+                    <form method="POST" action="../function/php/pax.php" style="display:inline;">
+                        <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                        <button type="submit" name="action" value="delete" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        <?php endwhile; ?>
+    </tbody>
+</table>
 
-                <!-- Modal for Add/Edit Event -->
-                <div class="modal fade" id="events_list" tabindex="-1" aria-labelledby="events_listLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="events_listLabel">Manage Event</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <form method="POST" action="../function/php/pax.php">
-                                <div class="modal-body">
-                                    <input type="hidden" name="id" id="eventPackageId">
-                                    <div class="form-group mt-4">
-                                        <label for="event-type" class="form-label">Type of Event</label>
-                                        <select id="event-type" name="event_type" class="form-control">
-                                            <option value="" disabled selected>Select an event</option>
-                                            <?php
-                                            require '../../../db.php';
-                                            $query = "SELECT id, type_of_event FROM event_list";
-                                            $result = $conn->query($query);
-                                            if ($result && $result->num_rows > 0) {
-                                                while ($row = $result->fetch_assoc()) {
-                                                    echo '<option value="' . htmlspecialchars($row['type_of_event']) . '">' . htmlspecialchars($row['type_of_event']) . '</option>';
-                                                }
-                                            } else {
-                                                echo '<option value="" disabled>No events available</option>';
-                                            }
-                                            ?>
-                                        </select>
-
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="pax" class="form-label">Pax</label>
-                                        <input type="text" class="form-control" id="pax" name="pax" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="price" class="form-label">Price</label>
-                                        <input type="number" class="form-control" id="price" name="price" required>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="submit" name="action" value="add"
-                                        class="btn btn-primary">Save</button>
-                                    <button type="submit" name="action" value="edit" class="btn btn-success d-none"
-                                        id="editBtn">Update</button>
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Cancel</button>
-                                </div>
-                            </form>
-                        </div>
+<!-- Modal for Add/Edit Event -->
+<div class="modal fade" id="events_list" tabindex="-1" aria-labelledby="events_listLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="events_listLabel">Manage Event</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" action="../function/php/pax.php">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="eventPackageId">
+                    <div class="form-group mt-4">
+                        <label for="event-type" class="form-label">Type of Event</label>
+                        <select id="event-type" name="event_type" class="form-control">
+                            <option value="" disabled selected>Select an event</option>
+                            <?php
+                            $query = "SELECT id, type_of_event FROM event_list";
+                            $result = $conn->query($query);
+                            if ($result && $result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) {
+                                    echo '<option value="' . htmlspecialchars($row['type_of_event']) . '">' . htmlspecialchars($row['type_of_event']) . '</option>';
+                                }
+                            } else {
+                                echo '<option value="" disabled>No events available</option>';
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="pax" class="form-label">Pax</label>
+                        <input type="text" class="form-control" id="pax" name="pax" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Price</label>
+                        <input type="number" class="form-control" id="price" name="price" required>
                     </div>
                 </div>
+                <div class="modal-footer">
+                                   <!-- Add button and Edit button -->
+<button type="submit" name="action" value="add" class="btn btn-primary" id="addBtn">Add</button>
+<button type="submit" name="action" value="edit" class="btn btn-success d-none" id="editBtn">Update</button>                
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
 
                 <nav aria-label="Page navigation">
                     <ul class="pagination d-flex justify-content-end">
@@ -221,21 +219,59 @@ $result = $conn->query($query);
                 </nav>
 
                 <script>
-                   document.querySelectorAll('.edit-btn').forEach(button => {
-    button.addEventListener('click', function() {
-        const id = this.getAttribute('data-id');
-        const eventName = this.getAttribute('data-event_name');
-        const pax = this.getAttribute('data-pax');
-        const price = this.getAttribute('data-price');
+             document.addEventListener('DOMContentLoaded', function () {
+    // Add event listener to all edit buttons
+    document.querySelectorAll('.edit-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            // Debug message to ensure button is working as expected
+            console.log('Edit button clicked with data:', {
+                id: this.getAttribute('data-id'),
+                eventName: this.getAttribute('data-event_name'),
+                pax: this.getAttribute('data-pax'),
+                price: this.getAttribute('data-price'),
+            });
 
-        document.getElementById('eventPackageId').value = id;
-        document.getElementById('event-type').value = eventName; // Set the selected value for event_type
-        document.getElementById('pax').value = pax;
-        document.getElementById('price').value = price;
+            // Retrieve data attributes from the clicked button
+            const id = this.getAttribute('data-id');
+            const eventName = this.getAttribute('data-event_name');
+            const pax = this.getAttribute('data-pax');
+            const price = this.getAttribute('data-price');
 
-        document.getElementById('editBtn').classList.remove('d-none');
+            // Ensure the element exists before setting its value
+            const paxElement = document.getElementById('pax');
+            if (paxElement) {
+                paxElement.value = pax; // Set Pax field value
+            } else {
+                console.error("Element with ID 'pax' not found.");
+            }
+
+            // Populate other modal input fields
+            document.getElementById('eventPackageId').value = id; // Hidden ID field
+            document.getElementById('event-type').value = eventName; // Event type dropdown
+            document.getElementById('price').value = price; // Price field
+
+            // Show the Update button and hide the Add button
+            document.getElementById('editBtn').classList.remove('d-none'); // Show Update button
+            document.getElementById('addBtn').classList.add('d-none'); // Hide Add button
+        });
+    });
+
+    // Reset modal when closed
+    document.getElementById('events_list').addEventListener('hidden.bs.modal', function () {
+        // Clear modal fields
+        document.getElementById('eventPackageId').value = '';
+        document.getElementById('event-type').value = '';
+        document.getElementById('pax').value = '';
+        document.getElementById('price').value = '';
+
+        // Reset button visibility
+        document.getElementById('editBtn').classList.add('d-none'); // Hide Update button
+        document.getElementById('addBtn').classList.remove('d-none'); // Show Add button
     });
 });
+
+
+
 
                 </script>
 

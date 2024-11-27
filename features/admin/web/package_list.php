@@ -216,7 +216,7 @@ $result = $conn->query($query);
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="submit" name="action" value="add" class="btn btn-primary">Save</button>
+                                    <button type="submit" name="action" value="add" class="btn btn-primary">Add</button>
                                     <button type="submit" name="action" value="edit" class="btn btn-success d-none" id="editPackageBtn">Update</button>
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                 </div>
@@ -251,23 +251,36 @@ $result = $conn->query($query);
                 </nav>
 
                 <script>
-                    document.querySelectorAll('.edit-btn').forEach(button => {
-                        button.addEventListener('click', function() {
-                            const id = this.getAttribute('data-id');
-                            const eventName = this.getAttribute('data-event_name');
+                   document.querySelectorAll('.edit-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        const id = this.getAttribute('data-id');
+        const eventName = this.getAttribute('data-event_name');
+        const row = this.closest('tr');
+        const description = row.querySelector('td:nth-child(2)').textContent;
+        const price = row.querySelector('td:nth-child(3)').textContent.replace('₱', '').replace(',', '');
 
-                            document.getElementById('eventPackageId').value = id;
-                            document.getElementById('eventName').value = eventName;
+        document.getElementById('packageId').value = id;
+        document.getElementById('packageName').value = eventName;
+        document.getElementById('description').value = description;
+        document.getElementById('price').value = price;
 
-                            document.getElementById('editBtn').classList.remove('d-none');
-                        });
-                    });
+        // Show the Update button and hide the Save button
+        document.getElementById('editPackageBtn').classList.remove('d-none');
+        document.querySelector('button[name="action"][value="add"]').classList.add('d-none');
+    });
+});
 
-                    document.getElementById('events_list').addEventListener('hidden.bs.modal', function() {
-                        document.getElementById('eventPackageId').value = '';
-                        document.getElementById('eventName').value = '';
-                        document.getElementById('editBtn').classList.add('d-none');
-                    });
+// Reset modal on close
+document.getElementById('events_list').addEventListener('hidden.bs.modal', function() {
+    document.getElementById('packageId').value = '';
+    document.getElementById('packageName').value = '';
+    document.getElementById('description').value = '';
+    document.getElementById('price').value = '';
+    
+    // Show the Save button and hide the Update button
+    document.getElementById('editPackageBtn').classList.add('d-none');
+    document.querySelector('button[name="action"][value="add"]').classList.remove('d-none');
+});
                 </script>
 
 

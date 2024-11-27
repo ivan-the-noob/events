@@ -458,6 +458,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function updateTotalPayment(amount) {
         totalPayment += amount;
+    
         totalPaymentElement.textContent = '₱' + totalPayment.toLocaleString('en-US');
+        
+        const eventCostInput = document.getElementById('event-cost');
+        if (eventCostInput) {
+            eventCostInput.value = totalPayment;
+        }
+    
+        console.log("Total Payment (Visible): " + totalPaymentElement.textContent);
+        console.log("Event Cost (Hidden Input): " + eventCostInput.value);
     }
+    
 });

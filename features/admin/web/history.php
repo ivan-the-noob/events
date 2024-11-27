@@ -72,7 +72,7 @@ $result = $conn->query($query);
                 <span>History</span>
             </a>
             <div class="dropdown dropup">
-                <a href="#" class="navbar-highlight dropdown-toggle" id="eventsListDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <a href="#" class=" dropdown-toggle" id="eventsListDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fa-solid fa-tachometer-alt"></i>
                     <span>Events List</span>
                 </a>

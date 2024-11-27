@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 26, 2024 at 01:16 PM
+-- Generation Time: Nov 27, 2024 at 01:32 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -50,15 +50,14 @@ CREATE TABLE `booking` (
 --
 
 INSERT INTO `booking` (`id`, `status`, `full_name`, `celebrants_name`, `email`, `phone_number`, `events_date`, `guest_count`, `event_duration`, `event_starttime`, `event_endtime`, `event_type`, `event_package`, `event_options`, `cost`) VALUES
-(75, 'Pending', 'Ivan Ablanida', 'Ivan Ablanida', 'ej@gmail.com', '321321', '2024-11-25', 60, 5, 18, 11, 'Kiddie Party', 'Package A (Kiddie Party, 50 pax)', 'None', 25000.00),
-(76, 'Pending', 'Ej Ivan Ablanida', 'Ivan Ablanida', 'ej@gmail.com', '321321', '2024-11-25', 60, 5, 18, 11, 'Kiddie Party', 'Package B (Kiddie Party, 60 pax)', 'None', 30000.00),
-(77, 'Pending', 'Ivan Ablanida', 'Ivan Ablanida', 'ej@gmail.com', '321321', '2024-11-25', 60, 5, 10, 3, 'Adult Birthday party', 'Package A (Adult Birthday Party, 50 pax)', 'None', 25000.00),
-(78, 'Pending', 'Ivan Ablanida', 'Ivan', 'ej@gmail.com', '09957939703', '2024-11-30', 60, 5, 8, 0, 'Kiddie Party', 'other', '150 Pax Package', 0.00),
-(79, 'Pending', 'Ivan Ablanida', 'Ivan', 'ej@gmail.com', '09957939703', '2024-11-28', 60, 5, 8, 0, 'Kiddie Party', 'other', '80 Pax Package', 0.00),
-(80, 'Pending', 'Ivan Ablanida', 'Ivan', 'ej@gmail.com', '09957939703', '2024-11-30', 80, 5, 21, 2, 'Kiddie Party', NULL, '200 Pax Package', 0.00),
-(81, 'Pending', 'Ivan Ablanida', 'Brio', 'ej@gmail.com', '321312', '2024-11-28', 50, 5, 10, 3, 'Kiddie Party', 'Clown', '200 Pax Package', 0.00),
-(82, 'Pending', 'Ivan Ablanida', 'Brio', 'ej@gmail.com', '321312', '2024-11-26', 80, 5, 10, 3, 'Kiddie Party', 'Package D (Kiddie Birthday Party (100 pax)', 'None', 0.00),
-(83, 'Pending', 'Ivan Ablanida', 'Brio', 'ej@gmail.com', '321312', '2024-11-26', 80, 5, 10, 3, 'Kiddie Party', 'other', '200 Pax Package, Clown', 0.00);
+(84, 'Pending', 'Ivan Ablanida', 'Brio', 'ej@gmail.com', '321312', '2024-12-04', 80, 5, 10, 3, 'Kiddie Party', 'other', '200 Pax Package, Glazing Table, Catering', 0.00),
+(85, 'Pending', 'Ivan Ablanida', 'Brio', 'ej@gmail.com', '321312', '2024-11-28', 80, 5, 10, 3, 'Kiddie Party', 'other', '200 Pax Package, Clown, Glazing Table, Catering', 0.00),
+(86, 'Pending', 'Ivan Ablanida', 'Brio', 'ej@gmail.com', '321312', '2024-11-28', 80, 5, 10, 3, 'Kiddie Party', 'other', '200 Pax Package, Clown, Glazing Table, Catering', 100.00),
+(87, 'Pending', 'Ivan Ablanida', 'Brio', 'ej@gmail.com', '321312', '2024-11-30', 80, 5, 10, 3, 'Kiddie Party', 'other', '200 Pax Package', 100.00),
+(88, 'Pending', 'Ivan Ablanida', 'Brio', 'ej@gmail.com', '321312', '2024-11-30', 80, 5, 10, 3, 'Kiddie Party', 'other', '150 Pax Package, Clown, Glazing Table, Catering', 0.00),
+(89, 'Pending', 'Ivan Ablanida', 'Brio', 'ej@gmail.com', '321312', '2024-12-05', 80, 5, 10, 3, 'Kiddie Party', 'other', '150 Pax Package, Clown, Glazing Table', 0.00),
+(90, 'Pending', 'Ivan Ablanida', 'Brio', 'ej@gmail.com', '321312', '2024-12-05', 80, 5, 10, 3, 'Kiddie Party', 'other', '200 Pax Package, Clown, Glazing Table, Catering', 122000.00),
+(91, 'Pending', 'Ivan Ablanida', 'Brio', 'ej@gmail.com', '321312', '2024-12-06', 80, 5, 10, 0, 'Kiddie Party', 'other', '150 Pax Package, Clown, Glazing Table', 69000.00);
 
 -- --------------------------------------------------------
 
@@ -105,7 +104,31 @@ INSERT INTO `event_packages` (`id`, `type_of_event`, `description`, `price`) VAL
 (5, 'Kiddie Party', 'Package A (Kiddie Birthday Party (50 pax)', 25000.00),
 (10, 'Kiddie Party', 'Package B (Kiddie Birthday Party (60 pax)', 30000.00),
 (13, 'Kiddie Party', 'Package C (Kiddie Birthday Party (80 pax)', 40000.00),
-(14, 'Kiddie Party', 'Package D (Kiddie Birthday Party (100 pax)', 45000.00);
+(14, 'Kiddie Party', 'Package D (Kiddie Birthday Party (100 pax)', 45000.00),
+(16, 'Adult Party', 'Package A (Adult Birthday Party (50 pax)	', 25000.00),
+(17, 'Adult Party', 'Package B (Adult Birthday Party (60 pax)	', 30000.00),
+(18, 'Adult Party', 'Package C (Adult Birthday Party (80 pax)	', 35000.00),
+(19, 'Adult Party', 'Package A (Adult Birthday Party (100 pax)	', 40000.00),
+(20, 'Christening', 'Package A (Christening (50 pax)	', 20000.00),
+(21, 'Christening', 'Package B (Christening (60 pax)', 25000.00),
+(22, 'Christening', 'Package C (Christening (80 pax)', 35000.00),
+(23, 'Christening', 'Package D (Christening (100 pax)', 40000.00),
+(24, 'Christmas Year End party', 'Package A (Christmas / Year end party (50 pax)', 20000.00),
+(25, 'Christmas Year End party', 'Package B (Christmas / Year end party (60 pax)', 25000.00),
+(26, 'Christmas Year End party', 'Package C (Christmas / Year end party (80 pax)', 35000.00),
+(27, 'Christmas Year End party', 'Package D (Christmas / Year end party (100 pax)', 40000.00),
+(28, 'Debut', 'Package A (Debut (50 pax)', 25000.00),
+(29, 'Debut', 'Package A (Debut (60 pax)', 30000.00),
+(30, 'Debut', 'Package C (Debut (80 pax)', 40000.00),
+(31, 'Debut', 'Package D (Debut (100 pax)', 45000.00),
+(32, 'Despedida', 'Package A (Despedida (50 pax)', 20000.00),
+(33, 'Despedida', 'Package B (Despedida (60 pax)', 25000.00),
+(34, 'Despedida', 'Package C (Despedida (80 pax)', 35000.00),
+(35, 'Despedida', 'Package D (Despedida (100 pax)', 40000.00),
+(36, 'Wedding', 'Package A (Wedding (50 pax)', 30000.00),
+(37, 'Wedding', 'Package B (Wedding (60 pax)', 35000.00),
+(38, 'Wedding', 'Package C (Wedding (80 pax)', 45000.00),
+(39, 'Wedding', 'Package D (Wedding (100 pax)', 55000.00);
 
 -- --------------------------------------------------------
 
@@ -125,7 +148,9 @@ CREATE TABLE `extra` (
 --
 
 INSERT INTO `extra` (`id`, `type_of_event`, `extra_name`, `price`) VALUES
-(1, 'Kiddie Party', 'Clown', 2000.00);
+(1, 'Kiddie Party', 'Clown', 2000.00),
+(3, 'Kiddie Party', 'Glazing Table', 6000.00),
+(4, 'Kiddie Party', 'Catering', 13000.00);
 
 -- --------------------------------------------------------
 
@@ -151,7 +176,42 @@ INSERT INTO `pax` (`id`, `type_of_event`, `pax`, `price`) VALUES
 (10, 'Kiddie Party', '100 Pax Package', 45000.00),
 (11, 'Kiddie Party', '150 Pax Package', 50000.00),
 (12, 'Kiddie Party', '200 Pax Package', 60000.00),
-(13, 'Adult Party', '100 Pax Package', 70000.00);
+(14, 'Adult Party', '50 Pax Package', 25000.00),
+(15, 'Adult Party', '60 Pax Package', 35000.00),
+(16, 'Adult Party', '80 Pax Package', 45000.00),
+(17, 'Adult Party', '100 Pax Package', 50000.00),
+(18, 'Adult Party', '150 Pax Package', 60000.00),
+(19, 'Adult Party', '200 Pax Package', 75000.00),
+(20, 'Christening', '50 Pax Package', 20000.00),
+(21, 'Christening', '60 Pax Package', 25000.00),
+(24, 'Christening', '150 Pax Package', 45000.00),
+(25, 'Christening', '200 Pax Package', 60000.00),
+(26, 'Christmas Year End party', '50 Pax Package', 20000.00),
+(27, 'Christmas Year End party', '60 Pax Package', 25000.00),
+(28, 'Christmas Year End party', '80 Pax Package', 35000.00),
+(29, 'Christmas Year End party', '100 Pax Package', 40000.00),
+(30, 'Christmas Year End party', '150 Pax Package', 45000.00),
+(31, 'Christmas Year End party', '200 Pax Package', 60000.00),
+(32, 'Debut', '50 Pax Package', 25000.00),
+(33, 'Debut', '60 Pax Package', 30000.00),
+(34, 'Debut', '80 Pax Package', 40000.00),
+(35, 'Debut', '100 Pax Package', 45000.00),
+(36, 'Debut', '150 Pax Package', 55000.00),
+(37, 'Debut', '200 Pax Package', 60000.00),
+(38, 'Despedida', '50 Pax Package', 20000.00),
+(39, 'Despedida', '60 Pax Package', 25000.00),
+(40, 'Despedida', '80 Pax Package', 35000.00),
+(41, 'Despedida', '100 Pax Package', 40000.00),
+(42, 'Despedida', '150 Pax Package', 45000.00),
+(43, 'Despedida', '200 Pax Package', 60000.00),
+(44, 'Wedding', '50 Pax Package', 30000.00),
+(45, 'Wedding', '60 Pax Package', 35000.00),
+(46, 'Wedding', '80 Pax Package', 45000.00),
+(47, 'Wedding', '100 Pax Package', 55000.00),
+(48, 'Wedding', '150 Pax Package', 60000.00),
+(49, 'Wedding', '200 Pax Package', 75000.00),
+(50, 'Christening', '80 Pax Package', 35000.00),
+(51, 'Christening', '100 Pax Package	', 40000.00);
 
 -- --------------------------------------------------------
 
@@ -285,7 +345,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=84;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
 
 --
 -- AUTO_INCREMENT for table `event_list`
@@ -297,19 +357,19 @@ ALTER TABLE `event_list`
 -- AUTO_INCREMENT for table `event_packages`
 --
 ALTER TABLE `event_packages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `extra`
 --
 ALTER TABLE `extra`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `pax`
 --
 ALTER TABLE `pax`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT for table `reminders`

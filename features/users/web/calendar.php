@@ -238,7 +238,7 @@ if (!(isset($_SESSION['email']) && $_SESSION['role'] === 'users')) {
                                         <div class="form-group " id="extra-options-container"></div>   
                                     </div>
                                 
-                                    <input type="hidden" id="event-cost" name="cost" value="">
+                                  
                                 </div>
                                 <div class="col-md-4 justify-content-between">
                                     <h5 class="mb-4">Total Payment</h5>
@@ -255,7 +255,9 @@ if (!(isset($_SESSION['email']) && $_SESSION['role'] === 'users')) {
                                             <div class="d-flex justify-content-between">
                                                 <p>Total Payment:</p>
                                                 <p id="cost"></p>
+                                                <input type="hidden" id="event-cost" name="cost" value="">
                                             </div>
+                                            
                                         </div>
                                     </div>
                                 </div>
