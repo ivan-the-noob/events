@@ -10,25 +10,21 @@
 
     require '../../../db.php';
 
-    // Get the email from the session
     $email = $_SESSION['email']; 
 
-    // Prepare the SQL query to select bookings based on the session email
     $sql = "SELECT * FROM booking WHERE email = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
 
-    // Fetch all the booking records
     $bookings = [];
     while ($row = $result->fetch_assoc()) {
-        $bookings[] = $row; // Store each booking record in an array
+        $bookings[] = $row; 
     }
 
     $conn->close();
 ?>
-
 
 
 
@@ -82,7 +78,7 @@
                                     <img src="../../../assets/profile/user.png" alt="Profile Image" class="profile" style="width: 30px; height: 30px; margin-left: 5px; margin-right: 5px;">
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                                    <li><a class="dropdown-item" href="">Profile</a></li>
+                                    <li><a class="dropdown-item" href="user-dashboard.php">Profile</a></li>
                                     <li><a class="dropdown-item" href="../function/authentication/logout.php">Logout</a></li>
                                 </ul>
                             </div>
@@ -106,43 +102,87 @@
     <h3 class="text-center calendar-h3">Let's Plan Your Perfect Event</h3>
     <div class="container">
     <?php if (!empty($bookings)): ?>
-        <?php foreach ($bookings as $booking): ?>
-            <div class="card p-4 mb-4">
-                <div class="d-flex justify-content-between align-items-start mb-3">
-                    <div>
-                        <h5 class="card-title mb-0"><?php echo htmlspecialchars($booking['full_name']); ?></h5>
-                        <p class="card-text text-muted"><?php echo htmlspecialchars($booking['email']); ?></p>
-                    </div>
-                    <span class="status-badge"><?php echo htmlspecialchars($booking['status']); ?></span>
+    <?php foreach ($bookings as $booking): ?>
+        <div class="card p-4 mb-4">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <div>
+                    <h5 class="card-title mb-0"><?php echo htmlspecialchars($booking['full_name']); ?></h5>
+                    <p class="card-text text-muted"><?php echo htmlspecialchars($booking['email']); ?></p>
                 </div>
-                <hr>
-                <div class="card-body p-0">
-                    <div class="d-flex justify-content-between">
-                        <p class="mb-1">Event Date:</p>
-                        <p><?php echo (new DateTime($booking['events_date']))->format('F j, Y'); ?></p>
+                <div class="d-flex gap-2">
+                    <!-- Modal for cancellation reason -->
+                    <div class="modal fade" id="cancelModal-<?php echo $booking['id']; ?>" tabindex="-1" aria-labelledby="cancelModalLabel-<?php echo $booking['id']; ?>" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="cancelModalLabel-<?php echo $booking['id']; ?>">Reason for Cancellation</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="POST" action="../function/php/process_cancel.php">
+                                        <input type="hidden" name="id" value="<?php echo $booking['id']; ?>" />
+                                        <div class="mb-3">
+                                            <label for="cancellationReason-<?php echo $booking['id']; ?>" class="form-label">Reason for cancellation:</label>
+                                            <textarea class="form-control" id="cancellationReason-<?php echo $booking['id']; ?>" name="cancel_reason" rows="4" placeholder="Enter your reason here..."></textarea>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-danger">Submit</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="d-flex justify-content-between">
-                        <p class="mb-1"><span class="info-label">Package:</span></p>
-                        <p><?php echo htmlspecialchars($booking['event_package']); ?></p>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                        <p class="mb-1"><span class="info-label">Event Options:</span></p>
-                        <p><?php echo htmlspecialchars($booking['event_options']); ?></p>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                        <p class="mb-1"><span class="info-label">Type of Event:</span></p>
-                        <p><?php echo htmlspecialchars($booking['event_type']); ?></p>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                        <p class="mb-1"><span class="info-label">Total Payment</span></p>
-                        <p>₱<?php echo number_format(htmlspecialchars($booking['cost']), 2); ?></p>
-                    </div>
+
+                    <span class="status-badge <?php echo (strtolower($booking['status']) === 'cancel') ? 'bg-danger text-white' : ''; ?>">
+                        <?php echo (strtolower($booking['status']) === 'cancel') ? 'Cancelled' : htmlspecialchars($booking['status']); ?>
+                    </span>
+
+
+                    <?php if ($booking['status'] === 'Pending'): ?>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelModal-<?php echo $booking['id']; ?>">
+                        Cancel
+                    </button>
+                <?php endif; ?>
                 </div>
             </div>
-        <?php endforeach; ?>
-    <?php else: ?>
-        <p>No bookings found.</p>
-    <?php endif; ?>
+            <hr>
+            <div class="card-body p-0">
+                <div class="d-flex justify-content-between">
+                    <p class="mb-1">Event Date:</p>
+                    <p><?php echo (new DateTime($booking['events_date']))->format('F j, Y'); ?></p>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <p class="mb-1"><span class="info-label">Package:</span></p>
+                    <p><?php echo htmlspecialchars($booking['event_package']); ?></p>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <p class="mb-1"><span class="info-label">Event Options:</span></p>
+                    <p><?php echo htmlspecialchars($booking['event_options']); ?></p>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <p class="mb-1"><span class="info-label">Type of Event:</span></p>
+                    <p><?php echo htmlspecialchars($booking['event_type']); ?></p>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <p class="mb-1"><span class="info-label">Total Payment</span></p>
+                    <p>₱<?php echo number_format(htmlspecialchars($booking['cost']), 2); ?></p>
+                </div>
+                <?php if (strtolower($booking['status']) === 'cancel'): ?>
+                    <div class="d-flex justify-content-between">
+                        <p class="mb-1"><span class="info-label">Reason for Cancellation</span></p>
+                        <p><?php echo htmlspecialchars($booking['cancel_reason']); ?></p>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    <?php endforeach; ?>
+<?php else: ?>
+    <p>No bookings found.</p>
+<?php endif; ?>
+
+
 </div>
 </section>
 

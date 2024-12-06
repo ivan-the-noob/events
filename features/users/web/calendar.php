@@ -63,7 +63,7 @@ if (!(isset($_SESSION['email']) && $_SESSION['role'] === 'users')) {
                                             style="width: 30px; height: 30px; margin-left: 5px; margin-right: 5px;">
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                                        <li><a class="dropdown-item" href="">Profile</a></li>
+                                        <li><a class="dropdown-item" href="user-dashboard.php">Profile</a></li>
                                         <li><a class="dropdown-item" href="../function/authentication/logout.php">Logout</a>
                                         </li>
                                     </ul>

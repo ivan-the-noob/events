@@ -51,7 +51,7 @@
                                 <div class="d-flex gap-2 navbar-btn">
                               
                                 <?php if ($email): ?>
-                            <div class="dropdown second-dropdown">
+                            <div class="dropdown second-dropdown d-flex align-items-center">
                                 <button class="btn" type="button" id="dropdownMenuButton2"
                                         data-bs-toggle="dropdown" aria-expanded="false" style="padding: 0; margin-top: 2px;">
                                     <img src="assets/profile/user.png" alt="Profile Image" class="profile" style="width: 30px; height: 30px; margin-left: 5px; margin-right: 5px;">
@@ -61,18 +61,13 @@
                                     <li><a class="dropdown-item" href="features/users/function/authentication/logout.php">Logout</a></li>
                                 </ul>
                             </div>
-
-
                         <?php else: ?>
                             <a href="features/users/web/login.php" class="sign-in">Sign In</a>
                         <?php endif; ?>
                                 <a href="features/users/web/calendar.php" class="book-event">Book Event</a>
-                            </div>
-                    
+                            </div>            
                             </ul>
-                       
-                        </div>
-                     
+                        </div>        
                     </div>
                 </nav>       
             </div>
