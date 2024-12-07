@@ -144,21 +144,25 @@ $result = $conn->query($query);
                                 <td><?php echo htmlspecialchars($row['full_name']); ?></td>
                                 <td><?php echo htmlspecialchars($row['event_type']); ?></td>
                                 <td>
-                                    <button type="button" class="btn view" data-bs-toggle="modal"
-                                        data-bs-target="#infoModal" data-id="<?php echo $row['id']; ?>"
-                                        data-full-name="<?php echo htmlspecialchars($row['full_name']); ?>"
-                                        data-event-type="<?php echo htmlspecialchars($row['event_type']); ?>"
-                                        data-email="<?php echo htmlspecialchars($row['email']); ?>"
-                                        data-phone="<?php echo htmlspecialchars($row['phone_number']); ?>"
-                                        data-events-date="<?php echo htmlspecialchars($row['events_date']); ?>"
-                                        data-guest-count="<?php echo htmlspecialchars($row['guest_count']); ?>"
-                                        data-event-duration="<?php echo htmlspecialchars($row['event_duration']); ?>"
-                                        data-event-starttime="<?php echo htmlspecialchars($row['event_starttime']); ?>"
-                                        data-event-endtime="<?php echo htmlspecialchars($row['event_endtime']); ?>"
-                                        data-event-package="<?php echo htmlspecialchars($row['event_package']); ?>"
-                                        data-event-options="<?php echo htmlspecialchars($row['event_options']); ?>">
-                                        View
-                                    </button>
+                                <button type="button" class="btn view" data-bs-toggle="modal"
+                                    data-bs-target="#infoModal" 
+                                    data-id="<?php echo $row['id']; ?>"
+                                    data-full-name="<?php echo htmlspecialchars($row['full_name']); ?>"
+                                    data-event-type="<?php echo htmlspecialchars($row['event_type']); ?>"
+                                    data-email="<?php echo htmlspecialchars($row['email']); ?>"
+                                    data-phone="<?php echo htmlspecialchars($row['phone_number']); ?>"
+                                    data-events-date="<?php echo htmlspecialchars($row['events_date']); ?>"
+                                    data-guest-count="<?php echo htmlspecialchars($row['guest_count']); ?>"
+                                    data-event-duration="<?php echo htmlspecialchars($row['event_duration']); ?>"
+                                    data-event-starttime="<?php echo htmlspecialchars($row['event_starttime']); ?>"
+                                    data-event-endtime="<?php echo htmlspecialchars($row['event_endtime']); ?>"
+                                    data-event-package="<?php echo htmlspecialchars($row['event_package']); ?>"
+                                    data-event-options="<?php echo htmlspecialchars($row['event_options']); ?>"
+                                    data-payment-image="<?php echo htmlspecialchars($row['payment_image']); ?>"
+                                    data-reference-no="<?php echo htmlspecialchars($row['reference_no']); ?>">
+                                    View
+                                </button>
+
                                 </td>
                                 <td>
                                     <form method="POST" action="../function/php/pending.php" style="display:inline;">
@@ -178,74 +182,11 @@ $result = $conn->query($query);
                 </table>
             </div>
 
-            <!-- Modal (OUTSIDE THE TABLE) -->
-            <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-xl">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="infoModalLabel">Event Details</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <h5>Customer Info</h5>
-                                        <div class="form-group mt-1">
-                                            <label for="modal-full-name" class="form-label">Full Name</label>
-                                            <input type="text" id="modal-full-name" class="form-control" readonly>
-                                        </div>
-                                        <div class="form-group mt-1">
-                                            <label for="modal-email" class="form-label">Email</label>
-                                            <input type="email" id="modal-email" class="form-control" readonly>
-                                        </div>
-                                        <div class="form-group mt-1">
-                                            <label for="modal-phone-number" class="form-label">Phone Number</label>
-                                            <input type="number" id="modal-phone-number" class="form-control" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 mt-0">
-                                        <h5>Event Info</h5>
-                                        <div class="form-group mt-1">
-                                            <label for="modal-event-type" class="form-label">Type of Event</label>
-                                            <input type="text" id="modal-event-type" class="form-control" readonly>
-                                        </div>
-                                        <div class="form-group mt-1">
-                                            <label for="modal-events-date" class="form-label">Events Date</label>
-                                            <input type="text" id="modal-events-date" class="form-control" readonly>
-                                        </div>
-                                        <div class="form-group mt-1">
-                                            <label for="modal-guest-count" class="form-label">Guest Count</label>
-                                            <input type="number" id="modal-guest-count" class="form-control" readonly>
-                                        </div>
-                                        <div class="form-group mt-1">
-                                            <label for="modal-event-duration" class="form-label">Event Duration</label>
-                                            <input type="text" id="modal-event-duration" class="form-control" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <h5>Event Packages</h5>
-                                        <div class="form-group mt-1">
-                                            <label for="modal-event-package" class="form-label">Event Package</label>
-                                            <input type="text" id="modal-event-package" class="form-control" readonly>
-                                        </div>
-                                        <div class="form-group mt-1">
-                                            <label for="modal-event-options" class="form-label">Event Options</label>
-                                            <input type="text" id="modal-event-options" class="form-control" readonly>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+           
+            
 
             <script>
-                document.addEventListener('DOMContentLoaded', () => {
+               document.addEventListener('DOMContentLoaded', () => {
                     // Add event listener to all view buttons
                     document.querySelectorAll('.btn.view').forEach(button => {
                         button.addEventListener('click', event => {
@@ -262,6 +203,8 @@ $result = $conn->query($query);
                             const eventDuration = button.dataset.eventDuration;
                             const eventPackage = button.dataset.eventPackage;
                             const eventOptions = button.dataset.eventOptions;
+                            const paymentImage = button.dataset.paymentImage; // get the payment image data
+                            const referenceNo = button.dataset.referenceNo; // get the reference number data
 
                             // Populate modal inputs
                             modal.querySelector('#modal-full-name').value = fullName;
@@ -274,9 +217,12 @@ $result = $conn->query($query);
                                 `${eventDuration} hours`;
                             modal.querySelector('#modal-event-package').value = eventPackage;
                             modal.querySelector('#modal-event-options').value = eventOptions;
+                            modal.querySelector('#modal-payment-image').src = paymentImage ? `../../assets/gcash-payments/${paymentImage}` : ''; // set payment image
+                            modal.querySelector('#modal-reference-no').value = referenceNo; 
                         });
                     });
                 });
+
             </script>
 
             <nav aria-label="Page navigation">

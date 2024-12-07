@@ -256,8 +256,7 @@ if (!(isset($_SESSION['email']) && $_SESSION['role'] === 'users')) {
                                                 <p>Total Payment:</p>
                                                 <p id="cost"></p>
                                                 <input type="hidden" id="event-cost" name="cost" value="">
-                                            </div>
-                                            
+                                            </div>          
                                         </div>
                                     </div>
                                 </div>

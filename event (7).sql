@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 27, 2024 at 01:32 AM
+-- Generation Time: Dec 07, 2024 at 09:29 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `booking` (
   `id` int(11) NOT NULL,
-  `status` enum('Pending','Waiting','On-going','Finished','Declined') DEFAULT 'Pending',
+  `status` enum('Pending','Waiting','On-going','Finished','Cancel') NOT NULL,
   `full_name` varchar(255) NOT NULL,
   `celebrants_name` varchar(255) DEFAULT NULL,
   `email` varchar(255) NOT NULL,
@@ -42,22 +42,23 @@ CREATE TABLE `booking` (
   `event_type` varchar(255) DEFAULT NULL,
   `event_package` varchar(255) DEFAULT NULL,
   `event_options` text DEFAULT NULL,
-  `cost` decimal(10,2) DEFAULT 0.00
+  `cost` decimal(10,2) DEFAULT 0.00,
+  `cancel_reason` text DEFAULT NULL,
+  `payment_image` varchar(255) DEFAULT NULL,
+  `reference_no` varchar(100) DEFAULT NULL,
+  `status_paid` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `booking`
 --
 
-INSERT INTO `booking` (`id`, `status`, `full_name`, `celebrants_name`, `email`, `phone_number`, `events_date`, `guest_count`, `event_duration`, `event_starttime`, `event_endtime`, `event_type`, `event_package`, `event_options`, `cost`) VALUES
-(84, 'Pending', 'Ivan Ablanida', 'Brio', 'ej@gmail.com', '321312', '2024-12-04', 80, 5, 10, 3, 'Kiddie Party', 'other', '200 Pax Package, Glazing Table, Catering', 0.00),
-(85, 'Pending', 'Ivan Ablanida', 'Brio', 'ej@gmail.com', '321312', '2024-11-28', 80, 5, 10, 3, 'Kiddie Party', 'other', '200 Pax Package, Clown, Glazing Table, Catering', 0.00),
-(86, 'Pending', 'Ivan Ablanida', 'Brio', 'ej@gmail.com', '321312', '2024-11-28', 80, 5, 10, 3, 'Kiddie Party', 'other', '200 Pax Package, Clown, Glazing Table, Catering', 100.00),
-(87, 'Pending', 'Ivan Ablanida', 'Brio', 'ej@gmail.com', '321312', '2024-11-30', 80, 5, 10, 3, 'Kiddie Party', 'other', '200 Pax Package', 100.00),
-(88, 'Pending', 'Ivan Ablanida', 'Brio', 'ej@gmail.com', '321312', '2024-11-30', 80, 5, 10, 3, 'Kiddie Party', 'other', '150 Pax Package, Clown, Glazing Table, Catering', 0.00),
-(89, 'Pending', 'Ivan Ablanida', 'Brio', 'ej@gmail.com', '321312', '2024-12-05', 80, 5, 10, 3, 'Kiddie Party', 'other', '150 Pax Package, Clown, Glazing Table', 0.00),
-(90, 'Pending', 'Ivan Ablanida', 'Brio', 'ej@gmail.com', '321312', '2024-12-05', 80, 5, 10, 3, 'Kiddie Party', 'other', '200 Pax Package, Clown, Glazing Table, Catering', 122000.00),
-(91, 'Pending', 'Ivan Ablanida', 'Brio', 'ej@gmail.com', '321312', '2024-12-06', 80, 5, 10, 0, 'Kiddie Party', 'other', '150 Pax Package, Clown, Glazing Table', 69000.00);
+INSERT INTO `booking` (`id`, `status`, `full_name`, `celebrants_name`, `email`, `phone_number`, `events_date`, `guest_count`, `event_duration`, `event_starttime`, `event_endtime`, `event_type`, `event_package`, `event_options`, `cost`, `cancel_reason`, `payment_image`, `reference_no`, `status_paid`) VALUES
+(90, 'Waiting', 'Ivan Ablanida', 'Brio', 'ej@gmail.com', '321312', '2024-12-05', 80, 5, 10, 3, 'Kiddie Party', 'other', '200 Pax Package, Clown, Glazing Table, Catering', 122000.00, 'Hey', NULL, NULL, 0),
+(91, 'Finished', 'Ivan Ablanida', 'Brio', 'ej@gmail.com', '321312', '2024-12-06', 80, 5, 10, 0, 'Kiddie Party', 'other', '150 Pax Package, Clown, Glazing Table', 69000.00, NULL, NULL, NULL, 0),
+(92, 'Waiting', 'Ivan Ablanida', 'Ivan', 'ejivancablanida@gmail.com', '09957939703', '2024-12-12', 50, 5, 9, 2, 'Adult Party', 'Package A (Adult Birthday Party (50 pax)', 'None', 25000.00, NULL, 'payment_6753ecbb7a5438.95824567.jpg', '21312', 1),
+(93, 'Waiting', 'Ivan Ablanida', 'dasdasda', 'ejivancablanida@gmail.com', '312321', '2024-12-09', 50, 5, 9, 2, 'Despedida', 'Package A (Despedida (50 pax)', 'None', 20000.00, NULL, NULL, NULL, 0),
+(94, 'Waiting', 'Ivan Ablanida', 'Ivan', 'ejivancablanida@gmail.com', '0999312321', '2024-12-13', 50, 5, 9, 2, 'Debut', 'Package A (Debut (50 pax)', 'None', 25000.00, NULL, 'gcash.jpg', '21312312', 1);
 
 -- --------------------------------------------------------
 
@@ -239,6 +240,34 @@ INSERT INTO `reminders` (`id`, `description`, `date`, `start_time`, `finish_time
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `reviews`
+--
+
+CREATE TABLE `reviews` (
+  `id` int(11) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `rating` int(11) NOT NULL CHECK (`rating` >= 1 and `rating` <= 5),
+  `subject` varchar(255) NOT NULL,
+  `feedback` text NOT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `reviews`
+--
+
+INSERT INTO `reviews` (`id`, `email`, `name`, `rating`, `subject`, `feedback`, `image`, `created_at`) VALUES
+(1, 'ej@gmail.com', 'Ivan', 2, 'dsadasdas', 'dsadsa', '../../../../assets/review/Desktop View.PNG', '2024-12-06 08:31:00'),
+(2, 'ej@gmail.com', 'Ivan', 3, 'dsadsa', 'dasdasdas', 'Mobile View.PNG', '2024-12-06 08:32:16'),
+(3, 'ej@gmail.com', 'Ivan', 3, 'dasdas', 'dasdas', 'Mobile View.PNG', '2024-12-06 08:33:51'),
+(4, 'ej@gmail.com', 'Ivan', 4, 'dsadsa', 'dsadas', '', '2024-12-06 08:34:08'),
+(5, 'ej@gmail.com', 'Ivan', 4, 'dsadas', 'dsadsa', 'Mobile View.PNG', '2024-12-06 08:34:26');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `unavailable_days`
 --
 
@@ -278,7 +307,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `created_at`, `role`) VALUES
-(1, 'Ivan', 'ej@gmail.com', '$2y$10$4kqdeBcgEzF95Ng.uO7rkuj07O5aqKrulTQ7PTXbTDFqcVXPUol26', '2024-11-10 06:20:57', 'users'),
+(1, 'Ivan', 'ejivancablanida@gmail.com', '$2y$10$4kqdeBcgEzF95Ng.uO7rkuj07O5aqKrulTQ7PTXbTDFqcVXPUol26', '2024-11-10 06:20:57', 'users'),
 (6, 'Ablanida, Ej Ivan C.', 'ejivan.ablanida@cvsu.edu.ph', '$2y$10$.7lUDxKeOYzFwkeZ16AyjOieEi2OWks9Ad9dGqmcSCLYPpmoHXDz.', '2024-11-18 07:16:02', 'admin'),
 (7, 'admin', 'admin@gmail.com', '$2y$10$w6JFYtB3uHb.P8MmenFQh.Tn47qYjZ9OtUIhOXhMf3jqCmFjx1mnq', '2024-11-19 06:28:40', 'admin');
 
@@ -325,6 +354,12 @@ ALTER TABLE `reminders`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `reviews`
+--
+ALTER TABLE `reviews`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `unavailable_days`
 --
 ALTER TABLE `unavailable_days`
@@ -345,7 +380,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
 
 --
 -- AUTO_INCREMENT for table `event_list`
@@ -376,6 +411,12 @@ ALTER TABLE `pax`
 --
 ALTER TABLE `reminders`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT for table `reviews`
+--
+ALTER TABLE `reviews`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `unavailable_days`

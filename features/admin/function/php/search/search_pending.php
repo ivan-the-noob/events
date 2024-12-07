@@ -55,7 +55,7 @@ while ($row = $result->fetch_assoc()) {
                 <div class="modal-body">
                     <div class="container">
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <h5>Customer Info</h5>
                                 <div class="form-group mt-1">
                                     <label for="full-name" class="form-label">Full Name</label>
@@ -74,7 +74,7 @@ while ($row = $result->fetch_assoc()) {
                                     <input type="number" id="phone-number" name="phone_number" class="form-control" value="' . htmlspecialchars($row['phone_number']) . '" readonly>
                                 </div>
                             </div>
-                            <div class="col-md-4 mt-2">
+                            <div class="col-md-3">
                                 <h5 class="events">Event Info</h5>
                                 <div class="form-group mt-1">
                                     <label for="events-date" class="form-label">Event Date</label>
@@ -89,11 +89,37 @@ while ($row = $result->fetch_assoc()) {
                                     <input type="text" id="event-duration" name="event_duration" class="form-control" value="' . htmlspecialchars($row['event_duration']) . ' hours" readonly>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <h5>Event Selection</h5>
                                 <div class="form-group">
                                     <label for="event-type" class="form-label">Type of Event</label>
                                     <input type="text" id="event-type" name="event_type" class="form-control" value="' . htmlspecialchars($row['event_type']) . '" readonly>
+                                </div>
+                                 <div class="form-group">
+                                    <label for="package-type" class="form-label">Type of Package</label>
+                                    <input type="text" id="package-type" name="event_type" class="form-control" value="' . htmlspecialchars($row['event_package']) . '" readonly>
+                                </div>
+                                 <div class="form-group">
+                                    <label for="event-options" class="form-label">Event Options</label>
+                                    <input type="text" id="event-options" name="event_type" class="form-control" value="' . htmlspecialchars($row['event_options']) . '" readonly>
+                                </div>
+                                
+                               
+                            </div>
+                            <div class="col-md-3">
+                                <h5>Total Payment</h5>
+                                <div class="form-group">
+                                    <label for="total-cost" class="form-label">Total</label>
+                                  <input type="text" id="total-cost" name="event_type" class="form-control" value="₱' . number_format($row['cost'], 0, '.', ',') . '" readonly>
+
+                                </div>
+                                <div class="form-group mt-1">
+                                    <label for="modal-payment-image" class="form-label">Payment Image</label>
+                                 <img id="modal-payment-image" src="../../../assets/gcash-payments/' . htmlspecialchars($row['payment_image']) . '" alt="Payment Image" class="img-fluid" style="max-width: 100%;"/>
+                                </div>
+                                <div class="form-group mt-1">
+                                    <label for="modal-reference-no" class="form-label">Reference No</label>
+                                   <input type="text" id="modal-reference-no" class="form-control" value="' . htmlspecialchars($row['reference_no'] ?: 'No Reference') . '" readonly>
                                 </div>
                             </div>
                         </div>

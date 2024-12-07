@@ -135,16 +135,59 @@
                         </div>
                     </div>
 
+                    <div class="modal fade" id="payNowModal-<?php echo $booking['id']; ?>" tabindex="-1" aria-labelledby="payNowModalLabel-<?php echo $booking['id']; ?>" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="payNowModalLabel-<?php echo $booking['id']; ?>">Payment Details</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form method="POST" action="../function/php/payment.php" enctype="multipart/form-data">
+                                    <input type="hidden" name="id" value="<?php echo $booking['id']; ?>">
+                                    <div class="modal-body">
+                                        <!-- Image Preview -->
+                                        <div class="mb-3 text-center">
+                                            <img id="preview-<?php echo $booking['id']; ?>" src="../../../assets/gcash.jpg" alt="Payment Image Preview" class="img-fluid">
+                                        </div>
+                                        
+                                        <!-- Image Upload -->
+                                        <div class="mb-3">
+                                            <label for="imageInput-<?php echo $booking['id']; ?>" class="form-label">Upload Payment Screenshot</label>
+                                            <input type="file" class="form-control" id="imageInput-<?php echo $booking['id']; ?>" name="payment_image" accept="image/*" onchange="previewImage(event, '<?php echo $booking['id']; ?>')" required>
+                                        </div>
+                                        
+                                        <!-- Reference Number -->
+                                        <div class="mb-3">
+                                            <label for="referenceNo-<?php echo $booking['id']; ?>" class="form-label">Reference Number</label>
+                                            <input type="text" class="form-control" id="referenceNo-<?php echo $booking['id']; ?>" name="reference_no" placeholder="Enter your payment reference number" required>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Submit Payment</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
                     <span class="status-badge <?php echo (strtolower($booking['status']) === 'cancel') ? 'bg-danger text-white' : ''; ?>">
                         <?php echo (strtolower($booking['status']) === 'cancel') ? 'Cancelled' : htmlspecialchars($booking['status']); ?>
                     </span>
 
-
+                    
                     <?php if ($booking['status'] === 'Pending'): ?>
-                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelModal-<?php echo $booking['id']; ?>">
-                        Cancel
-                    </button>
-                <?php endif; ?>
+                        <?php if ($booking['status_paid'] != 1): ?>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#payNowModal-<?php echo $booking['id']; ?>">
+                                Pay Now
+                            </button>
+                        <?php else: ?>
+                            <span class="btn btn-success">Paid</span>
+                        <?php endif; ?>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelModal-<?php echo $booking['id']; ?>">
+                            Cancel
+                        </button>
+                    <?php endif; ?>
                 </div>
             </div>
             <hr>

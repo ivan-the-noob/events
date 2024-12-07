@@ -118,7 +118,7 @@ $result = $conn->query($query);
 
         <div class="container mt-4">
             <div class="d-flex justify-content-between mb-2">
-                <h3>Pending Booking</h3>
+                <h3>Approve Booking</h3>
                 <input type="text" id="searchInput" class="search" placeholder="Search..">
             </div>
             <div class="table-responsive">
@@ -195,7 +195,9 @@ $result = $conn->query($query);
                                             <label for="modal-event-options" class="form-label">Event Options</label>
                                             <input type="text" id="modal-event-options" class="form-control" readonly>
                                         </div>
+                                        
                                     </div>
+                                    
                                 </div>
                             </div>
                         </div>
