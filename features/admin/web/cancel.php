@@ -104,6 +104,14 @@
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Unavailable</span>
             </a>
+            <a href="invoice.php">
+                <i class="fa-solid fa-tachometer-alt"></i>
+                <span>Invoice</span>
+            </a>
+            <a href="reviews.php">
+                <i class="fa-solid fa-tachometer-alt"></i>
+                <span>Reviews</span>
+            </a>
             <a href="history.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>History</span>

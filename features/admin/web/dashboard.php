@@ -64,13 +64,21 @@ if ($result && $row = $result->fetch_assoc()) {
                 <span>Approved Booking</span>
             </a>
 
-            <a href="packages.php">
+            <a href="cancel.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
-                <span>Event Packages</span>
+                <span>Cancelled Booking</span>
             </a>
             <a href="unavailable.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Unavailable</span>
+            </a>
+            <a href="invoice.php">
+                <i class="fa-solid fa-tachometer-alt"></i>
+                <span>Invoice</span>
+            </a>
+            <a href="reviews.php">
+                <i class="fa-solid fa-tachometer-alt"></i>
+                <span>Reviews</span>
             </a>
             <a href="history.php">
                 <i class="fa-solid fa-tachometer-alt"></i>

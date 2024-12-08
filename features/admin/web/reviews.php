@@ -1,26 +1,21 @@
 <?php
-session_start();
-if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'admin') {
-    header('Location: ../../users/web/login.php');
-    exit();
-}
-require '../../../db.php';
+    session_start();
+    if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'admin') {
+        header('Location: ../../users/web/login.php');
+        exit();
+    }
+    require '../../../db.php';
 
-$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-$limit = 5;
-$offset = ($page - 1) * $limit;
-$total_query = "SELECT COUNT(*) as total FROM booking";
-$total_result = $conn->query($total_query);
-$total_row = $total_result->fetch_assoc();
-$total_records = $total_row['total'];
-$total_pages = ceil($total_records / $limit);
-$query = "SELECT * FROM booking LIMIT $limit OFFSET $offset";
-$result = $conn->query($query);
-
-$query = "SELECT * FROM unavailable_days";
-$result = $conn->query($query);
-
-
+    $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+    $limit = 5;
+    $offset = ($page - 1) * $limit;
+    $total_query = "SELECT COUNT(*) as total FROM reviews";
+    $total_result = $conn->query($total_query);
+    $total_row = $total_result->fetch_assoc();
+    $total_records = $total_row['total'];
+    $total_pages = ceil($total_records / $limit);
+    $query = "SELECT * FROM reviews LIMIT $limit OFFSET $offset";
+    $result = $conn->query($query);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,7 +23,7 @@ $result = $conn->query($query);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unavailable | Admin</title>
+    <title>Reviews | Admin</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -65,7 +60,7 @@ $result = $conn->query($query);
                 <span>Cancelled Booking</span>
             </a>
 
-            <a href="#" class="navbar-highlight">
+            <a href="#">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Unavailable</span>
             </a>
@@ -73,7 +68,7 @@ $result = $conn->query($query);
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Invoice</span>
             </a>
-            <a href="reviews.php">
+            <a href="#" class="navbar-highlight">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Reviews</span>
             </a>
@@ -128,38 +123,48 @@ $result = $conn->query($query);
 
         <div class="container mt-4">
             <div class="d-flex justify-content-between mb-2">
-                <h3>Unavailable Days</h3>
+                <h3>Reviews</h3>
                 <div class="d-flex gap-2">
-                    <button class="btn btn-primary add-btn" data-bs-toggle="modal"
-                        data-bs-target="#unavailableDaysModal">+ Add</button>
                     <input type="text" class="search" placeholder="Search.." id="searchInput">
                 </div>
             </div>
             <div class="table-responsive">
-                <table class="table">
+            <table class="table">
                     <thead>
                         <tr>
-                            <th scope="col">Date</th>
-                            <th scope="col">Reason</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Rating</th>
+                            <th scope="col">Subject</th>
+                            <th scope="col">Feedback</th>
+                            <th scope="col">Image</th>
                             <th scope="col">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
                         while ($row = $result->fetch_assoc()):
+                            $buttonText = $row['status'] == 0 ? 'Show' : 'Hide';
+                            $buttonAction = $row['status'] == 0 ? 'show' : 'hide';
                         ?>
                             <tr>
-                                <td><?php echo date("F j, Y", strtotime($row['date'])); ?></td>
-                                <td><?php echo htmlspecialchars($row['reason']); ?></td>
+                                <td><?php echo htmlspecialchars($row['email']); ?></td>
+                                <td><?php echo htmlspecialchars($row['name']); ?></td>
+                                <td><?php echo htmlspecialchars($row['rating']); ?></td>
+                                <td><?php echo htmlspecialchars($row['subject']); ?></td>
+                                <td><?php echo htmlspecialchars($row['feedback']); ?></td>
                                 <td>
-                                    <button class="btn btn-warning edit-btn" data-id="<?php echo $row['id']; ?>"
-                                        data-date="<?php echo $row['date']; ?>"
-                                        data-reason="<?php echo htmlspecialchars($row['reason']); ?>" data-bs-toggle="modal"
-                                        data-bs-target="#unavailableDaysModal">Edit</button>
-                                    <form method="POST" action="../function/php/unavailable.php" style="display:inline;">
+                                    <?php if ($row['image']): ?>
+                                        <img src="../../../assets/review/<?php echo htmlspecialchars($row['image']); ?>" alt="Review Image" width="50">
+                                    <?php else: ?>
+                                        No Image
+                                    <?php endif; ?>
+                                </td>
+                                <td>
+                                    <form method="POST" action="../function/php/review.php" style="display:inline;">
                                         <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                                        <button type="submit" name="action" value="delete"
-                                            class="btn btn-danger">Delete</button>
+                                        <button type="submit" name="action" value="<?php echo $buttonAction; ?>" class="btn btn-info"><?php echo $buttonText; ?></button>
+                                        <button type="submit" name="action" value="delete" class="btn btn-danger">Delete</button>
                                     </form>
                                 </td>
                             </tr>

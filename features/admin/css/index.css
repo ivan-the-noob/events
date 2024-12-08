@@ -188,7 +188,7 @@ th,tr{
 }
 
 .form-select-sm{
-    width: 50%;
+    width: 115px;
     display: flex;
     margin: auto;
 }
@@ -337,4 +337,18 @@ th,tr{
     text-align: center;
   }
 /*History Section End*/
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px; 
+}
+.info-left {
+    width: 50%; 
+    text-align: left;
+}
+.info-right {
+    width: 50%;
+    text-align: start;
+}
 

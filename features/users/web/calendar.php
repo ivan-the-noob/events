@@ -126,12 +126,9 @@ if (!(isset($_SESSION['email']) && $_SESSION['role'] === 'users')) {
                     </div>
                 </div>
                 <div id="calendar" class="calendar flex-grow-1"></div>
-
-
             </div>
         </div>
     </section>
-
     <div class="modal fade" id="dateModal" tabindex="-1" aria-labelledby="dateModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered custom-modal mx-auto">
             <div class="modal-content">

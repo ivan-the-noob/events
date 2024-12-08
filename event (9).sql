@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 08, 2024 at 01:17 AM
+-- Generation Time: Dec 08, 2024 at 10:04 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -55,9 +55,9 @@ CREATE TABLE `booking` (
 --
 
 INSERT INTO `booking` (`id`, `status`, `full_name`, `celebrants_name`, `email`, `phone_number`, `events_date`, `guest_count`, `event_duration`, `event_starttime`, `event_endtime`, `event_type`, `event_package`, `event_options`, `cost`, `cancel_reason`, `payment_image`, `reference_no`, `payment_amount`, `status_paid`) VALUES
-(90, 'Cancel', 'Ivan Ablanida', 'Brio', 'ej@gmail.com', '321312', '2024-12-05', 80, 5, 10, 3, 'Kiddie Party', 'other', '200 Pax Package, Clown, Glazing Table, Catering', 122000.00, 'Hey', NULL, NULL, 0.00, 0),
-(91, 'Finished', 'Ivan Ablanida', 'Brio', 'ejivancablanida@gmail.com', '321312', '2024-12-06', 80, 5, 10, 0, 'Kiddie Party', 'other', '150 Pax Package, Clown, Glazing Table', 69000.00, NULL, NULL, NULL, 0.00, 0),
-(92, 'Cancel', 'Ivan Ablanida', 'Ivan', 'ejivancablanida@gmail.com', '09957939703', '2024-11-12', 50, 5, 9, 2, 'Adult Party', 'Package A (Adult Birthday Party (50 pax)', 'None', 25000.00, NULL, 'gcash.jpg', '222', 12500.00, 1),
+(90, 'Finished', 'Ivan Ablanida', 'Brio', 'ej@gmail.com', '321312', '2024-12-05', 80, 5, 10, 3, 'Kiddie Party', 'other', '200 Pax Package, Clown, Glazing Table, Catering', 122000.00, 'Hey', NULL, NULL, 0.00, 0),
+(91, 'Finished', 'Ivan Ablanida', 'Brio', 'ejivancablanida@gmail.com', '321312', '2023-12-06', 80, 5, 10, 0, 'Kiddie Party', 'other', '150 Pax Package, Clown, Glazing Table', 69000.00, NULL, NULL, NULL, 0.00, 0),
+(92, 'Finished', 'Ivan Ablanida', 'Ivan', 'ejivancablanida@gmail.com', '09957939703', '2024-11-12', 50, 5, 9, 2, 'Adult Party', 'Package A (Adult Birthday Party (50 pax)', 'None', 25000.00, NULL, 'gcash.jpg', '222', 12500.00, 1),
 (95, 'Cancel', 'Ivan Ablanidas', 'Ivan', 'ejivancablanida@gmail.com', '09957939703', '2023-12-12', 50, 5, 9, 2, 'Adult Party', 'Package A (Adult Birthday Party (50 pax)', 'None', 25000.00, NULL, 'gcash.jpg', '222', 12500.00, 1);
 
 -- --------------------------------------------------------
@@ -94,42 +94,43 @@ CREATE TABLE `event_packages` (
   `id` int(11) NOT NULL,
   `type_of_event` varchar(255) NOT NULL,
   `description` text NOT NULL,
-  `price` decimal(10,2) NOT NULL
+  `price` decimal(10,2) NOT NULL,
+  `package_image` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `event_packages`
 --
 
-INSERT INTO `event_packages` (`id`, `type_of_event`, `description`, `price`) VALUES
-(5, 'Kiddie Party', 'Package A (Kiddie Birthday Party (50 pax)', 25000.00),
-(10, 'Kiddie Party', 'Package B (Kiddie Birthday Party (60 pax)', 30000.00),
-(13, 'Kiddie Party', 'Package C (Kiddie Birthday Party (80 pax)', 40000.00),
-(14, 'Kiddie Party', 'Package D (Kiddie Birthday Party (100 pax)', 45000.00),
-(16, 'Adult Party', 'Package A (Adult Birthday Party (50 pax)	', 25000.00),
-(17, 'Adult Party', 'Package B (Adult Birthday Party (60 pax)	', 30000.00),
-(18, 'Adult Party', 'Package C (Adult Birthday Party (80 pax)	', 35000.00),
-(19, 'Adult Party', 'Package A (Adult Birthday Party (100 pax)	', 40000.00),
-(20, 'Christening', 'Package A (Christening (50 pax)	', 20000.00),
-(21, 'Christening', 'Package B (Christening (60 pax)', 25000.00),
-(22, 'Christening', 'Package C (Christening (80 pax)', 35000.00),
-(23, 'Christening', 'Package D (Christening (100 pax)', 40000.00),
-(24, 'Christmas Year End party', 'Package A (Christmas / Year end party (50 pax)', 20000.00),
-(25, 'Christmas Year End party', 'Package B (Christmas / Year end party (60 pax)', 25000.00),
-(26, 'Christmas Year End party', 'Package C (Christmas / Year end party (80 pax)', 35000.00),
-(27, 'Christmas Year End party', 'Package D (Christmas / Year end party (100 pax)', 40000.00),
-(28, 'Debut', 'Package A (Debut (50 pax)', 25000.00),
-(29, 'Debut', 'Package A (Debut (60 pax)', 30000.00),
-(30, 'Debut', 'Package C (Debut (80 pax)', 40000.00),
-(31, 'Debut', 'Package D (Debut (100 pax)', 45000.00),
-(32, 'Despedida', 'Package A (Despedida (50 pax)', 20000.00),
-(33, 'Despedida', 'Package B (Despedida (60 pax)', 25000.00),
-(34, 'Despedida', 'Package C (Despedida (80 pax)', 35000.00),
-(35, 'Despedida', 'Package D (Despedida (100 pax)', 40000.00),
-(36, 'Wedding', 'Package A (Wedding (50 pax)', 30000.00),
-(37, 'Wedding', 'Package B (Wedding (60 pax)', 35000.00),
-(38, 'Wedding', 'Package C (Wedding (80 pax)', 45000.00),
-(39, 'Wedding', 'Package D (Wedding (100 pax)', 55000.00);
+INSERT INTO `event_packages` (`id`, `type_of_event`, `description`, `price`, `package_image`) VALUES
+(5, 'Kiddie Party', 'Package A (Kiddie Birthday Party (50 pax)', 25000.00, '1733635045_2.png'),
+(10, 'Kiddie Party', 'Package B (Kiddie Birthday Party (60 pax)', 30000.00, '1733635968_3.png'),
+(13, 'Kiddie Party', 'Package C (Kiddie Birthday Party (80 pax)', 40000.00, '1733636035_4.png'),
+(14, 'Kiddie Party', 'Package D (Kiddie Birthday Party (100 pax)', 45000.00, '1733636047_5.png'),
+(16, 'Adult Party', 'Package A (Adult Birthday Party (50 pax)	', 25000.00, '1733636170_14.png'),
+(17, 'Adult Party', 'Package B (Adult Birthday Party (60 pax)	', 30000.00, '1733636175_15.png'),
+(18, 'Adult Party', 'Package C (Adult Birthday Party (80 pax)	', 35000.00, '1733636182_16.png'),
+(19, 'Adult Party', 'Package D (Adult Birthday Party (100 pax)	', 40000.00, '1733636189_17.png'),
+(20, 'Christening', 'Package A (Christening (50 pax)	', 20000.00, '1733636237_6.png'),
+(21, 'Christening', 'Package B (Christening (60 pax)', 25000.00, '1733636244_7.png'),
+(22, 'Christening', 'Package C (Christening (80 pax)', 35000.00, '1733636250_8.png'),
+(23, 'Christening', 'Package D (Christening (100 pax)', 40000.00, '1733636257_9.png'),
+(24, 'Christmas Year End party', 'Package A (Christmas / Year end party (50 pax)', 20000.00, '1733636306_20.png'),
+(25, 'Christmas Year End party', 'Package B (Christmas / Year end party (60 pax)', 25000.00, '1733636313_21.png'),
+(27, 'Christmas Year End party', 'Package D (Christmas / Year end party (100 pax)', 40000.00, '1733637160_23.png'),
+(28, 'Debut', 'Package A (Debut (50 pax)', 25000.00, '1733637411_10.png'),
+(29, 'Debut', 'Package B (Debut (60 pax)', 30000.00, '1733637418_11.png'),
+(30, 'Debut', 'Package C (Debut (80 pax)', 40000.00, '1733637425_12.png'),
+(31, 'Debut', 'Package D (Debut (100 pax)', 45000.00, '1733637430_13.png'),
+(32, 'Despedida', 'Package A (Despedida (50 pax)', 20000.00, '1733637368_28.png'),
+(33, 'Despedida', 'Package B (Despedida (60 pax)', 25000.00, '1733637375_29.png'),
+(34, 'Despedida', 'Package C (Despedida (80 pax)', 35000.00, '1733637383_30.png'),
+(35, 'Despedida', 'Package D (Despedida (100 pax)', 40000.00, '1733637389_31.png'),
+(36, 'Wedding', 'Package A (Wedding (50 pax)', 30000.00, '1733637332_24.png'),
+(37, 'Wedding', 'Package B (Wedding (60 pax)', 35000.00, '1733637339_25.png'),
+(38, 'Wedding', 'Package C (Wedding (80 pax)', 45000.00, '1733637346_26.png'),
+(39, 'Wedding', 'Package D (Wedding (100 pax)', 55000.00, '1733637352_27.png'),
+(46, 'Christmas Year End party', 'Package C (Christmas / Year end party (80 pax)', 35000.00, '1733637148_22.png');
 
 -- --------------------------------------------------------
 
@@ -251,19 +252,20 @@ CREATE TABLE `reviews` (
   `subject` varchar(255) NOT NULL,
   `feedback` text NOT NULL,
   `image` varchar(255) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `status` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `reviews`
 --
 
-INSERT INTO `reviews` (`id`, `email`, `name`, `rating`, `subject`, `feedback`, `image`, `created_at`) VALUES
-(1, 'ej@gmail.com', 'Ivan', 2, 'dsadasdas', 'dsadsa', '../../../../assets/review/Desktop View.PNG', '2024-12-06 08:31:00'),
-(2, 'ej@gmail.com', 'Ivan', 3, 'dsadsa', 'dasdasdas', 'Mobile View.PNG', '2024-12-06 08:32:16'),
-(3, 'ej@gmail.com', 'Ivan', 3, 'dasdas', 'dasdas', 'Mobile View.PNG', '2024-12-06 08:33:51'),
-(4, 'ej@gmail.com', 'Ivan', 4, 'dsadsa', 'dsadas', '', '2024-12-06 08:34:08'),
-(5, 'ej@gmail.com', 'Ivan', 4, 'dsadas', 'dsadsa', 'Mobile View.PNG', '2024-12-06 08:34:26');
+INSERT INTO `reviews` (`id`, `email`, `name`, `rating`, `subject`, `feedback`, `image`, `created_at`, `status`) VALUES
+(1, 'ej@gmail.com', 'Ivan', 2, 'dsadasdas', 'dsadsa', 'review.png', '2024-12-06 08:31:00', 0),
+(2, 'ej@gmail.com', 'Ivan', 3, 'dsadsa', 'dasdasdas', 'review.png', '2024-12-06 08:32:16', 0),
+(3, 'ej@gmail.com', 'Ivan', 3, 'dasdas', 'dasdas', 'review.png', '2024-12-06 08:33:51', 0),
+(4, 'ej@gmail.com', 'Ivan', 4, 'dsadsa', 'dsadas', 'review.png', '2024-12-06 08:34:08', 0),
+(5, 'ej@gmail.com', 'Ivan', 4, 'dsadas', 'dsadsa', 'review.png', '2024-12-06 08:34:26', 0);
 
 -- --------------------------------------------------------
 
@@ -391,7 +393,7 @@ ALTER TABLE `event_list`
 -- AUTO_INCREMENT for table `event_packages`
 --
 ALTER TABLE `event_packages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT for table `extra`

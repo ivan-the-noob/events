@@ -1,18 +1,22 @@
 document.addEventListener('DOMContentLoaded', function () {
     const sliderWrapper = document.querySelector('.slider-wrapper');
-    const sliderItems = document.querySelectorAll('.slider-item');
-    const prevButton = document.querySelector('.slider-btn.prev');
-    const nextButton = document.querySelector('.slider-btn.next');
+    const sliderItems = document.querySelectorAll('.review-item');
+    const prevButton = document.querySelector('.slider-btn-prev');
+    const nextButton = document.querySelector('.slider-btn-next');
+    const dots = document.querySelectorAll('.dot');
     const totalSlides = sliderItems.length;
 
     let currentIndex = 0;
 
     function updateSlider() {
-        sliderWrapper.style.transform = `translateX(-${currentIndex * 60}%)`;
+        // Adjust the translation percentage for each item width (100% in this case)
+        sliderWrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
 
         sliderItems.forEach(item => item.classList.remove('active'));
+        dots.forEach(dot => dot.classList.remove('active'));
 
         sliderItems[currentIndex].classList.add('active');
+        dots[currentIndex].classList.add('active');
     }
 
     nextButton.addEventListener('click', () => {
@@ -25,7 +29,6 @@ document.addEventListener('DOMContentLoaded', function () {
         updateSlider();
     });
 
+    // Update dots based on the current index
     updateSlider();
-
-   
 });

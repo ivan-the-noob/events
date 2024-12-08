@@ -214,59 +214,68 @@
             <h3 class="text-center">What our customers say</h3>
             <div class="slider">
                 <button class="slider-btn-prev">&lt;</button>
+                <?php
+                    require 'db.php';
+
+                    $query = "SELECT name, subject, feedback, image FROM reviews WHERE status = 0";
+                    $result = $conn->query($query);
+
+                    if ($result === false) {
+                        echo "Error executing query: " . $conn->error;
+                    } elseif ($result->num_rows == 0) {
+                        echo "No reviews found.";
+                    }
+
+                    $reviews = [];
+                    if ($result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            $reviews[] = $row;
+                        }
+                    }
+                ?>
+
+
                 <div class="testimonial-slider-container">
-                    <!-- Slide 1 -->
+                    <?php
+                    if (!empty($reviews)) {
+                        foreach ($reviews as $review):
+                            $name = htmlspecialchars($review['name']);
+                            $subject = htmlspecialchars($review['subject']);
+                            $feedback = htmlspecialchars($review['feedback']);
+                            $image = htmlspecialchars($review['image']);
+                    ?>
                     <div class="review-item">
                         <div class="row reviews-item">
-                            <!-- Testimonial Text Section -->
                             <div class="col-10 col-sm-12 col-md-6 d-flex flex-column">
                                 <h4 class="text-center d-flex justify-content-center">
-                                   first At Amiel's MOM, they cater a very excellent service! It's easy to use and scale, and is really handy to customize for any projects.
+                                    <?php echo $subject; ?>
                                 </h4>
                                 <p class="text-center mt-2 pp">
-                                    Ac faucibus orci id quis consectetur laoreet sed. Enim congue molestie nam odio pulvinar ac ultrices. Elementum ut pellentesque volutpat mi.
+                                    <?php echo $feedback; ?>
                                 </p>
-                                <p class="text-start mt-2 pp"><strong class="text-start">Rachel Bright</strong><br>Customer Mom</p>
+                                <p class="text-start mt-2 pp"><strong class="text-start"><?php echo $name; ?></strong><br>Customer</p>
                             </div>
-        
-                            <!-- Testimonial Image Section -->
+
                             <div class="col-10 col-sm-10 col-md-6">
                                 <div class="slider-image">
-                                    <img src="assets/review/review.png" alt="Testimonial Image" class="img-fluid">
+                                    <?php if ($image): ?>
+                                        <img src="assets/review/<?php echo $image; ?>" alt="Testimonial Image" class="img-fluid" style="max-height: 200px;">
+                                    <?php else: ?>
+                                        <img src="default-image.png" alt="Default Image" class="img-fluid"> <!-- Default image if no review image -->
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
                     </div>
-        
-                    <!-- Slide 2 -->
-                    <div class="review-item">
-                        <div class="row reviews-item">
-                            <!-- Testimonial Text Section -->
-                            <div class="col-10 col-sm-12 col-md-6 d-flex flex-column">
-                                <h4 class="text-center d-flex justify-content-center">
-                                   first At Amiel's MOM, they cater a very excellent service! It's easy to use and scale, and is really handy to customize for any projects.
-                                </h4>
-                                <p class="text-center mt-2 pp">
-                                    Ac faucibus orci id quis consectetur laoreet sed. Enim congue molestie nam odio pulvinar ac ultrices. Elementum ut pellentesque volutpat mi.
-                                </p>
-                                <p class="text-start mt-2 pp"><strong class="text-start">Rachel Bright</strong><br>Customer Mom</p>
-                            </div>
-        
-                            <!-- Testimonial Image Section -->
-                            <div class="col-10 col-sm-10 col-md-6">
-                                <div class="slider-image">
-                                    <img src="assets/review/review.png" alt="Testimonial Image" class="img-fluid">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
+                    <?php endforeach; } ?>
                 </div>
+
                 <button class="slider-btn-next">&gt;</button>
             </div>
             <div class="pagination-dots">
-                <span class="dot active"></span>
-                <span class="dot"></span>
+                <?php for ($i = 0; $i < count($reviews); $i++): ?>
+                    <span class="dot <?php echo $i === 0 ? 'active' : ''; ?>"></span>
+                <?php endfor; ?>
             </div>
         </section>
         <section class="extra-events">
