@@ -10,6 +10,7 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
+    overflow-x: hidden;
 }
 
 /*Navbar Section*/
@@ -173,6 +174,7 @@ th,tr{
     background-color: #382D31 !important;
     color: #fff !important;
     text-align: center;
+    white-space: nowrap !important;
 }
 
 .view{
@@ -191,8 +193,45 @@ th,tr{
     margin: auto;
 }
 
+.search-form input{
+    background-color: transparent !important;
+    padding: 8px;
+    border-radius: 10px;
+}
+
+.search-form button{
+    padding: 8px;
+    border-radius: 10px;
+    background-color: #382D31;
+    color: #fff;
+}
+
+.search-form button:hover{
+    background-color: #473f42;
+}
+.date-filter-form{
+    max-width: 300px !important;
+    display: flex;
+    margin-left: auto;
+}
+.date-filter{
+    display: flex;
+    gap: 5px;
+}
+
+.date-filter button{
+    padding: 8px;
+    border-radius: 10px;
+    background-color: #382D31;
+    color: #fff;
+}
+
+.date-filter button:hover{
+    background-color: #473f42;
+}
+
 .container{
-    padding: 10px 100px 10px 100px;
+    padding: 10px 50px 10px 10px;
 }
 
 .pagination .page-item {

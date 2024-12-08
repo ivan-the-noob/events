@@ -1,29 +1,38 @@
 <?php
-session_start();
-if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'admin') {
-    header('Location: ../../users/web/login.php');
-    exit();
-}
-require '../../../db.php';
+    session_start();
+    if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'admin') {
+        header('Location: ../../users/web/login.php');
+        exit();
+    }
 
-// Pagination settings
-$results_per_page = 5;
+    require '../../../db.php';
 
-// Determine the current page or set default to 1
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$start_from = ($page - 1) * $results_per_page;
+    $search = isset($_GET['search']) ? $_GET['search'] : '';
 
-// Fetch total bookings to calculate total pages
-$total_query = "SELECT COUNT(*) FROM booking WHERE status = 'Pending'";
-$total_result = $conn->query($total_query);
-$total_row = $total_result->fetch_row();
-$total_bookings = $total_row[0];
-$total_pages = ceil($total_bookings / $results_per_page);
+    $results_per_page = 10; 
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    $start_from = ($page - 1) * $results_per_page;
 
-// Fetch pending bookings with limit
-$query = "SELECT * FROM booking WHERE status = 'Pending' LIMIT $start_from, $results_per_page";
-$result = $conn->query($query);
+    $search_term = "%" . $search . "%";
+
+    $total_query = "SELECT COUNT(*) FROM booking WHERE status = 'Pending' AND status_paid = 1 AND (full_name LIKE ? OR celebrants_name LIKE ? OR email LIKE ?)";
+    $stmt = $conn->prepare($total_query);
+    $stmt->bind_param("sss", $search_term, $search_term, $search_term);
+    $stmt->execute();
+    $total_result = $stmt->get_result();
+    $total_row = $total_result->fetch_row();
+    $total_bookings = $total_row[0];
+    $total_pages = ceil($total_bookings / $results_per_page);
+
+    $query = "SELECT * FROM booking WHERE status = 'Pending' AND status_paid = 1 AND (full_name LIKE ? OR celebrants_name LIKE ? OR email LIKE ?) LIMIT ?, ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("ssiii", $search_term, $search_term, $search_term, $start_from, $results_per_page);
+    $stmt->execute();
+    $result = $stmt->get_result();
 ?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -56,7 +65,7 @@ $result = $conn->query($query);
             </a>
             <a href="#" class="navbar-highlight">
                 <i class="fa-solid fa-tachometer-alt"></i>
-                <span>Pending</span>
+                <span>Pending Booking</span>
             </a>
             <a href="approve.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
@@ -124,132 +133,124 @@ $result = $conn->query($query);
         <div class="container mt-4">
             <div class="d-flex justify-content-between mb-2">
                 <h3>Pending Booking</h3>
-                <input type="text" class="search" placeholder="Search.." id="searchInput">
-            </div>
+                <div class="search-form">
+                    <form action="" method="get">
+                        <input type="text" id="searchInput" name="search" value="<?php echo htmlspecialchars($search); ?>" placeholder="Search...">
+                        <button type="submit">Search</button>
+                    </form>
+                </div>
+                </div>
             <div class="table-responsive">
-                <table class="table">
-                    <thead class="table-booking">
+            <table class="table mt-4">
+                <thead class="table-booking">
+                    <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Full Name</th>
+                    <th scope="col">Celebrant's Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Phone Number</th>
+                    <th scope="col">Event Date</th>
+                    <th scope="col">Guest Count</th>
+                    <th scope="col">Event Start Time</th>
+                    <th scope="col">Type of Event</th>
+                    <th scope="col">Type of Package</th>
+                    <th scope="col">Event Options</th>
+                    <th scope="col">Payment Image</th>
+                    <th scope="col">Reference No</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Payment Amount</th>
+                    <th scope="col">Remaining</th>
+                    <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php 
+                    $id = 1; 
+                    while ($row = $result->fetch_assoc()): ?>
                         <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Type of Event</th>
-                            <th scope="col">Info</th>
-                            <th scope="col">Actions</th>
+                            <td><?php echo $id++; ?></td>
+                            <td><?php echo htmlspecialchars($row['celebrants_name']); ?></td>
+                            <td><?php echo htmlspecialchars($row['full_name']); ?></td>
+                            <td><?php echo htmlspecialchars($row['email']); ?></td>
+                            <td><?php echo htmlspecialchars($row['phone_number']); ?></td>
+                            <td><?php echo htmlspecialchars($row['events_date']); ?></td>
+                            <td><?php echo htmlspecialchars($row['guest_count']); ?> guest</td>
+                            <td><?php echo htmlspecialchars($row['event_starttime']); ?>:00</td>
+                            <td><?php echo htmlspecialchars($row['event_type']); ?></td>
+                            <td><?php echo htmlspecialchars($row['event_package']); ?></td>
+                            <td><?php echo htmlspecialchars($row['event_options']); ?></td>
+                            <td>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#paymentImageModal" data-payment-image="<?php echo htmlspecialchars($row['payment_image']); ?>">View</button>
+                            </td>
+                            <td><?php echo htmlspecialchars($row['reference_no']); ?></td>
+                            <td>₱<?php echo number_format($row['cost'], 2); ?></td>
+                            <td>₱<?php echo number_format($row['payment_amount'], 2); ?></td>
+                            <td>₱<?php echo number_format($row['cost'] - $row['payment_amount'], 2); ?></td>
+                            <td>
+                                <form method="POST" action="../function/php/pending.php" style="display:inline;">
+                                    <input type="hidden" name="booking_id" value="<?php echo $row['id']; ?>">
+                                    <input type="hidden" name="action" value="accept">
+                                    <button type="submit" class="btn btn-success">Approve</button>
+                                </form>
+                                <form method="POST" action="../function/php/pending.php" style="display:inline;">
+                                    <input type="hidden" name="booking_id" value="<?php echo $row['id']; ?>">
+                                    <input type="hidden" name="action" value="decline">
+                                    <button type="submit" class="btn btn-danger">Decline</button>
+                                </form>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <?php while ($row = $result->fetch_assoc()): ?>
-                            <tr>
-                                <td><?php echo $row['id']; ?></td>
-                                <td><?php echo htmlspecialchars($row['full_name']); ?></td>
-                                <td><?php echo htmlspecialchars($row['event_type']); ?></td>
-                                <td>
-                                <button type="button" class="btn view" data-bs-toggle="modal"
-                                    data-bs-target="#infoModal" 
-                                    data-id="<?php echo $row['id']; ?>"
-                                    data-full-name="<?php echo htmlspecialchars($row['full_name']); ?>"
-                                    data-event-type="<?php echo htmlspecialchars($row['event_type']); ?>"
-                                    data-email="<?php echo htmlspecialchars($row['email']); ?>"
-                                    data-phone="<?php echo htmlspecialchars($row['phone_number']); ?>"
-                                    data-events-date="<?php echo htmlspecialchars($row['events_date']); ?>"
-                                    data-guest-count="<?php echo htmlspecialchars($row['guest_count']); ?>"
-                                    data-event-duration="<?php echo htmlspecialchars($row['event_duration']); ?>"
-                                    data-event-starttime="<?php echo htmlspecialchars($row['event_starttime']); ?>"
-                                    data-event-endtime="<?php echo htmlspecialchars($row['event_endtime']); ?>"
-                                    data-event-package="<?php echo htmlspecialchars($row['event_package']); ?>"
-                                    data-event-options="<?php echo htmlspecialchars($row['event_options']); ?>"
-                                    data-payment-image="<?php echo htmlspecialchars($row['payment_image']); ?>"
-                                    data-reference-no="<?php echo htmlspecialchars($row['reference_no']); ?>">
-                                    View
-                                </button>
+                    <?php endwhile; ?>
+                </tbody>
+            </table>
 
-                                </td>
-                                <td>
-                                    <form method="POST" action="../function/php/pending.php" style="display:inline;">
-                                        <input type="hidden" name="booking_id" value="<?php echo $row['id']; ?>">
-                                        <input type="hidden" name="action" value="accept">
-                                        <button type="submit" class="btn btn-success">Approve</button>
-                                    </form>
-                                    <form method="POST" action="../function/php/pending.php" style="display:inline;">
-                                        <input type="hidden" name="booking_id" value="<?php echo $row['id']; ?>">
-                                        <input type="hidden" name="action" value="decline">
-                                        <button type="submit" class="btn btn-danger">Decline</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        <?php endwhile; ?>
-                    </tbody>
-                </table>
-            </div>
+                </div>
+               
 
-           
-            
+                <div class="modal fade" id="paymentImageModal" tabindex="-1" aria-labelledby="paymentImageModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="paymentImageModalLabel">Payment Image</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <img src="" id="paymentImage" class="img-fluid" alt="Payment Image" style="max-width: 60%; display: flex; margin: auto;">
+                        </div>
+                        </div>
+                    </div>
+                </div>
 
-            <script>
-               document.addEventListener('DOMContentLoaded', () => {
-                    // Add event listener to all view buttons
-                    document.querySelectorAll('.btn.view').forEach(button => {
-                        button.addEventListener('click', event => {
-                            const modal = document.querySelector('#infoModal');
-
-                            // Get data attributes
-                            const id = button.dataset.id;
-                            const fullName = button.dataset.fullName;
-                            const eventType = button.dataset.eventType;
-                            const email = button.dataset.email;
-                            const phone = button.dataset.phone;
-                            const eventsDate = button.dataset.eventsDate;
-                            const guestCount = button.dataset.guestCount;
-                            const eventDuration = button.dataset.eventDuration;
-                            const eventPackage = button.dataset.eventPackage;
-                            const eventOptions = button.dataset.eventOptions;
-                            const paymentImage = button.dataset.paymentImage; // get the payment image data
-                            const referenceNo = button.dataset.referenceNo; // get the reference number data
-
-                            // Populate modal inputs
-                            modal.querySelector('#modal-full-name').value = fullName;
-                            modal.querySelector('#modal-email').value = email;
-                            modal.querySelector('#modal-phone-number').value = phone;
-                            modal.querySelector('#modal-event-type').value = eventType;
-                            modal.querySelector('#modal-events-date').value = eventsDate;
-                            modal.querySelector('#modal-guest-count').value = guestCount;
-                            modal.querySelector('#modal-event-duration').value =
-                                `${eventDuration} hours`;
-                            modal.querySelector('#modal-event-package').value = eventPackage;
-                            modal.querySelector('#modal-event-options').value = eventOptions;
-                            modal.querySelector('#modal-payment-image').src = paymentImage ? `../../assets/gcash-payments/${paymentImage}` : ''; // set payment image
-                            modal.querySelector('#modal-reference-no').value = referenceNo; 
+                <script>
+                    const paymentImageButtons = document.querySelectorAll('[data-bs-target="#paymentImageModal"]');
+                    paymentImageButtons.forEach(button => {
+                        button.addEventListener('click', function() {
+                        const paymentImage = this.getAttribute('data-payment-image');
+                        document.getElementById('paymentImage').src = "../../../assets/gcash-payments/" + paymentImage;
                         });
                     });
-                });
+                </script>
+      
+      <nav aria-label="Page navigation">
+    <ul class="pagination d-flex justify-content-end">
+        <?php if ($page > 1): ?>
+            <li class="page-item pg-btn"><a class="page-links" href="?page=<?php echo $page - 1; ?>&search=<?php echo urlencode($search); ?>">&laquo;</a></li>
+        <?php else: ?>
+            <li class="page-item pg-btn disabled"><span class="page-links">&laquo;</span></li>
+        <?php endif; ?>
 
-            </script>
+        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+            <li class="page-item <?php echo ($i == $page) ? 'active' : ''; ?>">
+                <a class="page-link" href="?page=<?php echo $i; ?>&search=<?php echo urlencode($search); ?>"><?php echo $i; ?></a>
+            </li>
+        <?php endfor; ?>
 
-            <nav aria-label="Page navigation">
-                <ul class="pagination d-flex justify-content-end">
-                    <?php if ($page > 1): ?>
-                        <li class="page-item pg-btn"><a class="page-links" href="?page=<?php echo $page - 1; ?>">&laquo;</a>
-                        </li>
-                    <?php else: ?>
-                        <li class="page-item pg-btn disabled"><span class="page-links">&laquo;</span></li>
-                    <?php endif; ?>
-
-                    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                        <li class="page-item <?php echo ($i == $page) ? 'active' : ''; ?>">
-                            <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
-                        </li>
-                    <?php endfor; ?>
-
-                    <?php if ($page < $total_pages): ?>
-                        <li class="page-item pg-btn"><a class="page-links" href="?page=<?php echo $page + 1; ?>">&raquo;</a>
-                        </li>
-                    <?php else: ?>
-                        <li class="page-item pg-btn disabled"><span class="page-links">&raquo;</span></li>
-                    <?php endif; ?>
-                </ul>
-            </nav>
-
-
+        <?php if ($page < $total_pages): ?>
+            <li class="page-item pg-btn"><a class="page-links" href="?page=<?php echo $page + 1; ?>&search=<?php echo urlencode($search); ?>">&raquo;</a></li>
+        <?php else: ?>
+            <li class="page-item pg-btn disabled"><span class="page-links">&raquo;</span></li>
+        <?php endif; ?>
+    </ul>
+</nav>
 
 
 
@@ -275,60 +276,10 @@ $result = $conn->query($query);
         ?>
 </body>
 
-
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="../function/script/status.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <style>
 
 </style>
-<script>
-    $(document).ready(function() {
-        function fetchResults(page = 1) {
-            var searchQuery = $('#searchInput').val();
-            $.ajax({
-                url: '../function/php/search/search_pending.php',
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    search: searchQuery,
-                    page: page
-                },
-                success: function(response) {
-                    $('tbody').html(response.rows);
-
-                    $('.pagination').html(response.pagination);
-
-                    $('#modalsContainer').html(response.modals);
-
-                    reinitializeModals();
-                }
-            });
-        }
-
-        $('#searchInput').on('keyup', function() {
-            fetchResults(1);
-        });
-
-        window.fetchPage = function(page) {
-            fetchResults(page);
-        };
-
-        function reinitializeModals() {
-            $('button[data-bs-toggle="modal"]').each(function() {
-                const targetModal = $(this).data('bs-target');
-                const modalInstance = bootstrap.Modal.getOrCreateInstance(document.querySelector(
-                    targetModal));
-                $(this).off('click').on('click', function() {
-                    modalInstance.show();
-                });
-            });
-        }
-
-        fetchResults(1);
-    });
-</script>
-
-
 </html>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 07, 2024 at 09:29 AM
+-- Generation Time: Dec 08, 2024 at 01:17 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -46,6 +46,7 @@ CREATE TABLE `booking` (
   `cancel_reason` text DEFAULT NULL,
   `payment_image` varchar(255) DEFAULT NULL,
   `reference_no` varchar(100) DEFAULT NULL,
+  `payment_amount` decimal(10,2) NOT NULL,
   `status_paid` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -53,12 +54,11 @@ CREATE TABLE `booking` (
 -- Dumping data for table `booking`
 --
 
-INSERT INTO `booking` (`id`, `status`, `full_name`, `celebrants_name`, `email`, `phone_number`, `events_date`, `guest_count`, `event_duration`, `event_starttime`, `event_endtime`, `event_type`, `event_package`, `event_options`, `cost`, `cancel_reason`, `payment_image`, `reference_no`, `status_paid`) VALUES
-(90, 'Waiting', 'Ivan Ablanida', 'Brio', 'ej@gmail.com', '321312', '2024-12-05', 80, 5, 10, 3, 'Kiddie Party', 'other', '200 Pax Package, Clown, Glazing Table, Catering', 122000.00, 'Hey', NULL, NULL, 0),
-(91, 'Finished', 'Ivan Ablanida', 'Brio', 'ej@gmail.com', '321312', '2024-12-06', 80, 5, 10, 0, 'Kiddie Party', 'other', '150 Pax Package, Clown, Glazing Table', 69000.00, NULL, NULL, NULL, 0),
-(92, 'Waiting', 'Ivan Ablanida', 'Ivan', 'ejivancablanida@gmail.com', '09957939703', '2024-12-12', 50, 5, 9, 2, 'Adult Party', 'Package A (Adult Birthday Party (50 pax)', 'None', 25000.00, NULL, 'payment_6753ecbb7a5438.95824567.jpg', '21312', 1),
-(93, 'Waiting', 'Ivan Ablanida', 'dasdasda', 'ejivancablanida@gmail.com', '312321', '2024-12-09', 50, 5, 9, 2, 'Despedida', 'Package A (Despedida (50 pax)', 'None', 20000.00, NULL, NULL, NULL, 0),
-(94, 'Waiting', 'Ivan Ablanida', 'Ivan', 'ejivancablanida@gmail.com', '0999312321', '2024-12-13', 50, 5, 9, 2, 'Debut', 'Package A (Debut (50 pax)', 'None', 25000.00, NULL, 'gcash.jpg', '21312312', 1);
+INSERT INTO `booking` (`id`, `status`, `full_name`, `celebrants_name`, `email`, `phone_number`, `events_date`, `guest_count`, `event_duration`, `event_starttime`, `event_endtime`, `event_type`, `event_package`, `event_options`, `cost`, `cancel_reason`, `payment_image`, `reference_no`, `payment_amount`, `status_paid`) VALUES
+(90, 'Cancel', 'Ivan Ablanida', 'Brio', 'ej@gmail.com', '321312', '2024-12-05', 80, 5, 10, 3, 'Kiddie Party', 'other', '200 Pax Package, Clown, Glazing Table, Catering', 122000.00, 'Hey', NULL, NULL, 0.00, 0),
+(91, 'Finished', 'Ivan Ablanida', 'Brio', 'ejivancablanida@gmail.com', '321312', '2024-12-06', 80, 5, 10, 0, 'Kiddie Party', 'other', '150 Pax Package, Clown, Glazing Table', 69000.00, NULL, NULL, NULL, 0.00, 0),
+(92, 'Cancel', 'Ivan Ablanida', 'Ivan', 'ejivancablanida@gmail.com', '09957939703', '2024-11-12', 50, 5, 9, 2, 'Adult Party', 'Package A (Adult Birthday Party (50 pax)', 'None', 25000.00, NULL, 'gcash.jpg', '222', 12500.00, 1),
+(95, 'Cancel', 'Ivan Ablanidas', 'Ivan', 'ejivancablanida@gmail.com', '09957939703', '2023-12-12', 50, 5, 9, 2, 'Adult Party', 'Package A (Adult Birthday Party (50 pax)', 'None', 25000.00, NULL, 'gcash.jpg', '222', 12500.00, 1);
 
 -- --------------------------------------------------------
 
@@ -284,8 +284,7 @@ CREATE TABLE `unavailable_days` (
 INSERT INTO `unavailable_days` (`id`, `date`, `reason`) VALUES
 (1, '2024-11-21', 'boss?!'),
 (8, '2024-11-26', 'Trip ko lang bat ba'),
-(9, '2024-11-28', 'ewan ko'),
-(10, '2024-11-30', './.');
+(9, '2024-11-28', 'ewan ko');
 
 -- --------------------------------------------------------
 
@@ -380,7 +379,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
 
 --
 -- AUTO_INCREMENT for table `event_list`

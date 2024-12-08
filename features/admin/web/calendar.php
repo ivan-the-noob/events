@@ -39,7 +39,7 @@ require '../../../db.php';
             </a>
             <a href="pending.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
-                <span>Pending</span>
+                <span>Pending Booking</span>
             </a>
             <a href="approve.php">
                 <i class="fa-solid fa-tachometer-alt"></i>

@@ -26,23 +26,37 @@ $rows = '';
 $modals = ''; 
 while ($row = $result->fetch_assoc()) {
     $rows .= '<tr>';
-    $rows .= '<td>' . htmlspecialchars($row['id']) . '</td>';
+    $rows .= '<td>' . htmlspecialchars($row['celebrants_name']) . '</td>'; 
     $rows .= '<td>' . htmlspecialchars($row['full_name']) . '</td>';
-    $rows .= '<td>' . htmlspecialchars($row['event_type']) . '</td>';
-    $rows .= '<td><button type="button" class="btn view" data-bs-toggle="modal" data-bs-target="#infoModal' . $row['id'] . '">View</button></td>';
-    $rows .= '<td>
-                <form method="POST" action="../function/php/pending.php" style="display:inline;">
-                    <input type="hidden" name="booking_id" value="' . $row['id'] . '">
-                    <input type="hidden" name="action" value="accept">
-                    <button type="submit" class="btn btn-success">Approve</button>
-                </form>
-                <form method="POST" action="../function/php/pending.php" style="display:inline;">
-                    <input type="hidden" name="booking_id" value="' . $row['id'] . '">
-                    <input type="hidden" name="action" value="decline">
-                    <button type="submit" class="btn btn-danger">Decline</button>
-                </form>
-              </td>';
+    $rows .= '<td>' . htmlspecialchars($row['email']) . '</td>';
+    $rows .= '<td>' . htmlspecialchars($row['phone_number']) . '</td>'; 
+    $rows .= '<td>' . htmlspecialchars($row['events_date']) . '</td>'; 
+    $rows .= '<td>' . htmlspecialchars($row['guest_count']) . '</td>'; 
+    $rows .= '<td>' . htmlspecialchars($row['event_starttime']) . '</td>';
+    $rows .= '<td>' . htmlspecialchars($row['event_type']) . '</td>'; 
+    $rows .= '<td>' . htmlspecialchars($row['event_package']) . '</td>'; 
+    $rows .= '<td>' . htmlspecialchars($row['event_options']) . '</td>'; 
+    $rows .= '<td>₱' . number_format($row['cost'], 2) . '</td>'; 
+    $rows .= '<td>';
+    $rows .= '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#paymentImageModal" data-payment-image="' . htmlspecialchars($row['payment_image']) . '">View</button>';
+    $rows .= '</td>'; 
+    $rows .= '<td>' . htmlspecialchars($row['reference_no']) . '</td>'; 
+    $rows .= '<td>₱' . number_format($row['payment_amount'], 2) . '</td>';
+    $rows .= '<td>';
+    $rows .= '<form method="POST" action="../function/php/pending.php" style="display:inline;">';
+    $rows .= '<input type="hidden" name="booking_id" value="' . $row['id'] . '">';
+    $rows .= '<input type="hidden" name="action" value="accept">';
+    $rows .= '<button type="submit" class="btn btn-success">Approve</button>';
+    $rows .= '</form>';
+    $rows .= '<form method="POST" action="../function/php/pending.php" style="display:inline;">';
+    $rows .= '<input type="hidden" name="booking_id" value="' . $row['id'] . '">';
+    $rows .= '<input type="hidden" name="action" value="decline">';
+    $rows .= '<button type="submit" class="btn btn-danger">Decline</button>';
+    $rows .= '</form>';
+    $rows .= '</td>';
     $rows .= '</tr>';
+}
+
 
     $modals .= '
     <div class="modal fade" id="infoModal' . $row['id'] . '" tabindex="-1" aria-labelledby="infoModalLabel' . $row['id'] . '" aria-hidden="true">
@@ -131,7 +145,7 @@ while ($row = $result->fetch_assoc()) {
             </div>
         </div>
     </div>';
-}
+
 
 
 

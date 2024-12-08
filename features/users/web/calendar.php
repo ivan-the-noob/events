@@ -1,6 +1,25 @@
 <?php
 session_start();
-$email = isset($_SESSION['email']);
+
+$email = isset($_SESSION['email']) ? $_SESSION['email'] : '';
+
+$name = '';
+
+if ($email) {
+    require '../../../db.php';
+
+    $stmt = $conn->prepare("SELECT name FROM users WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+    if ($row = $result->fetch_assoc()) {
+        $name = $row['name'];
+    }
+}
+
+
+
 
 if (!(isset($_SESSION['email']) && $_SESSION['role'] === 'users')) {
     header('Location: ../../../features/users/web/login.php');
@@ -130,7 +149,7 @@ if (!(isset($_SESSION['email']) && $_SESSION['role'] === 'users')) {
                                     <div class="form-group mt-4">
                                         <label for="full-name" class="form-label">Full Name</label>
                                         <input type="text" id="full-name" name="full_name" class="form-control"
-                                            placeholder="Enter your text here">
+                                            value="<?= htmlspecialchars($name); ?>" placeholder="Enter your text here" readonly>
                                     </div>
                                     <div class="form-group mt-4">
                                         <label for="celebrants-name" class="form-label">Celebrant's Name</label>
@@ -140,7 +159,7 @@ if (!(isset($_SESSION['email']) && $_SESSION['role'] === 'users')) {
                                     <div class="form-group mt-4">
                                         <label for="email" class="form-label">Email</label>
                                         <input type="email" id="email" name="email" class="form-control"
-                                            placeholder="Enter your text here">
+                                        value="<?= htmlspecialchars($email); ?>" placeholder="Enter your text here" readonly>
                                     </div>
                                     <div class="form-group mt-4">
                                         <label for="phone-number" class="form-label">Phone Number</label>

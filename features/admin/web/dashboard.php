@@ -15,6 +15,15 @@ $rowWaiting = $resultWaiting->fetch_assoc();
 $rowDeclined = $resultDeclined->fetch_assoc();
 $waitingCount = $rowWaiting['waiting_count'];
 $declinedCount = $rowDeclined['declined_count'];
+
+$query = "SELECT SUM(cost) AS total_sales FROM booking WHERE status = 'Finished'";
+$result = $conn->query($query);
+
+if ($result && $row = $result->fetch_assoc()) {
+    $total_sales = $row['total_sales'];
+} else {
+    $total_sales = 0; 
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -48,7 +57,7 @@ $declinedCount = $rowDeclined['declined_count'];
             </a>
             <a href="pending.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
-                <span>Pending</span>
+                <span>Pending Booking</span>
             </a>
             <a href="approve.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
@@ -121,7 +130,7 @@ $declinedCount = $rowDeclined['declined_count'];
                             <div class="d-flex">
                                 <div class="col-md-12">
                                     <p class="mb-1">Total Sales</p>
-                                    <h5>₱518, 024</h5>
+                                    <h5>₱<?php echo number_format($total_sales, 2); ?></h5>
                                 </div>
                             </div>
                         </div>

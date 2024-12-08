@@ -235,6 +235,7 @@ body{
     height: 30px;
     background-color: #FFFFFF;
     border: 1px solid #000;
+    flex-shrink: 0;
 }
 
 .booked{
@@ -242,12 +243,14 @@ body{
     height: 30px;
     background-color: #D2B48C;
     border: 1px solid #000;
+    flex-shrink: 0;
 }
 .unavailable{
     width: 30px;
     height: 30px;
     background-color: #FFBFBD;
     border: 1px solid #000;
+    flex-shrink: 0;
 }
 
 
@@ -257,10 +260,8 @@ body{
     width: auto;
     max-width: 50%;
     padding: 10px;
+    flex-shrink: 0;
 }
-
-
-
 
 
 /*Calendar Section End*/

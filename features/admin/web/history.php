@@ -1,24 +1,62 @@
 <?php
-session_start();
-if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'admin') {
-    header('Location: ../../users/web/login.php');
-    exit();
-}
-require '../../../db.php';
-
-$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-$limit = 5;
-$offset = ($page - 1) * $limit;
-$total_query = "SELECT COUNT(*) as total FROM booking";
-$total_result = $conn->query($total_query);
-$total_row = $total_result->fetch_assoc();
-$total_records = $total_row['total'];
-$total_pages = ceil($total_records / $limit);
-$query = "SELECT * FROM booking LIMIT $limit OFFSET $offset";
-$result = $conn->query($query);
-
-$query = "SELECT * FROM booking WHERE status = 'finished'";
-$result = $conn->query($query);
+    session_start();
+    if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'admin') {
+        header('Location: ../../users/web/login.php');
+        exit();
+    }
+    require '../../../db.php';
+    
+    $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+    $limit = 5;
+    $offset = ($page - 1) * $limit;
+    
+    // Retrieve search term, month, and year from GET parameters
+    $search = isset($_GET['search']) ? $_GET['search'] : '';
+    $month = isset($_GET['month']) ? intval($_GET['month']) : null;
+    $year = isset($_GET['year']) ? intval($_GET['year']) : null;
+    
+    $search_term = "%" . $search . "%";
+    
+    $total_query = "SELECT COUNT(*) as total FROM booking WHERE status = 'Finished'";
+    
+    if (!empty($search)) {
+        $total_query .= " AND (full_name LIKE ? OR celebrants_name LIKE ? OR email LIKE ?)";
+    }
+    
+    if ($month && $year) {
+        $total_query .= " AND MONTH(events_date) = $month AND YEAR(events_date) = $year";
+    }
+    
+    $stmt = $conn->prepare($total_query);
+    if (!empty($search)) {
+        $stmt->bind_param("sss", $search_term, $search_term, $search_term);
+    } else {
+        $stmt->execute();
+    }
+    $total_result = $stmt->get_result();
+    $total_row = $total_result->fetch_assoc();
+    $total_records = $total_row['total'];
+    $total_pages = ceil($total_records / $limit);
+    
+    $query = "SELECT * FROM booking WHERE status = 'Finished'";
+    
+    if (!empty($search)) {
+        $query .= " AND (full_name LIKE ? OR celebrants_name LIKE ? OR email LIKE ?)";
+    }
+    
+    if ($month && $year) {
+        $query .= " AND MONTH(events_date) = $month AND YEAR(events_date) = $year";
+    }
+    
+    $query .= " LIMIT $limit OFFSET $offset";
+    
+    $stmt = $conn->prepare($query);
+    if (!empty($search)) {
+        $stmt->bind_param("sss", $search_term, $search_term, $search_term);
+    }
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -52,7 +90,7 @@ $result = $conn->query($query);
             </a>
             <a href="pending.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
-                <span>Pending</span>
+                <span>Pending Booking</span>
             </a>
             <a href="approve.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
@@ -117,171 +155,98 @@ $result = $conn->query($query);
 
 
         <div class="container mt-4">
+                <div class="date-filter-form mb-2">
+                    <form action="" method="get">
+                        <div class="date-filter">
+                            <select name="month" id="month" class="form-control">
+                                <option value="">Select Month</option>
+                                <?php 
+                                $months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                                foreach ($months as $index => $month) {
+                                    $selected = (isset($_GET['month']) && $_GET['month'] == $index + 1) ? 'selected' : '';
+                                    echo "<option value='" . ($index + 1) . "' $selected>$month</option>";
+                                }
+                                ?>
+                            </select>
+                            <select name="year" id="year" class="form-control">
+                                <option value="">Select Year</option>
+                                <?php
+                                $current_year = date('Y');
+                                for ($i = $current_year - 5; $i <= $current_year; $i++) {
+                                    $selected = (isset($_GET['year']) && $_GET['year'] == $i) ? 'selected' : '';
+                                    echo "<option value='$i' $selected>$i</option>";
+                                }
+                                ?>
+                            </select>
+
+                            <button type="submit">Filter</button>
+                        </div>
+                    </form>
+                </div>
             <div class="d-flex justify-content-between mb-2">
-                <h3>History</h3>
-                <input type="text" class="search" placeholder="Search.." id="searchInput">
+                <h3>History Booking</h3>
+                
+                <div class="search-form">
+                    <form action="" method="get">
+                        <input type="text" id="searchInput" name="search" value="<?php echo htmlspecialchars($search); ?>" placeholder="Search...">
+                        <button type="submit">Search</button>
+                    </form>
+                </div>
+                
             </div>
+            
+
             <div class="table-responsive">
-                <table class="table">
+                <table class="table mt-4">
                     <thead class="table-booking">
                         <tr>
-                            <th scope="col">Date</th>
-                            <th scope="col">Name</th>
+                            <th scope="col">#</th>
+                            <th scope="col">Full Name</th>
+                            <th scope="col">Celebrant's Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Phone Number</th>
+                            <th scope="col">Event Date</th>
+                            <th scope="col">Guest Count</th>
+                            <th scope="col">Event Start Time</th>
                             <th scope="col">Type of Event</th>
-                            <th scope="col">Info</th>
-                            <th scope="col">Status</th>
-
+                            <th scope="col">Type of Package</th>
+                            <th scope="col">Event Options</th>
+                            <th scope="col">Payment Image</th>
+                            <th scope="col">Reference No</th>
+                            <th scope="col">Total</th>
+                            <th scope="col">Payment Amount</th>
+                            <th scope="col">Remaining</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <?php while ($row = $result->fetch_assoc()): ?>
-                            <tr>
-                                <td><?php echo date("F j, Y", strtotime($row['events_date'])); ?></td>
-                                <td><?php echo htmlspecialchars($row['full_name']); ?></td>
-                                <td><?php echo htmlspecialchars($row['event_type']); ?></td>
-                                <td>
-                                    <button type="button" class="btn view " data-bs-toggle="modal"
-                                        data-bs-target="#infoModal<?php echo $row['id']; ?>">
-                                        View
-                                    </button>
-                                </td>
-                                <td>
-                                    <p class="done">Done</p>
-                                </td>
-
-                            </tr>
-
-                            <!-- Modal -->
-                            <div class="modal fade" id="infoModal<?php echo $row['id']; ?>" tabindex="-1"
-                                aria-labelledby="infoModalLabel<?php echo $row['id']; ?>" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered modal-xl">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="infoModalLabel<?php echo $row['id']; ?>">Event
-                                                Details</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="container">
-                                                <div class="row">
-                                                    <div class="col-md-4">
-                                                        <h5>Customer Info</h5>
-                                                        <div class="form-group mt-1">
-                                                            <label for="full-name" class="form-label">Full Name</label>
-                                                            <input type="text" id="full-name" name="full_name"
-                                                                class="form-control"
-                                                                value="<?php echo htmlspecialchars($row['full_name']); ?>"
-                                                                readonly>
-                                                        </div>
-                                                        <div class="form-group mt-1">
-                                                            <label for="celebrants-name" class="form-label">Celebrant's
-                                                                Name</label>
-                                                            <input type="text" id="celebrants-name" name="celebrants_name"
-                                                                class="form-control"
-                                                                value="<?php echo htmlspecialchars($row['celebrants_name']); ?>"
-                                                                readonly>
-                                                        </div>
-                                                        <div class="form-group mt-1">
-                                                            <label for="email" class="form-label">Email</label>
-                                                            <input type="email" id="email" name="email" class="form-control"
-                                                                value="<?php echo htmlspecialchars($row['email']); ?>"
-                                                                readonly>
-                                                        </div>
-                                                        <div class="form-group mt-1">
-                                                            <label for="phone-number" class="form-label">Phone
-                                                                Number</label>
-                                                            <input type="number" id="phone-number" name="phone_number"
-                                                                class="form-control"
-                                                                value="<?php echo htmlspecialchars($row['phone_number']); ?>"
-                                                                readonly>
-                                                        </div>
-                                                        <h5 class="events">Event Info</h5>
-                                                        <div class="form-group mt-1">
-                                                            <label for="events-date" class="form-label">Events Date</label>
-                                                            <input type="text" id="events-date" name="events_date"
-                                                                class="form-control"
-                                                                value="<?php echo htmlspecialchars($row['events_date']); ?>"
-                                                                readonly>
-                                                        </div>
-                                                        <div class="form-group mt-1">
-                                                            <label for="guess-count" class="form-label">Guest Count</label>
-                                                            <input type="number" id="guess-count" name="guest_count"
-                                                                class="form-control"
-                                                                value="<?php echo htmlspecialchars($row['guest_count']); ?>"
-                                                                readonly>
-                                                        </div>
-                                                        <div class="form-group mt-1">
-                                                            <label for="event-duration" class="form-label">Event
-                                                                Duration</label>
-                                                            <input type="text" id="event-duration" name="event_duration"
-                                                                class="form-control"
-                                                                value="<?php echo htmlspecialchars($row['event_duration']); ?> hours"
-                                                                readonly>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4 mt-2">
-                                                        <div class="form-group mt-4">
-                                                            <label for="event-starttime" class="form-label">Event Start
-                                                                Time</label>
-                                                            <input type="text" id="event-starttime" name="event_starttime"
-                                                                class="form-control"
-                                                                value="<?php echo htmlspecialchars($row['event_starttime']); ?>:00"
-                                                                readonly>
-                                                        </div>
-
-                                                        <div class="form-group mt-1">
-                                                            <label for="event-endtime" class="form-label">Event End
-                                                                Time</label>
-                                                            <input type="text" id="event-endtime" name="event_endtime"
-                                                                class="form-control"
-                                                                value="<?php echo htmlspecialchars($row['event_endtime']); ?>:00"
-                                                                readonly>
-                                                        </div>
-                                                        <h5 class=" eventss">Event Selection</h5>
-                                                        <div class="form-group">
-                                                            <label for="event-type" class="form-label">Type of Event</label>
-                                                            <input type="text" id="event-type" name="event_type"
-                                                                class="form-control"
-                                                                value="<?php echo htmlspecialchars($row['event_type']); ?>"
-                                                                readonly>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <h5 class="">Event Packages</h5>
-                                                        <div class="form-group mt-1">
-                                                            <label for="event-package" class="form-label">Event
-                                                                Package</label>
-                                                            <input type="text" id="event-package" name="event_package"
-                                                                class="form-control"
-                                                                value="<?php echo htmlspecialchars($row['event_package']); ?>"
-                                                                readonly>
-                                                        </div>
-                                                        <div class="form-group mt-1">
-                                                            <label for="event-options" class="form-label">Event
-                                                                Options</label>
-                                                            <input type="text" id="event-options" name="event_options"
-                                                                class="form-control"
-                                                                value="<?php echo htmlspecialchars($row['event_options']); ?>"
-                                                                readonly>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Close</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    <tbody id="bookingTable">
+                        <?php 
+                        $id = 1;
+                        while ($row = $result->fetch_assoc()) {
+                            echo '<tr>';
+                            echo '<td>' . $id++ . '</td>';
+                            echo '<td>' . htmlspecialchars($row['full_name']) . '</td>';
+                            echo '<td>' . htmlspecialchars($row['celebrants_name']) . '</td>';
+                            echo '<td>' . htmlspecialchars($row['email']) . '</td>';
+                            echo '<td>' . htmlspecialchars($row['phone_number']) . '</td>';
+                            echo '<td>' . htmlspecialchars($row['events_date']) . '</td>';
+                            echo '<td>' . htmlspecialchars($row['guest_count']) . '</td>';
+                            echo '<td>' . htmlspecialchars($row['event_starttime']) . '</td>';
+                            echo '<td>' . htmlspecialchars($row['event_type']) . '</td>';
+                            echo '<td>' . htmlspecialchars($row['event_package']) . '</td>';
+                            echo '<td>' . htmlspecialchars($row['event_options']) . '</td>';
+                            echo '<td>';
+                            echo '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#paymentImageModal" data-payment-image="' . htmlspecialchars($row['payment_image']) . '">View</button>';
+                            echo '</td>';
+                            echo '<td>' . htmlspecialchars($row['reference_no']) . '</td>';
+                            echo '<td>₱' . number_format($row['cost'], 2) . '</td>';
+                            echo '<td>₱' . number_format($row['payment_amount'], 2) . '</td>';
+                            echo '<td>₱' . number_format($row['cost'] - $row['payment_amount'], 2) . '</td>';
+                            echo '</tr>';
+                        }
+                        ?>
+                    </tbody>
+                </table>
             </div>
-        <?php endwhile; ?>
-        </tbody>
-        </table>
-        </div>
         <nav>
             <ul class="pagination d-flex justify-content-end">
                 <?php

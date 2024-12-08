@@ -144,7 +144,12 @@ body{
     text-align: center;
     line-height: 40px;
   }
-  
+  input[type="number"]::-webkit-inner-spin-button, 
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    }
+
   .calendar-h3 {
     font-family: "Inter", sans-serif;
     font-weight: 700;
@@ -179,6 +184,11 @@ body{
 .info-label {
     color: #6c757d;
     font-weight: 500;
+}
+
+.remaining{
+    border-top: 2px solid #808080 !important;
+    padding-top: 3px;
 }
 
 /*Body Section End*/

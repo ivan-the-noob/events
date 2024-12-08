@@ -1,26 +1,62 @@
 <?php
-session_start();
-if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'admin') {
-    header('Location: ../../users/web/login.php');
-    exit();
-}
-require '../../../db.php';
-
-$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-$limit = 5;
-$offset = ($page - 1) * $limit;
-
-$total_query = "SELECT COUNT(*) as total FROM booking";
-$total_result = $conn->query($total_query);
-$total_row = $total_result->fetch_assoc();
-$total_records = $total_row['total'];
-$total_pages = ceil($total_records / $limit);
-
-$query = "SELECT * FROM booking LIMIT $limit OFFSET $offset";
-$result = $conn->query($query);
-
-$declined_query = "SELECT * FROM booking WHERE status = 'declined' LIMIT $limit OFFSET $offset";
-$declined_result = $conn->query($declined_query);
+    session_start();
+    if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'admin') {
+        header('Location: ../../users/web/login.php');
+        exit();
+    }
+    require '../../../db.php';
+    
+    $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+    $limit = 5;
+    $offset = ($page - 1) * $limit;
+    
+    // Retrieve search term, month, and year from GET parameters
+    $search = isset($_GET['search']) ? $_GET['search'] : '';
+    $month = isset($_GET['month']) ? intval($_GET['month']) : null;
+    $year = isset($_GET['year']) ? intval($_GET['year']) : null;
+    
+    $search_term = "%" . $search . "%";
+    
+    $total_query = "SELECT COUNT(*) as total FROM booking WHERE status = 'Cancel'";
+    
+    if (!empty($search)) {
+        $total_query .= " AND (full_name LIKE ? OR celebrants_name LIKE ? OR email LIKE ?)";
+    }
+    
+    if ($month && $year) {
+        $total_query .= " AND MONTH(events_date) = $month AND YEAR(events_date) = $year";
+    }
+    
+    $stmt = $conn->prepare($total_query);
+    if (!empty($search)) {
+        $stmt->bind_param("sss", $search_term, $search_term, $search_term);
+    } else {
+        $stmt->execute();
+    }
+    $total_result = $stmt->get_result();
+    $total_row = $total_result->fetch_assoc();
+    $total_records = $total_row['total'];
+    $total_pages = ceil($total_records / $limit);
+    
+    $query = "SELECT * FROM booking WHERE status = 'Cancel'";
+    
+    if (!empty($search)) {
+        $query .= " AND (full_name LIKE ? OR celebrants_name LIKE ? OR email LIKE ?)";
+    }
+    
+    if ($month && $year) {
+        $query .= " AND MONTH(events_date) = $month AND YEAR(events_date) = $year";
+    }
+    
+    $query .= " LIMIT $limit OFFSET $offset";
+    
+    $stmt = $conn->prepare($query);
+    if (!empty($search)) {
+        $stmt->bind_param("sss", $search_term, $search_term, $search_term);
+    }
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -54,7 +90,7 @@ $declined_result = $conn->query($declined_query);
             </a>
             <a href="pending.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
-                <span>Pending</span>
+                <span>Pending Booking</span>
             </a>
             <a href="approve.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
@@ -118,64 +154,126 @@ $declined_result = $conn->query($declined_query);
 
 
         <div class="container mt-4">
+                <div class="date-filter-form mb-2">
+                    <form action="" method="get">
+                        <div class="date-filter">
+                            <select name="month" id="month" class="form-control">
+                                <option value="">Select Month</option>
+                                <?php 
+                                $months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                                foreach ($months as $index => $month) {
+                                    $selected = (isset($_GET['month']) && $_GET['month'] == $index + 1) ? 'selected' : '';
+                                    echo "<option value='" . ($index + 1) . "' $selected>$month</option>";
+                                }
+                                ?>
+                            </select>
+                            <select name="year" id="year" class="form-control">
+                                <option value="">Select Year</option>
+                                <?php
+                                $current_year = date('Y');
+                                for ($i = $current_year - 5; $i <= $current_year; $i++) {
+                                    $selected = (isset($_GET['year']) && $_GET['year'] == $i) ? 'selected' : '';
+                                    echo "<option value='$i' $selected>$i</option>";
+                                }
+                                ?>
+                            </select>
+
+                            <button type="submit">Filter</button>
+                        </div>
+                    </form>
+                </div>
             <div class="d-flex justify-content-between mb-2">
                 <h3>Cancelled Booking</h3>
-                <input type="text" class="search" placeholder="Search.." id="searchInput">
+                
+                <div class="search-form">
+                    <form action="" method="get">
+                        <input type="text" id="searchInput" name="search" value="<?php echo htmlspecialchars($search); ?>" placeholder="Search...">
+                        <button type="submit">Search</button>
+                    </form>
+                </div>
+                
             </div>
+            
 
             <div class="table-responsive">
-                <table class="table" id="bookingTable">
+                <table class="table mt-4">
                     <thead class="table-booking">
                         <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Name</th>
+                            <th scope="col">#</th>
+                            <th scope="col">Full Name</th>
+                            <th scope="col">Celebrant's Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Phone Number</th>
+                            <th scope="col">Event Date</th>
+                            <th scope="col">Guest Count</th>
+                            <th scope="col">Event Start Time</th>
                             <th scope="col">Type of Event</th>
-                            <th scope="col">Reason</th>
+                            <th scope="col">Type of Package</th>
+                            <th scope="col">Event Options</th>
+                            <th scope="col">Payment Image</th>
+                            <th scope="col">Reference No</th>
+                            <th scope="col">Total</th>
+                            <th scope="col">Payment Amount</th>
+                            <th scope="col">Remaining</th>
+                            <th scope="col">Reasons</th>
                         </tr>
                     </thead>
-                    <tbody id="tableBody">
-                        <?php while ($row = $result->fetch_assoc()): ?>
-                            <tr>
-                                <td><?php echo $row['id']; ?></td>
-                                <td><?php echo htmlspecialchars($row['full_name']); ?></td>
-                                <td><?php echo htmlspecialchars($row['event_type']); ?></td>
-                                <td>
-                                    <p>Dummy Reason.</p>
-                                </td>
-                            </tr>
-                        <?php endwhile; ?>
+                    <tbody id="bookingTable">
+                        <?php 
+                        $id = 1;
+                        while ($row = $result->fetch_assoc()) {
+                            echo '<tr>';
+                            echo '<td>' . $id++ . '</td>';
+                            echo '<td>' . htmlspecialchars($row['full_name']) . '</td>';
+                            echo '<td>' . htmlspecialchars($row['celebrants_name']) . '</td>';
+                            echo '<td>' . htmlspecialchars($row['email']) . '</td>';
+                            echo '<td>' . htmlspecialchars($row['phone_number']) . '</td>';
+                            echo '<td>' . htmlspecialchars($row['events_date']) . '</td>';
+                            echo '<td>' . htmlspecialchars($row['guest_count']) . '</td>';
+                            echo '<td>' . htmlspecialchars($row['event_starttime']) . '</td>';
+                            echo '<td>' . htmlspecialchars($row['event_type']) . '</td>';
+                            echo '<td>' . htmlspecialchars($row['event_package']) . '</td>';
+                            echo '<td>' . htmlspecialchars($row['event_options']) . '</td>';
+                            echo '<td>';
+                            echo '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#paymentImageModal" data-payment-image="' . htmlspecialchars($row['payment_image']) . '">View</button>';
+                            echo '</td>';
+                            echo '<td>' . htmlspecialchars($row['reference_no']) . '</td>';
+                            echo '<td>₱' . number_format($row['cost'], 2) . '</td>';
+                            echo '<td>₱' . number_format($row['payment_amount'], 2) . '</td>';
+                            echo '<td>₱' . number_format($row['cost'] - $row['payment_amount'], 2) . '</td>';
+                            echo '<td>' . htmlspecialchars($row['cancel_reason']) . '</td>';
+                            echo '</tr>';
+                        }
+                        ?>
                     </tbody>
                 </table>
             </div>
 
-            <script>
-                const searchInput = document.getElementById('searchInput');
-                const tableBody = document.getElementById('tableBody');
-                const rows = tableBody.getElementsByTagName('tr');
+            <div class="modal fade" id="paymentImageModal" tabindex="-1" aria-labelledby="paymentImageModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="paymentImageModalLabel">Payment Image</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <img src="" id="paymentImage" class="img-fluid" alt="Payment Image" style="max-width: 60%; display: flex; margin: auto;">
+                        </div>
+                        </div>
+                    </div>
+                </div>
 
-                // Listen for input in the search field and trigger table filtering
-                searchInput.addEventListener('input', function() {
-                    const searchTerm = searchInput.value.toLowerCase();
+                <script>
+                    const paymentImageButtons = document.querySelectorAll('[data-bs-target="#paymentImageModal"]');
+                    paymentImageButtons.forEach(button => {
+                        button.addEventListener('click', function() {
+                        const paymentImage = this.getAttribute('data-payment-image');
+                        document.getElementById('paymentImage').src = "../../../assets/gcash-payments/" + paymentImage;
+                        });
+                    });
+                </script>
 
-                    // Loop through table rows
-                    for (let row of rows) {
-                        const cells = row.getElementsByTagName('td');
-                        let rowText = '';
-
-                        // Loop through each cell in the row and concatenate the text content
-                        for (let cell of cells) {
-                            rowText += cell.textContent.toLowerCase() + ' ';
-                        }
-
-                        // If the row's text content matches the search term, display it; otherwise, hide it
-                        if (rowText.includes(searchTerm)) {
-                            row.style.display = ''; // Show row
-                        } else {
-                            row.style.display = 'none'; // Hide row
-                        }
-                    }
-                });
-            </script>
+           
             <nav aria-label="Page navigation">
                 <ul class="pagination d-flex justify-content-end">
                     <?php if ($page > 1): ?>

@@ -145,17 +145,34 @@
                                 <form method="POST" action="../function/php/payment.php" enctype="multipart/form-data">
                                     <input type="hidden" name="id" value="<?php echo $booking['id']; ?>">
                                     <div class="modal-body">
+                                        
                                         <!-- Image Preview -->
                                         <div class="mb-3 text-center">
                                             <img id="preview-<?php echo $booking['id']; ?>" src="../../../assets/gcash.jpg" alt="Payment Image Preview" class="img-fluid">
                                         </div>
-                                        
+                                        <div class="mb-3">
+                                            <?php
+                                            $cost = $booking['cost']; 
+                                            $min_payment = $cost * 0.5;
+                                            ?>
+                                            <label class="form-label">Amount to Pay:</label>
+                                            <p><strong>Minimum: PHP <?php echo number_format($min_payment, 2); ?></strong></p>
+                                        </div>
+
                                         <!-- Image Upload -->
                                         <div class="mb-3">
                                             <label for="imageInput-<?php echo $booking['id']; ?>" class="form-label">Upload Payment Screenshot</label>
                                             <input type="file" class="form-control" id="imageInput-<?php echo $booking['id']; ?>" name="payment_image" accept="image/*" onchange="previewImage(event, '<?php echo $booking['id']; ?>')" required>
                                         </div>
-                                        
+
+                                       
+
+                                        <!-- Payment Amount -->
+                                        <div class="mb-3">
+                                            <label for="paymentAmount-<?php echo $booking['id']; ?>" class="form-label">Payment Amount</label>
+                                            <input type="number" class="form-control" id="paymentAmount-<?php echo $booking['id']; ?>" name="payment_amount" placeholder="Enter payment amount (min: PHP <?php echo number_format($min_payment, 2); ?>)" min="<?php echo $min_payment; ?>" required>
+                                        </div>
+
                                         <!-- Reference Number -->
                                         <div class="mb-3">
                                             <label for="referenceNo-<?php echo $booking['id']; ?>" class="form-label">Reference Number</label>
@@ -170,6 +187,7 @@
                             </div>
                         </div>
                     </div>
+
 
                     <span class="status-badge <?php echo (strtolower($booking['status']) === 'cancel') ? 'bg-danger text-white' : ''; ?>">
                         <?php echo (strtolower($booking['status']) === 'cancel') ? 'Cancelled' : htmlspecialchars($booking['status']); ?>
@@ -212,6 +230,17 @@
                     <p class="mb-1"><span class="info-label">Total Payment</span></p>
                     <p>₱<?php echo number_format(htmlspecialchars($booking['cost']), 2); ?></p>
                 </div>
+                <?php if (!empty($booking['payment_amount']) && !empty($booking['reference_no'])): ?>
+                    <div class="d-flex justify-content-between">
+                        <p class="mb-1"><span class="info-label">Downpayment</span></p>
+                        <p>₱<?php echo number_format($booking['payment_amount'], 2); ?></p>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <p class="mb-1"><span class="info-label">Remaining Amount</span></p>
+                        <p class="remaining">₱<?php echo number_format($booking['cost'] - $booking['payment_amount'], 2); ?></p>
+                    </div>
+                <?php endif; ?>
+                
                 <?php if (strtolower($booking['status']) === 'cancel'): ?>
                     <div class="d-flex justify-content-between">
                         <p class="mb-1"><span class="info-label">Reason for Cancellation</span></p>
