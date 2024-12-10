@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 08, 2024 at 10:04 AM
+-- Generation Time: Dec 10, 2024 at 10:43 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -47,18 +47,66 @@ CREATE TABLE `booking` (
   `payment_image` varchar(255) DEFAULT NULL,
   `reference_no` varchar(100) DEFAULT NULL,
   `payment_amount` decimal(10,2) NOT NULL,
-  `status_paid` tinyint(1) DEFAULT 0
+  `status_paid` tinyint(1) DEFAULT 0,
+  `beef_dish` varchar(255) DEFAULT NULL,
+  `pork_dish` varchar(255) DEFAULT NULL,
+  `chicken_dish` varchar(255) DEFAULT NULL,
+  `pasta_dish` varchar(255) DEFAULT NULL,
+  `dessert_dish` varchar(255) DEFAULT NULL,
+  `fish_dish` varchar(255) DEFAULT NULL,
+  `drinks_dish` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `booking`
 --
 
-INSERT INTO `booking` (`id`, `status`, `full_name`, `celebrants_name`, `email`, `phone_number`, `events_date`, `guest_count`, `event_duration`, `event_starttime`, `event_endtime`, `event_type`, `event_package`, `event_options`, `cost`, `cancel_reason`, `payment_image`, `reference_no`, `payment_amount`, `status_paid`) VALUES
-(90, 'Finished', 'Ivan Ablanida', 'Brio', 'ej@gmail.com', '321312', '2024-12-05', 80, 5, 10, 3, 'Kiddie Party', 'other', '200 Pax Package, Clown, Glazing Table, Catering', 122000.00, 'Hey', NULL, NULL, 0.00, 0),
-(91, 'Finished', 'Ivan Ablanida', 'Brio', 'ejivancablanida@gmail.com', '321312', '2023-12-06', 80, 5, 10, 0, 'Kiddie Party', 'other', '150 Pax Package, Clown, Glazing Table', 69000.00, NULL, NULL, NULL, 0.00, 0),
-(92, 'Finished', 'Ivan Ablanida', 'Ivan', 'ejivancablanida@gmail.com', '09957939703', '2024-11-12', 50, 5, 9, 2, 'Adult Party', 'Package A (Adult Birthday Party (50 pax)', 'None', 25000.00, NULL, 'gcash.jpg', '222', 12500.00, 1),
-(95, 'Cancel', 'Ivan Ablanidas', 'Ivan', 'ejivancablanida@gmail.com', '09957939703', '2023-12-12', 50, 5, 9, 2, 'Adult Party', 'Package A (Adult Birthday Party (50 pax)', 'None', 25000.00, NULL, 'gcash.jpg', '222', 12500.00, 1);
+INSERT INTO `booking` (`id`, `status`, `full_name`, `celebrants_name`, `email`, `phone_number`, `events_date`, `guest_count`, `event_duration`, `event_starttime`, `event_endtime`, `event_type`, `event_package`, `event_options`, `cost`, `cancel_reason`, `payment_image`, `reference_no`, `payment_amount`, `status_paid`, `beef_dish`, `pork_dish`, `chicken_dish`, `pasta_dish`, `dessert_dish`, `fish_dish`, `drinks_dish`) VALUES
+(97, 'Pending', 'Ivans', 'Ivan', 'ejivancablanida@gmail.com', '09957939703', '2024-12-17', 50, 5, 14, 7, 'Despedida', 'Package A (Despedida (50 pax)', 'None', 20000.00, NULL, 'gcash.jpg', '312312412', 10000.00, 1, 'Beef Caldereta', 'Pork Menudo', 'Sweet & Sour Chicken', 'Pancit', 'Mango Tapioca', 'Fish Fillet', 'Red Tea'),
+(98, 'Pending', 'Ivane', 'Ivan', 'ejivancablanida@gmail.com', '09957939703', '2024-12-17', 50, 5, 14, 7, 'Despedida', 'Package A (Despedida (50 pax)', 'None', 20000.00, NULL, 'gcash.jpg', '312312412', 10000.00, 1, 'Beef Caldereta', 'Pork Menudo', 'Sweet & Sour Chicken', 'Pancit', 'Mango Tapioca', 'Fish Fillet', 'Red Tea');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `dishes`
+--
+
+CREATE TABLE `dishes` (
+  `id` int(11) NOT NULL,
+  `category` varchar(255) NOT NULL,
+  `dish_name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `dishes`
+--
+
+INSERT INTO `dishes` (`id`, `category`, `dish_name`) VALUES
+(2, 'beef', 'Beef Caldereta'),
+(3, 'beef', 'Creamy Beef with Mushroom'),
+(4, 'beef', 'Beef Steak'),
+(5, 'pork', 'Pork Menudo'),
+(6, 'pork', 'Pork Shanghai'),
+(7, 'pork', 'Pork Humba'),
+(8, 'pork', 'Pork Barbecue'),
+(9, 'beef', 'Pork Adobo'),
+(10, 'chicken', 'Sweet & Sour Chicken'),
+(11, 'chicken', 'Chicken Afritada'),
+(12, 'chicken', 'Chicken Curry'),
+(13, 'chicken', 'Chicken Adobo'),
+(14, 'pasta', 'Pancit'),
+(15, 'pasta', 'Carbonara'),
+(16, 'pasta', 'Spaghettti'),
+(17, 'dessert', 'Fruit Salad'),
+(18, 'dessert', 'Buko Pandan'),
+(19, 'dessert', 'Mango Tapioca'),
+(20, 'dessert', 'Coffee Jelly'),
+(21, 'fish', 'Fish Fillet'),
+(22, 'fish', 'Baked Salmon'),
+(23, 'drinks', 'Ice Tea'),
+(24, 'drinks', 'Red Tea'),
+(25, 'drinks', 'Blue Lemonade'),
+(26, 'drinks', 'Cucumber');
 
 -- --------------------------------------------------------
 
@@ -323,6 +371,12 @@ ALTER TABLE `booking`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `dishes`
+--
+ALTER TABLE `dishes`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `event_list`
 --
 ALTER TABLE `event_list`
@@ -381,7 +435,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
+
+--
+-- AUTO_INCREMENT for table `dishes`
+--
+ALTER TABLE `dishes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `event_list`

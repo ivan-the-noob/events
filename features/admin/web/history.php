@@ -205,55 +205,119 @@
             
 
             <div class="table-responsive">
-                <table class="table mt-4">
-                    <thead class="table-booking">
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Full Name</th>
-                            <th scope="col">Celebrant's Name</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Phone Number</th>
-                            <th scope="col">Event Date</th>
-                            <th scope="col">Guest Count</th>
-                            <th scope="col">Event Start Time</th>
-                            <th scope="col">Type of Event</th>
-                            <th scope="col">Type of Package</th>
-                            <th scope="col">Event Options</th>
-                            <th scope="col">Payment Image</th>
-                            <th scope="col">Reference No</th>
-                            <th scope="col">Total</th>
-                            <th scope="col">Payment Amount</th>
-                            <th scope="col">Remaining</th>
-                        </tr>
-                    </thead>
-                    <tbody id="bookingTable">
-                        <?php 
-                        $id = 1;
-                        while ($row = $result->fetch_assoc()) {
-                            echo '<tr>';
-                            echo '<td>' . $id++ . '</td>';
-                            echo '<td>' . htmlspecialchars($row['full_name']) . '</td>';
-                            echo '<td>' . htmlspecialchars($row['celebrants_name']) . '</td>';
-                            echo '<td>' . htmlspecialchars($row['email']) . '</td>';
-                            echo '<td>' . htmlspecialchars($row['phone_number']) . '</td>';
-                            echo '<td>' . htmlspecialchars($row['events_date']) . '</td>';
-                            echo '<td>' . htmlspecialchars($row['guest_count']) . '</td>';
-                            echo '<td>' . htmlspecialchars($row['event_starttime']) . '</td>';
-                            echo '<td>' . htmlspecialchars($row['event_type']) . '</td>';
-                            echo '<td>' . htmlspecialchars($row['event_package']) . '</td>';
-                            echo '<td>' . htmlspecialchars($row['event_options']) . '</td>';
-                            echo '<td>';
-                            echo '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#paymentImageModal" data-payment-image="' . htmlspecialchars($row['payment_image']) . '">View</button>';
-                            echo '</td>';
-                            echo '<td>' . htmlspecialchars($row['reference_no']) . '</td>';
-                            echo '<td>₱' . number_format($row['cost'], 2) . '</td>';
-                            echo '<td>₱' . number_format($row['payment_amount'], 2) . '</td>';
-                            echo '<td>₱' . number_format($row['cost'] - $row['payment_amount'], 2) . '</td>';
-                            echo '</tr>';
-                        }
-                        ?>
-                    </tbody>
-                </table>
+            <table class="table mt-4">
+                <thead class="table-booking">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Full Name</th>
+                        <th scope="col">Celebrant's Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Phone Number</th>
+                        <th scope="col">Event Date</th>
+                        <th scope="col">Guest Count</th>
+                        <th scope="col">Event Start Time</th>
+                        <th scope="col">Type of Event</th>
+                        <th scope="col">Type of Package</th>
+                        <th scope="col">Event Options</th>
+                        <th scope="col">Foods</th>
+                        <th scope="col">Payment Image</th>
+                        <th scope="col">Reference No</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Payment Amount</th>
+                        <th scope="col">Remaining</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php 
+                        $id = 1; 
+                        while ($row = $result->fetch_assoc()): ?>
+                            <tr>
+                                <td><?php echo $id++; ?></td>
+                                <td><?php echo htmlspecialchars($row['celebrants_name']); ?></td>
+                                <td><?php echo htmlspecialchars($row['full_name']); ?></td>
+                                <td><?php echo htmlspecialchars($row['email']); ?></td>
+                                <td><?php echo htmlspecialchars($row['phone_number']); ?></td>
+                                <td><?php echo htmlspecialchars($row['events_date']); ?></td>
+                                <td><?php echo htmlspecialchars($row['guest_count']); ?> guest</td>
+                                <td><?php echo htmlspecialchars($row['event_starttime']); ?>:00</td>
+                                <td><?php echo htmlspecialchars($row['event_type']); ?></td>
+                                <td><?php echo htmlspecialchars($row['event_package']); ?></td>
+                                <td><?php echo htmlspecialchars($row['event_options']); ?></td>
+                                <td>
+                                    <!-- View button for opening the modal -->
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#foodModal_<?php echo $row['id']; ?>">View</button>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#paymentImageModal" data-payment-image="<?php echo htmlspecialchars($row['payment_image']); ?>">View</button>
+                                </td>
+                                <td><?php echo htmlspecialchars($row['reference_no']); ?></td>
+                                <td>₱<?php echo number_format($row['cost'], 2); ?></td>
+                                <td>₱<?php echo number_format($row['payment_amount'], 2); ?></td>
+                                <td>₱<?php echo number_format($row['cost'] - $row['payment_amount'], 2); ?></td>
+                                <td>
+                                    <form method="POST" action="../function/php/pending.php" style="display:inline;">
+                                        <input type="hidden" name="booking_id" value="<?php echo $row['id']; ?>">
+                                        <input type="hidden" name="action" value="accept">
+                                        <button type="submit" class="btn btn-success">Approve</button>
+                                    </form>
+                                    <form method="POST" action="../function/php/pending.php" style="display:inline;">
+                                        <input type="hidden" name="booking_id" value="<?php echo $row['id']; ?>">
+                                        <input type="hidden" name="action" value="decline">
+                                        <button type="submit" class="btn btn-danger">Decline</button>
+                                    </form>
+                                </td>
+                            </tr>
+
+                            <!-- Modal to view food details -->
+                            <div class="modal fade" id="foodModal_<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="foodModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="foodModalLabel">Food Options for <?php echo htmlspecialchars($row['full_name']); ?></h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form>
+                                                <div class="mb-3">
+                                                    <label for="beef_dish_<?php echo $row['id']; ?>" class="form-label">Beef Dish</label>
+                                                    <input type="text" class="form-control" id="beef_dish_<?php echo $row['id']; ?>" value="<?php echo htmlspecialchars($row['beef_dish']); ?>" readonly>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="pork_dish_<?php echo $row['id']; ?>" class="form-label">Pork Dish</label>
+                                                    <input type="text" class="form-control" id="pork_dish_<?php echo $row['id']; ?>" value="<?php echo htmlspecialchars($row['pork_dish']); ?>" readonly>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="chicken_dish_<?php echo $row['id']; ?>" class="form-label">Chicken Dish</label>
+                                                    <input type="text" class="form-control" id="chicken_dish_<?php echo $row['id']; ?>" value="<?php echo htmlspecialchars($row['chicken_dish']); ?>" readonly>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="pasta_dish_<?php echo $row['id']; ?>" class="form-label">Pasta Dish</label>
+                                                    <input type="text" class="form-control" id="pasta_dish_<?php echo $row['id']; ?>" value="<?php echo htmlspecialchars($row['pasta_dish']); ?>" readonly>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="dessert_dish_<?php echo $row['id']; ?>" class="form-label">Dessert Dish</label>
+                                                    <input type="text" class="form-control" id="dessert_dish_<?php echo $row['id']; ?>" value="<?php echo htmlspecialchars($row['dessert_dish']); ?>" readonly>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="fish_dish_<?php echo $row['id']; ?>" class="form-label">Fish Dish</label>
+                                                    <input type="text" class="form-control" id="fish_dish_<?php echo $row['id']; ?>" value="<?php echo htmlspecialchars($row['fish_dish']); ?>" readonly>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="drinks_dish_<?php echo $row['id']; ?>" class="form-label">Drinks</label>
+                                                    <input type="text" class="form-control" id="drinks_dish_<?php echo $row['id']; ?>" value="<?php echo htmlspecialchars($row['drinks_dish']); ?>" readonly>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endwhile; ?>
+                </tbody>
+            </table>
             </div>
         <nav>
             <ul class="pagination d-flex justify-content-end">

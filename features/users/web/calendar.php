@@ -87,28 +87,20 @@ if (!(isset($_SESSION['email']) && $_SESSION['role'] === 'users')) {
                                         </li>
                                     </ul>
                                 </div>
-
-
                             <?php else: ?>
                                 <a href="features/users/web/login.php" class="sign-in">Sign In</a>
                             <?php endif; ?>
-
-
                         </ul>
-
                     </div>
-
                 </div>
             </nav>
         </div>
     </div>
-
     <section class="body">
         <p class="calendar-title text-center mb-0">Book your event today</p>
         <h3 class="text-center calendar-h3">Let's Plan Your Perfect Event</h3>
         <div class="container">
             <div class="container-calendar d-flex flex-column flex-lg-row gap-3">
-
                 <div class="card calendar-card">
                     <div class="card-body">
                         <div class="cont-avail d-flex align-items-center gap-3 mb-2">
@@ -253,7 +245,60 @@ if (!(isset($_SESSION['email']) && $_SESSION['role'] === 'users')) {
                                         </div>
                                         <div class="form-group " id="extra-options-container"></div>   
                                     </div>
-                                
+                                    <div class="form-group mt-4" id="beef-options" style="display: none;">
+                                        <label for="beef-select" class="form-label">Beef</label>
+                                        <select id="beef-select" name="beef_dish" class="form-control">
+                                            <option value="" disabled selected>Select a dish</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group mt-4" id="pork-options" style="display: none;">
+                                        <label for="pork-select" class="form-label">Pork</label>
+                                        <select id="pork-select" name="pork_dish" class="form-control">
+                                            <option value="" disabled selected>Select a dish</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group mt-4" id="chicken-options" style="display: none;">
+                                        <label for="chicken-select" class="form-label">Chicken</label>
+                                        <select id="chicken-select" name="chicken_dish" class="form-control">
+                                            <option value="" disabled selected>Select a dish</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group mt-4" id="pasta-options" style="display: none;">
+                                        <label for="pasta-select" class="form-label">Pasta</label>
+                                        <select id="pasta-select" name="pasta_dish" class="form-control">
+                                            <option value="" disabled selected>Select a dish</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- New Dessert Form Group -->
+                                    <div class="form-group mt-4" id="dessert-options" style="display: none;">
+                                        <label for="dessert-select" class="form-label">Dessert</label>
+                                        <select id="dessert-select" name="dessert_dish" class="form-control">
+                                            <option value="" disabled selected>Select a dish</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- New Fish Form Group -->
+                                    <div class="form-group mt-4" id="fish-options" style="display: none;">
+                                        <label for="fish-select" class="form-label">Fish</label>
+                                        <select id="fish-select" name="fish_dish" class="form-control">
+                                            <option value="" disabled selected>Select a dish</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- New Drinks Form Group -->
+                                    <div class="form-group mt-4" id="drinks-options" style="display: none;">
+                                        <label for="drinks-select" class="form-label">Drinks</label>
+                                        <select id="drinks-select" name="drinks_dish" class="form-control">
+                                            <option value="" disabled selected>Select a dish</option>
+                                        </select>
+                                    </div>
+
+                                    
+
                                   
                                 </div>
                                 <div class="col-md-4 justify-content-between">
