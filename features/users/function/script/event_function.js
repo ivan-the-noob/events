@@ -14,7 +14,6 @@ document.getElementById('event-type').addEventListener('change', function() {
         packageSelect.innerHTML = '<option value="" disabled selected>Select a package</option>';
     }
 
-    // Fetch event packages based on selected event type
     const xhr = new XMLHttpRequest();
     xhr.open('POST', '../function/php/fetch_event_packages.php', true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -46,26 +45,24 @@ document.getElementById('event-type').addEventListener('change', function() {
                 packageSelect.appendChild(option);
             }
 
-            // Add "Other" option to the select dropdown
             const otherOption = document.createElement('option');
             otherOption.value = "other";
             otherOption.setAttribute('data-cost', "0");
             otherOption.textContent = "Other";
             packageSelect.appendChild(otherOption);
 
-            resetCustomPackageOptions();  // Reset any custom package inputs
+            resetCustomPackageOptions();  
         }
     };
     xhr.send('event_type=' + encodeURIComponent(selectedEventType));
 
-    // Fetch dishes for the selected event type (beef, pork, chicken, pasta, dessert, fish, drinks)
-    fetchDishes('beef');     // Fetch for 'beef'
-    fetchDishes('pork');     // Fetch for 'pork'
-    fetchDishes('chicken');  // Fetch for 'chicken'
-    fetchDishes('pasta');    // Fetch for 'pasta'
-    fetchDishes('dessert');  // Fetch for 'dessert'
-    fetchDishes('fish');     // Fetch for 'fish'
-    fetchDishes('drinks');   // Fetch for 'drinks'
+    fetchDishes('beef');     
+    fetchDishes('pork');    
+    fetchDishes('chicken'); 
+    fetchDishes('pasta');    
+    fetchDishes('dessert');  
+    fetchDishes('fish');    
+    fetchDishes('drinks');   
 });
 
 document.getElementById('event-package').addEventListener('change', function() {
@@ -75,7 +72,6 @@ document.getElementById('event-package').addEventListener('change', function() {
 
     console.log("Selected Package: ", selectedPackage);
 
-    // If the selected package is "other", reset the cost
     if (selectedPackage === "other") {
         totalPaymentElement.textContent = '₱0';
         showCustomPackageInput();
@@ -88,7 +84,6 @@ document.getElementById('event-package').addEventListener('change', function() {
         hideCustomPackageOptions();
     }
 
-    // Show the "Choose Your Dish" section after selecting an event package
     const beefOptionsDiv = document.getElementById('beef-options');
     const porkOptionsDiv = document.getElementById('pork-options');
     const chickenOptionsDiv = document.getElementById('chicken-options');
@@ -98,16 +93,15 @@ document.getElementById('event-package').addEventListener('change', function() {
     const drinksOptionsDiv = document.getElementById('drinks-options');
 
     if (beefOptionsDiv && porkOptionsDiv && chickenOptionsDiv && pastaOptionsDiv && dessertOptionsDiv && fishOptionsDiv && drinksOptionsDiv) {
-        beefOptionsDiv.style.display = 'block';   // Show beef dish selection
-        porkOptionsDiv.style.display = 'block';   // Show pork dish selection
-        chickenOptionsDiv.style.display = 'block'; // Show chicken dish selection
-        pastaOptionsDiv.style.display = 'block';  // Show pasta dish selection
-        dessertOptionsDiv.style.display = 'block'; // Show dessert dish selection
-        fishOptionsDiv.style.display = 'block';    // Show fish dish selection
-        drinksOptionsDiv.style.display = 'block';  // Show drinks dish selection
+        beefOptionsDiv.style.display = 'block';  
+        porkOptionsDiv.style.display = 'block';  
+        chickenOptionsDiv.style.display = 'block'; 
+        pastaOptionsDiv.style.display = 'block';  
+        dessertOptionsDiv.style.display = 'block'; 
+        fishOptionsDiv.style.display = 'block';    
+        drinksOptionsDiv.style.display = 'block';  
     }
 
-    // Fetch dishes for all categories: 'beef', 'pork', 'chicken', 'pasta', 'dessert', 'fish', 'drinks'
     fetchDishes('beef');
     fetchDishes('pork');
     fetchDishes('chicken');
@@ -117,10 +111,9 @@ document.getElementById('event-package').addEventListener('change', function() {
     fetchDishes('drinks');
 });
 
-// Function to fetch dishes for a given category (e.g., 'beef', 'pork', 'chicken', 'pasta', 'dessert', 'fish', 'drinks')
 function fetchDishes(category) {
     const dishSelect = document.getElementById(category + '-select');
-    dishSelect.innerHTML = '<option value="" disabled selected>Select a dish</option>';  // Reset dish options
+    dishSelect.innerHTML = '<option value="" disabled selected>Select a dish</option>';  
 
     const xhr = new XMLHttpRequest();
     xhr.open('POST', '../function/php/fetch_dishes.php', true);
@@ -149,7 +142,7 @@ function fetchDishes(category) {
             }
         }
     };
-    xhr.send('category=' + category);  // Send category dynamically (either 'beef', 'pork', 'chicken', 'pasta', 'dessert', 'fish', or 'drinks')
+    xhr.send('category=' + category); 
 }
 
 
