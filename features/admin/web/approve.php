@@ -158,6 +158,7 @@ $result = $stmt->get_result();
                     <li><a class="dropdown-item" href="package_list.php">Package List</a></li>
                     <li><a class="dropdown-item" href="extra.php">Extra</a></li>
                     <li><a class="dropdown-item" href="pax.php">Pax</a></li>
+                    <li><a class="dropdown-item" href="dish.php">Dish</a></li>
                 </ul>
             </div>
             <a href="admin-user.php">
@@ -283,16 +284,11 @@ $result = $stmt->get_result();
                                 <td>₱<?php echo number_format($row['payment_amount'], 2); ?></td>
                                 <td>₱<?php echo number_format($row['cost'] - $row['payment_amount'], 2); ?></td>
                                 <td>
-                                    <form method="POST" action="../function/php/pending.php" style="display:inline;">
-                                        <input type="hidden" name="booking_id" value="<?php echo $row['id']; ?>">
-                                        <input type="hidden" name="action" value="accept">
-                                        <button type="submit" class="btn btn-success">Approve</button>
-                                    </form>
-                                    <form method="POST" action="../function/php/pending.php" style="display:inline;">
-                                        <input type="hidden" name="booking_id" value="<?php echo $row['id']; ?>">
-                                        <input type="hidden" name="action" value="decline">
-                                        <button type="submit" class="btn btn-danger">Decline</button>
-                                    </form>
+                                <select class="form-select form-select-sm" onchange="updateStatus(this, <?php echo $row['id']; ?>)">
+                                    <option value="Waiting" <?php echo ($row['status'] === 'Waiting' ? 'selected' : ''); ?>>Waiting</option>
+                                    <option value="On-going" <?php echo ($row['status'] === 'On-going' ? 'selected' : ''); ?>>On-going</option>
+                                    <option value="Finished" <?php echo ($row['status'] === 'Finished' ? 'selected' : ''); ?>>Finished</option>
+                                </select>
                                 </td>
                             </tr>
 

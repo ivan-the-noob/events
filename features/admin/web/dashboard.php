@@ -94,6 +94,7 @@ if ($result && $row = $result->fetch_assoc()) {
                     <li><a class="dropdown-item" href="package_list.php">Package List</a></li>
                     <li><a class="dropdown-item" href="extra.php">Extra</a></li>
                     <li><a class="dropdown-item" href="pax.php">Pax</a></li>
+                    <li><a class="dropdown-item" href="dish.php">Dish</a></li>
                 </ul>
             </div>
             <a href="admin-user.php">
