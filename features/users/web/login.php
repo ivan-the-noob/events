@@ -27,6 +27,12 @@ include '../function/authentication/login.php';
                     </div>
                     <div class="col-md-7 login-right">
                         <h5 class="mb-3">Login</h5>
+                        <?php
+                            if (isset($_GET['message'])) {
+                                $message = $_GET['message'];
+                                echo "<button class='btn btn-success'>$message</button>";
+                            }
+                        ?>
                         <form method="POST" action="login.php">
                             <div class="mb-3">
                                 <input type="email" name="email" class="form-control" placeholder="Enter your email" required>
