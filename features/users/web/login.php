@@ -30,7 +30,9 @@ include '../function/authentication/login.php';
                         <?php
                             if (isset($_GET['message'])) {
                                 $message = $_GET['message'];
-                                echo "<button class='btn btn-success'>$message</button>";
+                                echo "<div class='btn btn-success d-flex justify-content-center mb-4'>";
+                                echo "<p class='mb-4 text-center'>$message</p>";
+                                echo "</div>";
                             }
                         ?>
                         <form method="POST" action="login.php">

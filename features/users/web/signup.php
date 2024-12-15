@@ -88,7 +88,7 @@ include '../../../db.php';
         </div>
         <div class="form-check mb-3">
             <input type="checkbox" name="accept_terms" class="form-check-input" id="acceptTerms" required>
-            <label class="form-check-label" for="acceptTerms">Accept Terms and Conditions</label>
+            <label class="form-check-label text-decoration-underline cursor-pointer" for="acceptTerms" data-bs-toggle="modal" data-bs-target="#termsModal">Accept Terms and Conditions</label>
         </div>
         <button type="button" class="btn btn-secondary" onclick="showStep(3)">Back</button>
         <button type="submit" class="btn btn-success w-50">Sign Up</button>
@@ -99,6 +99,76 @@ include '../../../db.php';
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="termsModalLabel">Terms and Conditions</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h6>Terms and Conditions for Amiel's MOM Events Place</h6>
+                <p>By signing up for an account on Amiel's MOM Events Place, you agree to the following terms and conditions:</p>
+                
+                <h6>1. Account Registration</h6>
+                <ul>
+                    <li>1.1 You must provide accurate and up-to-date information during the registration process.</li>
+                    <li>1.2 You are responsible for maintaining the confidentiality of your account credentials.</li>
+                    <li>1.3 You agree not to share your account with others.</li>
+                </ul>
+
+                <h6>2. Use of the Platform</h6>
+                <ul>
+                    <li>2.1 The platform is intended for personal or business event planning and related services only.</li>
+                    <li>2.2 You must not use the platform for any unlawful, harmful, or malicious purposes.</li>
+                </ul>
+
+                <h6>3. Booking and Payment</h6>
+                <ul>
+                    <li>3.1 Any bookings or transactions made through the platform are binding.</li>
+                    <li>3.2 You are responsible for ensuring timely payment for services booked through the platform.</li>
+                    <li>3.3 Cancellation policies, fees, and refunds are subject to the specific terms of each service or event.</li>
+                </ul>
+
+                <h6>4. User Conduct</h6>
+                <ul>
+                    <li>4.1 You must not post or share any offensive, inappropriate, or harmful content on the platform.</li>
+                    <li>4.2 You agree to respect other users and event organizers on the platform.</li>
+                </ul>
+
+                <h6>5. Liability</h6>
+                <ul>
+                    <li>5.1 Amiel's MOM Events Place is not responsible for any damages or losses arising from your use of the platform.</li>
+                    <li>5.2 While we strive to provide accurate information, we do not guarantee the availability or quality of services offered by third parties.</li>
+                </ul>
+
+                <h6>6. Privacy Policy</h6>
+                <ul>
+                    <li>6.1 By signing up, you agree to the collection and use of your personal data as described in our Privacy Policy.</li>
+                    <li>6.2 We do not sell or share your personal information with third parties without your consent, except as required by law.</li>
+                </ul>
+
+                <h6>7. Amendments</h6>
+                <ul>
+                    <li>7.1 These terms and conditions may be updated from time to time.</li>
+                    <li>7.2 Continued use of the platform after updates constitutes your agreement to the revised terms.</li>
+                </ul>
+
+                <h6>8. Termination</h6>
+                <ul>
+                    <li>8.1 We reserve the right to terminate your account if you violate these terms.</li>
+                    <li>8.2 Upon termination, access to your account and any booked services may be restricted.</li>
+                </ul>
+
+                <p>By clicking "Sign Up," you confirm that you have read, understood, and agreed to these Terms and Conditions.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
     <script>
 function showStep(step) {
