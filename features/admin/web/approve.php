@@ -128,6 +128,10 @@ $result = $stmt->get_result();
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Approved Booking</span>
             </a>
+            <a href="refund.php">
+                <i class="fa-solid fa-tachometer-alt"></i>
+                <span>Refund Pending</span>
+            </a>
             <a href="cancel.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Cancelled Booking</span>

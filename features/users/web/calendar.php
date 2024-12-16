@@ -8,17 +8,17 @@ $name = '';
 if ($email) {
     require '../../../db.php';
 
-    $stmt = $conn->prepare("SELECT name FROM users WHERE email = ?");
+    $stmt = $conn->prepare("SELECT first_name, last_name, contact_number FROM users WHERE email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
 
     $result = $stmt->get_result();
     if ($row = $result->fetch_assoc()) {
-        $name = $row['name'];
+        $first_name = $row['first_name'];
+        $last_name = $row['last_name'];
+        $contact_number = $row['contact_number'];
     }
 }
-
-
 
 
 if (!(isset($_SESSION['email']) && $_SESSION['role'] === 'users')) {
@@ -138,7 +138,7 @@ if (!(isset($_SESSION['email']) && $_SESSION['role'] === 'users')) {
                                     <div class="form-group mt-4">
                                         <label for="full-name" class="form-label">Full Name</label>
                                         <input type="text" id="full-name" name="full_name" class="form-control"
-                                            value="<?= htmlspecialchars($name); ?>" placeholder="Enter your text here" readonly>
+                                        value="<?= htmlspecialchars($first_name . ' ' . $last_name); ?>" placeholder="Enter your text here" readonly>
                                     </div>
                                     <div class="form-group mt-4">
                                         <label for="celebrants-name" class="form-label">Celebrant's Name</label>
@@ -153,7 +153,7 @@ if (!(isset($_SESSION['email']) && $_SESSION['role'] === 'users')) {
                                     <div class="form-group mt-4">
                                         <label for="phone-number" class="form-label">Phone Number</label>
                                         <input type="number" id="phone-number" name="phone_number" class="form-control"
-                                            placeholder="Enter your text here">
+                                        value="<?= htmlspecialchars($contact_number); ?>" placeholder="Enter your text here">
                                     </div>
                                     <h5 class="mb-4 events">Event Info</h5>
                                     <div class="form-group mt-4">

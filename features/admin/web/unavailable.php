@@ -64,6 +64,10 @@ $result = $conn->query($query);
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Cancelled Booking</span>
             </a>
+            <a href="refund.php">
+                <i class="fa-solid fa-tachometer-alt"></i>
+                <span>Refund Pending</span>
+            </a>
 
             <a href="#" class="navbar-highlight">
                 <i class="fa-solid fa-tachometer-alt"></i>

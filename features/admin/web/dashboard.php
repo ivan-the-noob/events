@@ -16,13 +16,13 @@ $rowDeclined = $resultDeclined->fetch_assoc();
 $waitingCount = $rowWaiting['waiting_count'];
 $declinedCount = $rowDeclined['declined_count'];
 
-$query = "SELECT SUM(cost) AS total_sales FROM booking WHERE status = 'Finished'";
+$query = "SELECT SUM(cost) AS payment_amount FROM booking WHERE status = 'Finished'";
 $result = $conn->query($query);
 
 if ($result && $row = $result->fetch_assoc()) {
-    $total_sales = $row['total_sales'];
+    $payment_amount = $row['payment_amount'];
 } else {
-    $total_sales = 0; 
+    $payment_amount = 0; 
 }
 ?>
 <!DOCTYPE html>
@@ -62,6 +62,10 @@ if ($result && $row = $result->fetch_assoc()) {
             <a href="approve.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Approved Booking</span>
+            </a>
+            <a href="refund.php">
+                <i class="fa-solid fa-tachometer-alt"></i>
+                <span>Refund Pending</span>
             </a>
 
             <a href="cancel.php">
@@ -139,7 +143,7 @@ if ($result && $row = $result->fetch_assoc()) {
                             <div class="d-flex">
                                 <div class="col-md-12">
                                     <p class="mb-1">Total Sales</p>
-                                    <h5>₱<?php echo number_format($total_sales, 2); ?></h5>
+                                    <h5>₱<?php echo number_format($payment_amount, 2); ?></h5>
                                 </div>
                             </div>
                         </div>
@@ -174,7 +178,7 @@ if ($result && $row = $result->fetch_assoc()) {
                 <div class="col-md-5 mt-2  d-flex justify-content-center">
                     <div class="chart-container">
                         <h5 class="chart-title">Yearly Sales</h5>
-                        <canvas id="yearlySalesChart"></canvas>
+                        <canvas id="monthlySalesChart"></canvas>
                     </div>
                 </div>
                 <div class="col-md-9 mt-4">
@@ -351,8 +355,8 @@ if ($result && $row = $result->fetch_assoc()) {
 
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../function/script/daily-chart.js"></script>
 <script src="../function/script/month-chart.js"></script>
-<script src="../function/script/year-chart.js"></script>
 <script src="../function/script/status.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 

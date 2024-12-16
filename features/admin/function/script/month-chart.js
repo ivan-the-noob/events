@@ -1,46 +1,48 @@
 document.addEventListener("DOMContentLoaded", function() {
-    var ctx = document.getElementById('salesChart').getContext('2d');
-    var chartData = {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    var ctx = document.getElementById('monthlySalesChart').getContext('2d');
+
+    // Labels for the months of the year
+    var monthlyChartData = {
+        labels: ['Jan', 'Feb', 'March', 'April', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
         datasets: [
             {
-                label: 'Current Sales',
-                data: [5000, 8000, 9500, 7500, 12000, 11000, 13000, 11500, 13500, 14500, 16000, 17500], // Dummy data for current month
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                borderColor: 'rgba(54, 162, 235, 1)',
+                label: 'This Month Sales',
+                data: [],  // This will be populated by PHP/JS with current month's data
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1,
                 fill: true,
-                pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+                pointBackgroundColor: 'rgba(75, 192, 192, 1)',
                 pointBorderColor: '#fff',
                 pointHoverBackgroundColor: '#fff',
-                pointHoverBorderColor: 'rgba(54, 162, 235, 1)'
+                pointHoverBorderColor: 'rgba(75, 192, 192, 1)'
             },
             {
-                label: 'Last Sales',
-                data: [4500, 6500, 7000, 6000, 9500, 10500, 12000, 9800, 12500, 14000, 15500, 16500], // Dummy data for last month
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgba(255, 99, 132, 1)',
+                label: 'Last Month Sales',
+                data: [],  // This will be populated by PHP/JS with last month's data
+                backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                borderColor: 'rgba(153, 102, 255, 1)',
                 borderWidth: 1,
                 fill: true,
-                pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+                pointBackgroundColor: 'rgba(153, 102, 255, 1)',
                 pointBorderColor: '#fff',
                 pointHoverBackgroundColor: '#fff',
-                pointHoverBorderColor: 'rgba(255, 99, 132, 1)'
+                pointHoverBorderColor: 'rgba(153, 102, 255, 1)'
             }
         ]
     };
 
-    var salesChart = new Chart(ctx, {
+    var monthlySalesChart = new Chart(ctx, {
         type: 'line',
-        data: chartData,
+        data: monthlyChartData,
         options: {
             scales: {
                 y: {
                     beginAtZero: true,
-                    max: 20000, 
+                    max: 350000, 
                     ticks: {
                         callback: function(value, index, values) {
-                            return value + '₱';
+                            return value + '₱';  
                         }
                     }
                 }
@@ -53,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             if (label) {
                                 label += ': ';
                             }
-                            label += context.raw + '₱';
+                            label += context.raw + '₱';  
                             return label;
                         }
                     }
@@ -61,4 +63,34 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         }
     });
+
+    function fetchData() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '../function/php/fetch_monthly_sales_data.php', true); 
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                console.log('Response Text:', xhr.responseText); 
+                if (xhr.responseText.includes('|')) {
+                    try {
+                        var response = xhr.responseText.split('|');
+                        var thisMonthData = response[0].split(',').map(Number);
+                        var lastMonthData = response[1].split(',').map(Number);
+            
+                        monthlySalesChart.data.datasets[0].data = thisMonthData;  
+                        monthlySalesChart.data.datasets[1].data = lastMonthData;  
+                        monthlySalesChart.update();
+                    } catch (e) {
+                        console.error('Error parsing response:', e);
+                    }
+                } else {
+                    console.error('Unexpected response format:', xhr.responseText);
+                }
+            } else if (xhr.readyState === 4) {
+                console.error('Error fetching data:', xhr.statusText);
+            }
+        };
+        xhr.send();
+    }
+
+    fetchData();
 });

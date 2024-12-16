@@ -4,42 +4,67 @@
         header('Location: ../../users/web/login.php');
         exit();
     }
-
     require '../../../db.php';
-
+    
+    $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+    $limit = 5;
+    $offset = ($page - 1) * $limit;
+    
+    // Retrieve search term, month, and year from GET parameters
     $search = isset($_GET['search']) ? $_GET['search'] : '';
-
-    $results_per_page = 10; 
-    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-    $start_from = ($page - 1) * $results_per_page;
-
+    $month = isset($_GET['month']) ? intval($_GET['month']) : null;
+    $year = isset($_GET['year']) ? intval($_GET['year']) : null;
+    
     $search_term = "%" . $search . "%";
-
-    $total_query = "SELECT COUNT(*) FROM booking WHERE status = 'Pending' AND status_paid = 1 AND (full_name LIKE ? OR celebrants_name LIKE ? OR email LIKE ?)";
+    
+    $total_query = "SELECT COUNT(*) as total FROM booking WHERE status = 'Cancel'";
+    
+    if (!empty($search)) {
+        $total_query .= " AND (full_name LIKE ? OR celebrants_name LIKE ? OR email LIKE ?)";
+    }
+    
+    if ($month && $year) {
+        $total_query .= " AND MONTH(events_date) = $month AND YEAR(events_date) = $year";
+    }
+    
     $stmt = $conn->prepare($total_query);
-    $stmt->bind_param("sss", $search_term, $search_term, $search_term);
-    $stmt->execute();
+    if (!empty($search)) {
+        $stmt->bind_param("sss", $search_term, $search_term, $search_term);
+    } else {
+        $stmt->execute();
+    }
     $total_result = $stmt->get_result();
-    $total_row = $total_result->fetch_row();
-    $total_bookings = $total_row[0];
-    $total_pages = ceil($total_bookings / $results_per_page);
-
-    $query = "SELECT * FROM booking WHERE status = 'Pending' AND status_paid = 1 AND (full_name LIKE ? OR celebrants_name LIKE ? OR email LIKE ?) LIMIT ?, ?";
+    $total_row = $total_result->fetch_assoc();
+    $total_records = $total_row['total'];
+    $total_pages = ceil($total_records / $limit);
+    
+    $query = "SELECT * FROM booking WHERE status = 'cancel-pending'";
+    
+    if (!empty($search)) {
+        $query .= " AND (full_name LIKE ? OR celebrants_name LIKE ? OR email LIKE ?)";
+    }
+    
+    if ($month && $year) {
+        $query .= " AND MONTH(events_date) = $month AND YEAR(events_date) = $year";
+    }
+    
+    $query .= " LIMIT $limit OFFSET $offset";
+    
     $stmt = $conn->prepare($query);
-    $stmt->bind_param("ssiii", $search_term, $search_term, $search_term, $start_from, $results_per_page);
+    if (!empty($search)) {
+        $stmt->bind_param("sss", $search_term, $search_term, $search_term);
+    }
     $stmt->execute();
     $result = $stmt->get_result();
+    
 ?>
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pending | Admin</title>
+    <title>Refund History | Admin</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -63,7 +88,7 @@
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Calendar</span>
             </a>
-            <a href="#" class="navbar-highlight">
+            <a href="pending.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Pending Booking</span>
             </a>
@@ -71,20 +96,18 @@
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Approved Booking</span>
             </a>
+            <a href="#" class="navbar-highlight">
+                <i class="fa-solid fa-tachometer-alt"></i>
+                <span>Refund Pending</span>
+            </a>
             <a href="cancel.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Cancelled Booking</span>
             </a>
-            <a href="refund.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
-                <span>Refund Pending</span>
-            </a>
-
             <a href="unavailable.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Unavailable</span>
             </a>
-
             <a href="invoice.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Invoice</span>
@@ -114,7 +137,6 @@
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Manage Admin Users</span>
             </a>
-
         </div>
 
     </div>
@@ -145,15 +167,46 @@
 
 
         <div class="container mt-4">
+                <div class="date-filter-form mb-2">
+                    <form action="" method="get">
+                        <div class="date-filter">
+                            <select name="month" id="month" class="form-control">
+                                <option value="">Select Month</option>
+                                <?php 
+                                $months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                                foreach ($months as $index => $month) {
+                                    $selected = (isset($_GET['month']) && $_GET['month'] == $index + 1) ? 'selected' : '';
+                                    echo "<option value='" . ($index + 1) . "' $selected>$month</option>";
+                                }
+                                ?>
+                            </select>
+                            <select name="year" id="year" class="form-control">
+                                <option value="">Select Year</option>
+                                <?php
+                                $current_year = date('Y');
+                                for ($i = $current_year - 5; $i <= $current_year; $i++) {
+                                    $selected = (isset($_GET['year']) && $_GET['year'] == $i) ? 'selected' : '';
+                                    echo "<option value='$i' $selected>$i</option>";
+                                }
+                                ?>
+                            </select>
+                            <button type="submit">Filter</button>
+                        </div>
+                    </form>
+                </div>
             <div class="d-flex justify-content-between mb-2">
-                <h3>Pending Booking</h3>
+                <h3>Refund History</h3>
+                
                 <div class="search-form">
                     <form action="" method="get">
                         <input type="text" id="searchInput" name="search" value="<?php echo htmlspecialchars($search); ?>" placeholder="Search...">
                         <button type="submit">Search</button>
                     </form>
                 </div>
-                </div>
+                
+            </div>
+            
+
             <div class="table-responsive">
             <table class="table mt-4">
                 <thead class="table-booking">
@@ -162,6 +215,9 @@
                         <th scope="col">Full Name</th>
                         <th scope="col">Celebrant's Name</th>
                         <th scope="col">Email</th>
+                        <th scope="col">Refund Reason</th>
+                        <th scope="col">Gcash Name</th>
+                        <th scope="col">Gcash Number</th>
                         <th scope="col">Phone Number</th>
                         <th scope="col">Event Date</th>
                         <th scope="col">Guest Count</th>
@@ -187,6 +243,9 @@
                                 <td><?php echo htmlspecialchars($row['celebrants_name']); ?></td>
                                 <td><?php echo htmlspecialchars($row['full_name']); ?></td>
                                 <td><?php echo htmlspecialchars($row['email']); ?></td>
+                                <td><?php echo htmlspecialchars($row['cancel_reason']); ?></td>
+                                <td><?php echo htmlspecialchars($row['gcash_name']); ?></td>
+                                <td><?php echo htmlspecialchars($row['gcash_number']); ?></td>
                                 <td><?php echo htmlspecialchars($row['phone_number']); ?></td>
                                 <td><?php echo htmlspecialchars($row['events_date']); ?></td>
                                 <td><?php echo htmlspecialchars($row['guest_count']); ?> guest</td>
@@ -206,12 +265,12 @@
                                 <td>₱<?php echo number_format($row['payment_amount'], 2); ?></td>
                                 <td>₱<?php echo number_format($row['cost'] - $row['payment_amount'], 2); ?></td>
                                 <td>
-                                    <form method="POST" action="../function/php/pending.php" style="display:inline;">
+                                    <form method="POST" action="../function/php/approve_refund.php" style="display:inline;">
                                         <input type="hidden" name="booking_id" value="<?php echo $row['id']; ?>">
                                         <input type="hidden" name="action" value="accept">
                                         <button type="submit" class="btn btn-success">Approve</button>
                                     </form>
-                                    <form method="POST" action="../function/php/pending.php" style="display:inline;">
+                                    <form method="POST" action="../function/php/approve_refund.php" style="display:inline;">
                                         <input type="hidden" name="booking_id" value="<?php echo $row['id']; ?>">
                                         <input type="hidden" name="action" value="decline">
                                         <button type="submit" class="btn btn-danger">Decline</button>
@@ -268,12 +327,9 @@
                         <?php endwhile; ?>
                 </tbody>
             </table>
+            </div>
 
-
-                </div>
-               
-
-                <div class="modal fade" id="paymentImageModal" tabindex="-1" aria-labelledby="paymentImageModalLabel" aria-hidden="true">
+            <div class="modal fade" id="paymentImageModal" tabindex="-1" aria-labelledby="paymentImageModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                         <div class="modal-header">
@@ -296,57 +352,53 @@
                         });
                     });
                 </script>
-      
-      <nav aria-label="Page navigation">
-    <ul class="pagination d-flex justify-content-end">
-        <?php if ($page > 1): ?>
-            <li class="page-item pg-btn"><a class="page-links" href="?page=<?php echo $page - 1; ?>&search=<?php echo urlencode($search); ?>">&laquo;</a></li>
-        <?php else: ?>
-            <li class="page-item pg-btn disabled"><span class="page-links">&laquo;</span></li>
-        <?php endif; ?>
 
-        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-            <li class="page-item <?php echo ($i == $page) ? 'active' : ''; ?>">
-                <a class="page-link" href="?page=<?php echo $i; ?>&search=<?php echo urlencode($search); ?>"><?php echo $i; ?></a>
-            </li>
-        <?php endfor; ?>
+           
+            <nav aria-label="Page navigation">
+                <ul class="pagination d-flex justify-content-end">
+                    <?php if ($page > 1): ?>
+                        <li class="page-item pg-btn"><a class="page-links" href="?page=<?php echo $page - 1; ?>">&laquo;</a>
+                        </li>
+                    <?php else: ?>
+                        <li class="page-item pg-btn disabled"><span class="page-links">&laquo;</span></li>
+                    <?php endif; ?>
 
-        <?php if ($page < $total_pages): ?>
-            <li class="page-item pg-btn"><a class="page-links" href="?page=<?php echo $page + 1; ?>&search=<?php echo urlencode($search); ?>">&raquo;</a></li>
-        <?php else: ?>
-            <li class="page-item pg-btn disabled"><span class="page-links">&raquo;</span></li>
-        <?php endif; ?>
-    </ul>
-</nav>
+                    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                        <li class="page-item <?php echo ($i == $page) ? 'active' : ''; ?>">
+                            <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                        </li>
+                    <?php endfor; ?>
 
-
-
-            <div id="modalsContainer"></div>
-
+                    <?php if ($page < $total_pages): ?>
+                        <li class="page-item pg-btn"><a class="page-links" href="?page=<?php echo $page + 1; ?>">&raquo;</a>
+                        </li>
+                    <?php else: ?>
+                        <li class="page-item pg-btn disabled"><span class="page-links">&raquo;</span></li>
+                    <?php endif; ?>
+                </ul>
+            </nav>
         </div>
-
         <?php $conn->close(); ?>
 
         <?php
         if (isset($_SESSION['status_message'])) {
             echo "<script>
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success!',
-                        text: '" . $_SESSION['status_message'] . "',
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                </script>";
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'Success!',
+                                                text: '" . $_SESSION['status_message'] . "',
+                                                showConfirmButton: false,
+                                                timer: 1500
+                                            });
+                                        </script>";
             unset($_SESSION['status_message']);
         }
         ?>
 </body>
 
+
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="../function/script/status.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<style>
 
-</style>
 </html>

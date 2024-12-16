@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 10, 2024 at 10:43 AM
+-- Generation Time: Dec 16, 2024 at 09:36 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `booking` (
   `id` int(11) NOT NULL,
-  `status` enum('Pending','Waiting','On-going','Finished','Cancel') NOT NULL,
+  `status` enum('Pending','Waiting','On-going','Finished','Cancel-pending','Cancel') NOT NULL,
   `full_name` varchar(255) NOT NULL,
   `celebrants_name` varchar(255) DEFAULT NULL,
   `email` varchar(255) NOT NULL,
@@ -54,16 +54,20 @@ CREATE TABLE `booking` (
   `pasta_dish` varchar(255) DEFAULT NULL,
   `dessert_dish` varchar(255) DEFAULT NULL,
   `fish_dish` varchar(255) DEFAULT NULL,
-  `drinks_dish` varchar(255) DEFAULT NULL
+  `drinks_dish` varchar(255) DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `gcash_name` varchar(255) NOT NULL,
+  `gcash_number` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `booking`
 --
 
-INSERT INTO `booking` (`id`, `status`, `full_name`, `celebrants_name`, `email`, `phone_number`, `events_date`, `guest_count`, `event_duration`, `event_starttime`, `event_endtime`, `event_type`, `event_package`, `event_options`, `cost`, `cancel_reason`, `payment_image`, `reference_no`, `payment_amount`, `status_paid`, `beef_dish`, `pork_dish`, `chicken_dish`, `pasta_dish`, `dessert_dish`, `fish_dish`, `drinks_dish`) VALUES
-(97, 'Pending', 'Ivans', 'Ivan', 'ejivancablanida@gmail.com', '09957939703', '2024-12-17', 50, 5, 14, 7, 'Despedida', 'Package A (Despedida (50 pax)', 'None', 20000.00, NULL, 'gcash.jpg', '312312412', 10000.00, 1, 'Beef Caldereta', 'Pork Menudo', 'Sweet & Sour Chicken', 'Pancit', 'Mango Tapioca', 'Fish Fillet', 'Red Tea'),
-(98, 'Pending', 'Ivane', 'Ivan', 'ejivancablanida@gmail.com', '09957939703', '2024-12-17', 50, 5, 14, 7, 'Despedida', 'Package A (Despedida (50 pax)', 'None', 20000.00, NULL, 'gcash.jpg', '312312412', 10000.00, 1, 'Beef Caldereta', 'Pork Menudo', 'Sweet & Sour Chicken', 'Pancit', 'Mango Tapioca', 'Fish Fillet', 'Red Tea');
+INSERT INTO `booking` (`id`, `status`, `full_name`, `celebrants_name`, `email`, `phone_number`, `events_date`, `guest_count`, `event_duration`, `event_starttime`, `event_endtime`, `event_type`, `event_package`, `event_options`, `cost`, `cancel_reason`, `payment_image`, `reference_no`, `payment_amount`, `status_paid`, `beef_dish`, `pork_dish`, `chicken_dish`, `pasta_dish`, `dessert_dish`, `fish_dish`, `drinks_dish`, `created_at`, `gcash_name`, `gcash_number`) VALUES
+(97, 'Finished', 'Ivans', 'Ivan', 'ejivancablanida@gmail.com', '09957939703', '2024-12-17', 50, 5, 14, 7, 'Despedida', 'Package A (Despedida (50 pax)', 'None', 20000.00, NULL, 'gcash.jpg', '312312412', 10000.00, 1, 'Beef Caldereta', 'Pork Menudo', 'Sweet & Sour Chicken', 'Pancit', 'Mango Tapioca', 'Fish Fillet', 'Red Tea', '2024-12-15 22:15:36', '', ''),
+(98, 'Finished', 'Ivane', 'Ivan', 'ejivancablanida@gmail.com', '09957939703', '2024-12-17', 50, 5, 14, 7, 'Despedida', 'Package A (Despedida (50 pax)', 'None', 20000.00, NULL, 'gcash.jpg', '312312412', 10000.00, 1, 'Beef Caldereta', 'Pork Menudo', 'Sweet & Sour Chicken', 'Pancit', 'Mango Tapioca', 'Fish Fillet', 'Red Tea', '2024-12-16 22:15:36', '', ''),
+(99, 'Cancel', 'Ej Ivan Ablanida', 'Ivan Ablanida', 'ejivancablanida@gmail.com', '09957939703', '2024-12-26', 50, 5, 12, 5, 'Christmas Year End party', 'Package A (Christmas / Year end party (50 pax)', 'None', 20000.00, 'I just want to cancel', 'Star 1.png', '31231231', 10000.00, 1, 'Beef Caldereta', 'Pork Menudo', 'Sweet & Sour Chicken', 'Pancit', 'Fruit Salad', 'Fish Fillet', 'Red Tea', '2024-12-15 23:51:25', 'Ernesto A.', '09957939703');
 
 -- --------------------------------------------------------
 
@@ -344,21 +348,26 @@ INSERT INTO `unavailable_days` (`id`, `date`, `reason`) VALUES
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
-  `name` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
   `password` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `role` enum('users','admin') DEFAULT 'users'
+  `role` enum('users','admin') DEFAULT 'users',
+  `first_name` varchar(255) NOT NULL,
+  `last_name` varchar(255) NOT NULL,
+  `address` varchar(255) NOT NULL,
+  `contact_number` varchar(15) NOT NULL,
+  `verification_code` int(11) NOT NULL,
+  `status` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `password`, `created_at`, `role`) VALUES
-(1, 'Ivan', 'ejivancablanida@gmail.com', '$2y$10$4kqdeBcgEzF95Ng.uO7rkuj07O5aqKrulTQ7PTXbTDFqcVXPUol26', '2024-11-10 06:20:57', 'users'),
-(6, 'Ablanida, Ej Ivan C.', 'ejivan.ablanida@cvsu.edu.ph', '$2y$10$.7lUDxKeOYzFwkeZ16AyjOieEi2OWks9Ad9dGqmcSCLYPpmoHXDz.', '2024-11-18 07:16:02', 'admin'),
-(7, 'admin', 'admin@gmail.com', '$2y$10$w6JFYtB3uHb.P8MmenFQh.Tn47qYjZ9OtUIhOXhMf3jqCmFjx1mnq', '2024-11-19 06:28:40', 'admin');
+INSERT INTO `users` (`id`, `email`, `password`, `created_at`, `role`, `first_name`, `last_name`, `address`, `contact_number`, `verification_code`, `status`) VALUES
+(1, 'ejivancablanida@gmail.com', '$2y$10$4kqdeBcgEzF95Ng.uO7rkuj07O5aqKrulTQ7PTXbTDFqcVXPUol26', '2024-11-10 06:20:57', 'users', 'Ej Ivan', 'Ablanida', '', '09957939703', 0, NULL),
+(6, 'ejivan.ablanida@cvsu.edu.ph', '$2y$10$.7lUDxKeOYzFwkeZ16AyjOieEi2OWks9Ad9dGqmcSCLYPpmoHXDz.', '2024-11-18 07:16:02', 'admin', '', '', '', '', 0, NULL),
+(46, 'ejthecoder@gmail.com', '$2y$10$4T9f2Fnyk/MaDTUB/aW1NO/y1IVAu7r.3Skudvff7Qd2tpotuxjvG', '2024-12-15 08:18:50', 'users', 'Ej Ivan', 'Ablanida', 'Brgy.Agustin', '9957939', 4255, 1);
 
 --
 -- Indexes for dumped tables
@@ -435,7 +444,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
 
 --
 -- AUTO_INCREMENT for table `dishes`
@@ -489,7 +498,7 @@ ALTER TABLE `unavailable_days`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- Constraints for dumped tables

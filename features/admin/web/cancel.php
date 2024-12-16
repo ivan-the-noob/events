@@ -96,6 +96,10 @@
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Approved Booking</span>
             </a>
+            <a href="refund.php">
+                <i class="fa-solid fa-tachometer-alt"></i>
+                <span>Refund Pending</span>
+            </a>
             <a href="#" class="navbar-highlight">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Cancelled Booking</span>
@@ -225,7 +229,6 @@
                         <th scope="col">Total</th>
                         <th scope="col">Payment Amount</th>
                         <th scope="col">Remaining</th>
-                        <th scope="col">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -255,18 +258,7 @@
                                 <td>₱<?php echo number_format($row['cost'], 2); ?></td>
                                 <td>₱<?php echo number_format($row['payment_amount'], 2); ?></td>
                                 <td>₱<?php echo number_format($row['cost'] - $row['payment_amount'], 2); ?></td>
-                                <td>
-                                    <form method="POST" action="../function/php/pending.php" style="display:inline;">
-                                        <input type="hidden" name="booking_id" value="<?php echo $row['id']; ?>">
-                                        <input type="hidden" name="action" value="accept">
-                                        <button type="submit" class="btn btn-success">Approve</button>
-                                    </form>
-                                    <form method="POST" action="../function/php/pending.php" style="display:inline;">
-                                        <input type="hidden" name="booking_id" value="<?php echo $row['id']; ?>">
-                                        <input type="hidden" name="action" value="decline">
-                                        <button type="submit" class="btn btn-danger">Decline</button>
-                                    </form>
-                                </td>
+                                
                             </tr>
 
                             <!-- Modal to view food details -->

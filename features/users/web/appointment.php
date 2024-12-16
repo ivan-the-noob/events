@@ -121,10 +121,23 @@
                                 <div class="modal-body">
                                     <form method="POST" action="../function/php/process_cancel.php">
                                         <input type="hidden" name="id" value="<?php echo $booking['id']; ?>" />
+                                        
                                         <div class="mb-3">
                                             <label for="cancellationReason-<?php echo $booking['id']; ?>" class="form-label">Reason for cancellation:</label>
                                             <textarea class="form-control" id="cancellationReason-<?php echo $booking['id']; ?>" name="cancel_reason" rows="4" placeholder="Enter your reason here..."></textarea>
                                         </div>
+
+                                        <!-- New input fields for Gcash name and number -->
+                                        <div class="mb-3">
+                                            <label for="gcashName-<?php echo $booking['id']; ?>" class="form-label">Gcash Name:</label>
+                                            <input type="text" class="form-control" id="gcashName-<?php echo $booking['id']; ?>" name="gcash_name" placeholder="Enter your Gcash name" required>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="gcashNumber-<?php echo $booking['id']; ?>" class="form-label">Gcash Number:</label>
+                                            <input type="text" class="form-control" id="gcashNumber-<?php echo $booking['id']; ?>" name="gcash_number" placeholder="Enter your Gcash number" required>
+                                        </div>
+
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                             <button type="submit" class="btn btn-danger">Submit</button>
@@ -134,6 +147,7 @@
                             </div>
                         </div>
                     </div>
+
 
                     <div class="modal fade" id="payNowModal-<?php echo $booking['id']; ?>" tabindex="-1" aria-labelledby="payNowModalLabel-<?php echo $booking['id']; ?>" aria-hidden="true">
                         <div class="modal-dialog">
@@ -189,8 +203,8 @@
                     </div>
 
 
-                    <span class="status-badge <?php echo (strtolower($booking['status']) === 'cancel') ? 'bg-danger text-white' : ''; ?>">
-                        <?php echo (strtolower($booking['status']) === 'cancel') ? 'Cancelled' : htmlspecialchars($booking['status']); ?>
+                    <span class="status-badge <?php echo strtolower($booking['status']) === 'cancel' ? 'bg-danger text-white' : (strtolower($booking['status']) === 'cancel-pending' ? 'bg-warning text-black text-bold' : ''); ?>">
+                        <?php echo strtolower($booking['status']) === 'cancel' ? 'Cancelled' : (strtolower($booking['status']) === 'cancel-pending' ? 'Cancel on Pending' : htmlspecialchars($booking['status'])); ?>
                     </span>
 
                     
@@ -241,12 +255,24 @@
                     </div>
                 <?php endif; ?>
                 
-                <?php if (strtolower($booking['status']) === 'cancel'): ?>
+                <?php if (strtolower($booking['status']) === 'cancel' || strtolower($booking['status']) === 'cancel-pending'): ?>
                     <div class="d-flex justify-content-between">
                         <p class="mb-1"><span class="info-label">Reason for Cancellation</span></p>
                         <p><?php echo htmlspecialchars($booking['cancel_reason']); ?></p>
                     </div>
+
+                    <?php if (strtolower($booking['status']) === 'cancel' || strtolower($booking['status']) === 'cancel-pending'): ?>
+                        <div class="d-flex justify-content-between">
+                            <p class="mb-1"><span class="info-label">Gcash Name</span></p>
+                            <p><?php echo htmlspecialchars($booking['gcash_name']); ?></p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <p class="mb-1"><span class="info-label">Gcash Number</span></p>
+                            <p><?php echo htmlspecialchars($booking['gcash_number']); ?></p>
+                        </div>
+                    <?php endif; ?>
                 <?php endif; ?>
+
             </div>
         </div>
     <?php endforeach; ?>
