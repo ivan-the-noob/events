@@ -102,7 +102,19 @@ $result = $conn->query($query);
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Manage Admin Users</span>
             </a>
+            <div class="dropdown dropup">
+                <a href="#" class="dropdown-toggle" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fa-solid fa-tachometer-alt"></i>
+                    <span>CMS</span>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
+                    <li><a class="dropdown-item" href="front_cms.php">Front CMS</a></li>
+                    <li><a class="dropdown-item" href="scope_service.php">Scope Service</a></li>
+                    <li><a class="dropdown-item" href="extras.php">Extras</a></li>
+                </ul>
+            </div>
         </div>
+        
 
     </div>
     </div>
@@ -151,8 +163,12 @@ $result = $conn->query($query);
                             <div class="modal-body">
                                 <form method="POST" action="../function/php/add_acount.php">
                                     <div class="mb-3">
-                                        <label for="name" class="form-label">Name</label>
-                                        <input type="text" class="form-control" id="name" name="name" required>
+                                        <label for="editFirstName" class="form-label">First Name</label>
+                                        <input type="text" class="form-control" id="editFirstName" name="first_name" value="">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="editLastName" class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" id="editLastName" name="last_name" value="">
                                     </div>
                                     <div class="mb-3">
                                         <label for="email" class="form-label">Email</label>
@@ -188,11 +204,11 @@ $result = $conn->query($query);
                         ?>
                             <tr>
                                 <td><?php echo htmlspecialchars($row['id']); ?></td>
-                                <td><?php echo htmlspecialchars($row['name']); ?></td>
+                                <td><?php echo htmlspecialchars($row['first_name']); ?> <?php echo htmlspecialchars($row['last_name']); ?></td>
                                 <td><?php echo htmlspecialchars($row['email']); ?></td>
                                 <td>
                                     <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal"
-                                        data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['name']; ?>"
+                                        data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['first_name']; ?> <?php echo $row['last_name']; ?>"
                                         data-email="<?php echo $row['email']; ?>"
                                         data-password="<?php echo $row['password']; ?>">Edit</button>
                                     <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"
@@ -220,8 +236,12 @@ $result = $conn->query($query);
                             <form id="editForm" method="POST" action="../function/php/update_user.php">
                                 <input type="hidden" name="id" id="editId">
                                 <div class="mb-3">
-                                    <label for="editName" class="form-label">Name</label>
-                                    <input type="text" class="form-control" id="editName" name="name" value="">
+                                    <label for="editFirstName" class="form-label">First Name</label>
+                                    <input type="text" class="form-control" id="editFirstName" name="first_name" value="">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editLastName" class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" id="editLastName" name="last_name" value="">
                                 </div>
                                 <div class="mb-3">
                                     <label for="editEmail" class="form-label">Email</label>
@@ -307,16 +327,18 @@ $result = $conn->query($query);
         editModal.addEventListener('show.bs.modal', function(event) {
             var button = event.relatedTarget;
             var userId = button.getAttribute('data-id');
-            var userName = button.getAttribute('data-name');
+            var userFirstName = button.getAttribute('data-first-name');
+            var userLastName = button.getAttribute('data-last-name');
             var userEmail = button.getAttribute('data-email');
-            var userPassword = button.getAttribute('data-password');
 
             document.getElementById('editId').value = userId;
-            document.getElementById('editName').value = userName;
+            document.getElementById('editFirstName').value = userFirstName;
+            document.getElementById('editLastName').value = userLastName;
             document.getElementById('editEmail').value = userEmail;
         });
     });
 </script>
+
 
 
 

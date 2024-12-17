@@ -135,6 +135,17 @@
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Manage Admin Users</span>
             </a>
+            <div class="dropdown dropup">
+                <a href="#" class="dropdown-toggle" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fa-solid fa-tachometer-alt"></i>
+                    <span>CMS</span>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
+                    <li><a class="dropdown-item" href="front_cms.php">Front CMS</a></li>
+                    <li><a class="dropdown-item" href="scope_service.php">Scope Service</a></li>
+                    <li><a class="dropdown-item" href="extras.php">Extras</a></li>
+                </ul>
+            </div>
         </div>
 
     </div>

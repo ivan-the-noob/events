@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-
 if (!isset($_SESSION['email'])) {
     header("Location: login.php");
     exit();
@@ -11,36 +10,31 @@ $email = $_SESSION['email'];
 
 require '../../../../db.php'; 
 
-$stmt = $conn->prepare("SELECT name FROM users WHERE email = ?");
+$stmt = $conn->prepare("SELECT first_name, last_name FROM users WHERE email = ?");
 $stmt->bind_param("s", $email);
 $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows === 1) {
     $user = $result->fetch_assoc();
-    $name = $user['name']; 
+    $name = $user['first_name'] . ' ' . $user['last_name']; 
 } else {
     echo "User not found.";
     exit();
 }
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $rating = $_POST['rating'];        
-    $subject = $_POST['subject'];   
     $feedback = $_POST['feedback']; 
-    $image = $_FILES['image'];       
 
-    $imageName = '';
-    if ($image['error'] == 0) {
-        $imageName = '' . basename($image['name']);
-        move_uploaded_file($image['tmp_name'], $imageName);
-    }
-
-    $stmt = $conn->prepare("INSERT INTO reviews (email, name, rating, subject, feedback, image) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssssss", $email, $name, $rating, $subject, $feedback, $imageName);
+    $stmt = $conn->prepare("INSERT INTO reviews (email, name, rating, feedback) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("ssss", $email, $name, $rating, $feedback);
 
     if ($stmt->execute()) {
-        header("Location: ../../web/user-dashboard.php");
+        $updateStmt = $conn->prepare("UPDATE booking SET review_status = 1 WHERE email = ? AND status = 'Finished'");
+        $updateStmt->bind_param("s", $email);
+        $updateStmt->execute();
+
+        header("Location: ../../web/user-dashboar   d.php");
         exit();
     } else {
         echo "Error: " . $stmt->error;

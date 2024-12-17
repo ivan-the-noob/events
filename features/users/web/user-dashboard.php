@@ -12,7 +12,7 @@
 
     $email = $_SESSION['email']; 
 
-    $sql = "SELECT * FROM booking WHERE email = ? AND status = 'Finished'";
+    $sql = "SELECT * FROM booking WHERE email = ? AND status = 'Finished' AND review_status = '1'";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $email);
     $stmt->execute();
@@ -115,59 +115,9 @@
                         <span class="status-badge <?php echo $booking['status'] === 'Finished' ? 'success' : ''; ?>">
                             <?php echo $booking['status'] === 'Finished' ? 'Done' : htmlspecialchars($booking['status']); ?>
                         </span>
-                        <button class="btn btn-warning text-white" data-bs-toggle="modal" data-bs-target="#ratingModal">
-                            Rate our service
-                        </button>
+                       
                     </div>
-                    <form method="POST" action="../function/php/submit_review.php" enctype="multipart/form-data">
-                        <div class="modal fade" id="ratingModal" tabindex="-1" aria-labelledby="ratingModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="ratingModalLabel">Rate our Service</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="rate d-flex mx-auto justify-content-center">
-                                            <input type="radio" id="star5" name="rating" value="5" />
-                                            <label for="star5" title="text">5 stars</label>
-                                            <input type="radio" id="star4" name="rating" value="4" />
-                                            <label for="star4" title="text">4 stars</label>
-                                            <input type="radio" id="star3" name="rating" value="3" />
-                                            <label for="star3" title="text">3 stars</label>
-                                            <input type="radio" id="star2" name="rating" value="2" />
-                                            <label for="star2" title="text">2 stars</label>
-                                            <input type="radio" id="star1" name="rating" value="1" />
-                                            <label for="star1" title="text">1 star</label>
-                                        </div>
-
-                                        <!-- Subject Input -->
-                                        <div class="mb-3">
-                                            <input type="text" class="form-control" name="subject" id="subject" placeholder="Enter feedback subject" required>
-                                        </div>
-
-                                        <!-- Feedback Textarea Input -->
-                                        <div class="mb-3">
-                                            <label for="feedback" class="form-label">Your Feedback</label>
-                                            <textarea class="form-control" name="feedback" id="feedback" rows="3" placeholder="Write your feedback here..." required></textarea>
-                                        </div>
-
-                                        <!-- Image Input -->
-                                        <div class="mb-3">
-                                            <label for="imageInput" class="form-label">Upload Image</label>
-                                            <input class="form-control" type="file" name="image" id="imageInput" accept="image/*">
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary">Submit</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-
-
+                    
                 </div>
                 <hr>
                 <div class="card-body p-0">

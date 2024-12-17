@@ -1,25 +1,26 @@
 <?php
 
-    require '../../../../db.php';
+require '../../../../db.php';
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $name = $_POST['name'];
-        $email = $_POST['email'];
-        $password = $_POST['password']; 
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $first_name = $_POST['first_name'];
+    $last_name = $_POST['last_name'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
 
-        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+    $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
-        $role = 'admin';
+    $role = 'admin';
 
-        $query = "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("ssss", $name, $email, $hashedPassword, $role); 
+    $query = "INSERT INTO users (first_name, last_name, email, password, role) VALUES (?, ?, ?, ?, ?)";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("sssss", $first_name, $last_name, $email, $hashedPassword, $role);
 
-        if ($stmt->execute()) {
-            header("Location: ../../web/admin-user.php");
-            exit();
-        } else {
-            echo "Error: " . $stmt->error;
-        }
+    if ($stmt->execute()) {
+        header("Location: ../../web/admin-user.php");
+        exit();
+    } else {
+        echo "Error: " . $stmt->error;
     }
+}
 ?>

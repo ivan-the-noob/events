@@ -80,6 +80,7 @@
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>History</span>
             </a>
+           
             <div class="dropdown dropup">
                 <a href="#" class=" dropdown-toggle" id="eventsListDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fa-solid fa-tachometer-alt"></i>
@@ -97,6 +98,17 @@
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Manage Admin Users</span>
             </a>
+            <div class="dropdown dropup">
+                <a href="#" class="dropdown-toggle" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fa-solid fa-tachometer-alt"></i>
+                    <span>CMS</span>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
+                    <li><a class="dropdown-item" href="front_cms.php">Front CMS</a></li>
+                    <li><a class="dropdown-item" href="scope_service.php">Scope Service</a></li>
+                    <li><a class="dropdown-item" href="extras.php">Extras</a></li>
+                </ul>
+            </div>
         </div>
 
     </div>
@@ -140,9 +152,7 @@
                             <th scope="col">Email</th>
                             <th scope="col">Name</th>
                             <th scope="col">Rating</th>
-                            <th scope="col">Subject</th>
                             <th scope="col">Feedback</th>
-                            <th scope="col">Image</th>
                             <th scope="col">Actions</th>
                         </tr>
                     </thead>
@@ -156,15 +166,8 @@
                                 <td><?php echo htmlspecialchars($row['email']); ?></td>
                                 <td><?php echo htmlspecialchars($row['name']); ?></td>
                                 <td><?php echo htmlspecialchars($row['rating']); ?></td>
-                                <td><?php echo htmlspecialchars($row['subject']); ?></td>
                                 <td><?php echo htmlspecialchars($row['feedback']); ?></td>
-                                <td>
-                                    <?php if ($row['image']): ?>
-                                        <img src="../../../assets/review/<?php echo htmlspecialchars($row['image']); ?>" alt="Review Image" width="50">
-                                    <?php else: ?>
-                                        No Image
-                                    <?php endif; ?>
-                                </td>
+                            
                                 <td>
                                     <form method="POST" action="../function/php/review.php" style="display:inline;">
                                         <input type="hidden" name="id" value="<?php echo $row['id']; ?>">

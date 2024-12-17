@@ -12,7 +12,7 @@
 
     $email = $_SESSION['email']; 
 
-    $sql = "SELECT * FROM booking WHERE email = ?";
+    $sql = "SELECT * FROM booking WHERE email = ? AND review_status = 0";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $email);
     $stmt->execute();
@@ -36,6 +36,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/appointment.css">
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <title>Document</title>
 </head>
 <body>
@@ -101,6 +102,7 @@
     <p class="calendar-title text-center mb-0">Book your event today</p>
     <h3 class="text-center calendar-h3">Let's Plan Your Perfect Event</h3>
     <div class="container">
+    <a href="user-dashboard.php" class="btn btn-success mb-4 d-flex" style="width: 80px; margin-left: auto;">History</a>
     <?php if (!empty($bookings)): ?>
     <?php foreach ($bookings as $booking): ?>
         <div class="card p-4 mb-4">
@@ -201,13 +203,62 @@
                             </div>
                         </div>
                     </div>
+                  
+                    <?php if ($booking['status'] === 'Finished' && $booking['review_status'] === 0): ?>
+                        <button class="btn btn-primary text-white fw-bold" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                            Rate our service
+                        </button>
+                    <?php endif; ?>
+
+                    <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="reviewModalLabel">Submit your Review</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="../function/php/submit_review.php" method="POST">
+                                        <div class="mb-3">
+                                            <label for="rating" class="form-label">Rating</label>
+                                            <div class="star-rating">
+                                                <input type="radio" id="star5" name="rating" value="5" required />
+                                                <label for="star5" class="fa fa-star"></label>
+
+                                                <input type="radio" id="star4" name="rating" value="4" />
+                                                <label for="star4" class="fa fa-star"></label>
+
+                                                <input type="radio" id="star3" name="rating" value="3" />
+                                                <label for="star3" class="fa fa-star"></label>
+
+                                                <input type="radio" id="star2" name="rating" value="2" />
+                                                <label for="star2" class="fa fa-star"></label>
+
+                                                <input type="radio" id="star1" name="rating" value="1" />
+                                                <label for="star1" class="fa fa-star"></label>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="feedback" class="form-label">Feedback</label>
+                                            <textarea class="form-control" id="feedback" name="feedback" rows="3"  required maxlength="100" required placeholder="Max 100 letters."></textarea>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Submit Review</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
 
 
                     <span class="status-badge <?php echo strtolower($booking['status']) === 'cancel' ? 'bg-danger text-white' : (strtolower($booking['status']) === 'cancel-pending' ? 'bg-warning text-black text-bold' : ''); ?>">
                         <?php echo strtolower($booking['status']) === 'cancel' ? 'Cancelled' : (strtolower($booking['status']) === 'cancel-pending' ? 'Cancel on Pending' : htmlspecialchars($booking['status'])); ?>
                     </span>
 
-                    
                     <?php if ($booking['status'] === 'Pending'): ?>
                         <?php if ($booking['status_paid'] != 1): ?>
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#payNowModal-<?php echo $booking['id']; ?>">

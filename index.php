@@ -1,6 +1,15 @@
 <?php 
+
+    require 'db.php';
     session_start();
     $email = $_SESSION['email'] ?? '';
+
+    $query = "SELECT * FROM cms";
+    $result = $conn->query($query);
+    $row = $result->fetch_assoc();
+    
+    $query = "SELECT image, title, description FROM scope_services";
+    $result = $conn->query($query);
 ?>
 
 <!DOCTYPE html>
@@ -8,9 +17,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="features/users/css/index.css">
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDmgygVeipMUsrtGeZPZ9UzXRmcVdheIqw&libraries=places"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <title>Document</title>
 </head>
 <body>
@@ -18,11 +28,20 @@
         <section class="display">
             <div class="navbar-container">
                 <div class="col-10 col-md-10">
+                    <div class="d-flex justify-content-between">
+                        <div class="d-flex gap-3">
+                            <img src="assets/logo.png" alt="Logo" style="width: 60px; height: 60px;">
+                            <h5 class="text-white d-flex align-items-center fw-bold mb-0">Amiel's MOM</h5>
+                        </div>
+                        <div class="d-flex align-items-center">
+                        <p class="mb-0 text-white fw-bold w-100 d-flex">Where Memories Begin, and Moments Last Forever</p>
+                        </div>
+                    </div>
+                   
                 <nav class="navbar navbar-expand-lg navbar-light">
+                    
                     <div class="container">
-                        <a class="navbar-brand d-none d-lg-block" href="#">
-                            <img src="assets/logo.png" alt="Logo" width="30" height="30">
-                        </a>
+                        
     
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,12 +57,15 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="#">Home</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#services">Services</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#services">Packages</a>
+                                </li>
                                
                                 <li class="nav-item">
                                     <a class="nav-link" href="#about">About</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#services">Services</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="#contact-us">Contact Us</a>
@@ -64,7 +86,7 @@
                         <?php else: ?>
                             <a href="features/users/web/login.php" class="sign-in">Sign In</a>
                         <?php endif; ?>
-                                <a href="features/users/web/calendar.php" class="book-event">Book Event</a>
+                               
                             </div>            
                             </ul>
                         </div>        
@@ -75,13 +97,28 @@
             <div class="container d-flex justify-content-center">
                 <div class="row d-flex">
                     <div class="col-md-8 display-text">
-                        <h1 class="text-center">Celebrate your events with us at <span class="highlight">"Amiel's MOM Events Place!"</span></h1>
-                        <p class="text-center">From weddings to birthdays, reunions, and baptisms, we can cater to all your special events with elegance and deliciousness</p>
+                        <h1 class="text-center">Celebrate your events with us at <span class="highlight">"<?php echo htmlspecialchars($row['system_name']); ?>!"</span></h1>
+                        <p class="text-center"><?php echo htmlspecialchars($row['front_line']); ?></p>
                         <a href="features/users/web/calendar.php">Book an event now</a>
                     </div>
     
                 </div>
             </div>
+        </section>
+        <section class="welcome">
+           
+            <div class="container p-4">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-md-7">
+                        <h2 class="text-center h-100">Welcome to <?php echo htmlspecialchars($row['system_name']); ?></h2>
+                    </div>
+                    <div class="col-md-7">
+                    <p class="mb-0 text-center mt-2"><?php echo htmlspecialchars($row['welcome_message']); ?>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
         </section>
         <section class="slider-container">
             <p class="slider-heading mb-0">Services we have</p>
@@ -152,182 +189,78 @@
             <h3 class="text-center">Scope of our services</h3>
             <div class="container">
                 <div class="row">
-                    <!-- Card 1 -->
-                    <div class="col-12 col-md-3">
-                        <div class="card">
-                            <img src="assets/scope/wedding.png" class="card-img-top" alt="Wedding Image">
-                            <div class="card-body">
-                                <div class="col-md-4">
-                                    <p class="event">Event</p>
+
+                    <?php if ($result->num_rows > 0): ?>
+                        <?php while ($row = $result->fetch_assoc()): ?>
+                            <!-- Card -->
+                            <div class="col-12 col-md-3">
+                                <div class="card">
+                                    <!-- Display the image -->
+                                    <img src="assets/scope/<?php echo htmlspecialchars($row['image']); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($row['title']); ?>">
+                                    <div class="card-body">
+                                        <div class="col-md-4">
+                                            <p class="event">Event</p>
+                                        </div>
+                                        <!-- Display the title -->
+                                        <h5 class="card-title"><?php echo htmlspecialchars($row['title']); ?></h5>
+                                        <!-- Display the description -->
+                                        <p class="card-text"><?php echo htmlspecialchars($row['description']); ?></p>
+                                    </div>
                                 </div>
-                                <h5 class="card-title">Wedding</h5>
-                                <p class="card-text">Celebrate your big day with a feast as unforgettable as your love story.</p>
                             </div>
+                        <?php endwhile; ?>
+                    <?php else: ?>
+                        <div class="col-12">
+                            <p>No services available.</p>
                         </div>
-                    </div>
-                
-                    <!-- Card 2 -->
-                    <div class="col-12 col-md-3">
-                        <div class="card">
-                            <img src="assets/scope/birthday.png" class="card-img-top" alt="Wedding Image">
-                            <div class="card-body">
-                                <div class="col-md-4">
-                                    <p class="event">Event</p>
-                                </div>
-                                <h5 class="card-title">Birthdays</h5>
-                                <p class="card-text">Celebrate your big day with a feast as unforgettable as your love story.</p>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <!-- Card 3 -->
-                    <div class="col-12 col-md-3">
-                        <div class="card">
-                            <img src="assets/scope/wedding.png" class="card-img-top" alt="Wedding Image">
-                            <div class="card-body">
-                                <div class="col-md-4">
-                                    <p class="event">Event</p>
-                                </div>
-                                <h5 class="card-title">Reunion</h5>
-                                <p class="card-text">Celebrate your big day with a feast as unforgettable as your love story.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Card 4 -->
-                    <div class="col-12 col-md-3">
-                        <div class="card">
-                            <img src="assets/scope/wedding.png" class="card-img-top" alt="Wedding Image">
-                            <div class="card-body">
-                                <div class="col-md-4">
-                                    <p class="event">Event</p>
-                                </div>
-                                <h5 class="card-title">Anniversaries</h5>
-                                <p class="card-text">Celebrate your big day with a feast as unforgettable as your love story.</p>
-                            </div>
-                        </div>
-                    </div>
+                    <?php endif; ?>
                 </div>
-            </div>
-        </section>
-        <section class="review">
-            <p class="review-title text-center mb-0">Customer Review</p>
-            <h3 class="text-center">What our customers say</h3>
-            <div class="slider">
-                <button class="slider-btn-prev">&lt;</button>
+
                 <?php
-                    require 'db.php';
-
-                    $query = "SELECT name, subject, feedback, image FROM reviews WHERE status = 0";
-                    $result = $conn->query($query);
-
-                    if ($result === false) {
-                        echo "Error executing query: " . $conn->error;
-                    } elseif ($result->num_rows == 0) {
-                        echo "No reviews found.";
-                    }
-
-                    $reviews = [];
-                    if ($result->num_rows > 0) {
-                        while ($row = $result->fetch_assoc()) {
-                            $reviews[] = $row;
-                        }
-                    }
+                $conn->close();
                 ?>
-
-
-                <div class="testimonial-slider-container">
-                    <?php
-                    if (!empty($reviews)) {
-                        foreach ($reviews as $review):
-                            $name = htmlspecialchars($review['name']);
-                            $subject = htmlspecialchars($review['subject']);
-                            $feedback = htmlspecialchars($review['feedback']);
-                            $image = htmlspecialchars($review['image']);
-                    ?>
-                    <div class="review-item">
-                        <div class="row reviews-item">
-                            <div class="col-10 col-sm-12 col-md-6 d-flex flex-column">
-                                <h4 class="text-center d-flex justify-content-center">
-                                    <?php echo $subject; ?>
-                                </h4>
-                                <p class="text-center mt-2 pp">
-                                    <?php echo $feedback; ?>
-                                </p>
-                                <p class="text-start mt-2 pp"><strong class="text-start"><?php echo $name; ?></strong><br>Customer</p>
-                            </div>
-
-                            <div class="col-10 col-sm-10 col-md-6">
-                                <div class="slider-image">
-                                    <?php if ($image): ?>
-                                        <img src="assets/review/<?php echo $image; ?>" alt="Testimonial Image" class="img-fluid" style="max-height: 200px;">
-                                    <?php else: ?>
-                                        <img src="default-image.png" alt="Default Image" class="img-fluid"> <!-- Default image if no review image -->
-                                    <?php endif; ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <?php endforeach; } ?>
                 </div>
-
-                <button class="slider-btn-next">&gt;</button>
-            </div>
-            <div class="pagination-dots">
-                <?php for ($i = 0; $i < count($reviews); $i++): ?>
-                    <span class="dot <?php echo $i === 0 ? 'active' : ''; ?>"></span>
-                <?php endfor; ?>
             </div>
         </section>
         <section class="extra-events">
             <p class="extra-title text-center mb-0">Additional Services</p>
             <h3 class="text-center">Event extras</h3>
 
+            <?php 
+            require 'db.php';
+            $query = "SELECT image, title, description FROM extras";
+            $result = $conn->query($query);
+            ?>
+
             <div class="container my-5">
                 <div class="row g-4">
-                  <!-- Photobooth Card -->
-                  <div class="col-md-4">
-                    <div class="card">
-                      <img src="assets/extras/photobooth.png" alt="Photobooth Icon">
-                      <div class="context">
-                        <h5 class="card-title mt-2">Photobooth</h5>
-                        <div>
-                            <span class="badge-event">Event</span>
-                            <span class="badge-additional">Additional</span>
+                    <?php if ($result->num_rows > 0): ?>
+                        <?php while ($row = $result->fetch_assoc()): ?>
+                            <!-- Card -->
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <!-- Display the image -->
+                                    <img src="assets/extras/<?php echo htmlspecialchars($row['image']); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($row['title']); ?>">
+                                    <div class="context">
+                                        <!-- Display the title -->
+                                        <h5 class="card-title mt-2"><?php echo htmlspecialchars($row['title']); ?></h5>
+                                        <div>
+                                            <span class="badge-event">Event</span>
+                                            <span class="badge-additional">Additional</span>
+                                        </div>
+                                        <!-- Display the description -->
+                                        <p class="card-text mt-3"><?php echo htmlspecialchars($row['description']); ?></p>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endwhile; ?>
+                    <?php else: ?>
+                        <div class="col-12">
+                            <p>No services available.</p>
                         </div>
-                        <p class="card-text mt-3">Add an extra dash of fun and flair to your event with our interactive photo booths!</p>
-                        </div>
-                    </div>
-                  </div>
-                  <!-- Entertainers Card -->
-                  <div class="col-md-4">
-                    <div class="card">
-                      <img src="assets/extras/entertainers.png" alt="Entertainers Icon">
-                      <div class="context">
-                        <h5 class="card-title mt-2">Entertainers</h5>
-                        <div>
-                            <span class="badge-event">Event</span>
-                            <span class="badge-additional">Additional</span>
-                        </div>
-                        <p class="card-text mt-3">Bring your event to life with entertainers who know how to captivate an audience.</p>
-                        </div>
-                    </div>
-                  </div>
-                  <!-- Service Staff Card -->
-                  <div class="col-md-4">
-                    <div class="card">
-                      <img src="assets/extras/servicestaff.png" alt="Service Staff Icon">
-                      <div class="context">
-                        <h5 class="card-title mt-2">Service Staff</h5>
-                        <div>
-                            <span class="badge-event">Event</span>
-                            <span class="badge-additional">Additional</span>
-                        </div>
-                        <p class="card-text mt-3">Whether you need servers, bartenders, or coordinators, we have it all.</p>
-                        </div>
-                    </div>
-                  </div>
+                    <?php endif; ?>
                 </div>
-              </div>
+            </div>
         </section>
 
         <section class="choose-us">
@@ -405,6 +338,89 @@
                 
             </div>
             </section>
+            <section class="review">
+
+    <?php
+    require 'db.php';
+
+    $sql = "SELECT reviews.name, users.image_profile, reviews.feedback, reviews.rating, reviews.created_at
+            FROM reviews
+            INNER JOIN users ON reviews.email = users.email
+            WHERE reviews.status = 1";
+    $result = $conn->query($sql);
+
+    $reviews = [];
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $reviews[] = $row;
+        }
+    }
+
+    $conn->close();
+    ?>
+
+    <p class="review-title text-center mb-0">Customer Review</p>
+    <h3 class="text-center">What our customers say</h3>
+    <div id="reviewCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <?php 
+            $chunks = array_chunk($reviews, 3);
+            foreach ($chunks as $index => $chunk): 
+            ?>
+                <div class="carousel-item <?= $index === 0 ? 'active' : ''; ?>">
+                    <div class="container">
+                        <div class="row">
+                            <?php foreach ($chunk as $review): ?>
+                                <div class="col-md-4">
+                                    <div class="card p-3">
+                                        <div class="header mb-2">
+                                            <div class="review-profile d-flex gap-2 align-items-center">
+                                                <img src="assets/profile/<?= htmlspecialchars($review['image_profile']); ?>" 
+                                                    alt="Profile Image" 
+                                                    style="width: 40px; height: 40px; border-radius: 50%;">
+                                                <p class="mb-0 fw-bold"><?= htmlspecialchars($review['name']); ?></p>
+                                            </div>
+                                        </div>
+                                        <div class="review-content">
+                                            <p class="mb-0"><?= htmlspecialchars($review['feedback']); ?></p>
+                                        </div>
+                                        <div class="footer d-flex justify-content-between align-items-center">
+                                            <div class="review-rating mt-2">
+                                                <?php for ($i = 1; $i <= 5; $i++): ?>
+                                                    <?php if ($i <= $review['rating']): ?>
+                                                        <i class="fas fa-star text-warning"></i>
+                                                    <?php else: ?>
+                                                        <i class="far fa-star text-warning"></i>
+                                                    <?php endif; ?>
+                                                <?php endfor; ?>
+                                            </div>
+                                            <div class="date-posted mt-2">
+                                                <p class="mb-0">Reviewed on <?= date("m/d/y", strtotime($review['created_at'])); ?></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+
+        <!-- Carousel Controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#reviewCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#reviewCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+</section>
+
+
 
             <footer>
                 <div class="container">
@@ -430,9 +446,9 @@
                 </div>
             </footer>
           
-
-<script src="features/function/review.js"></script> 
+</body>
 <script src="features/function/map.js"></script>   
 <script src="features/function/offer-slider.js"></script>     
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
 </html>
