@@ -8,13 +8,14 @@ $name = '';
 if ($email) {
     require '../../../db.php';
 
-    $stmt = $conn->prepare("SELECT name FROM users WHERE email = ?");
+    $stmt = $conn->prepare("SELECT first_name, last_name FROM users WHERE email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
 
     $result = $stmt->get_result();
     if ($row = $result->fetch_assoc()) {
-        $name = $row['name'];
+        $name = $row['first_name'];
+        $name = $row['last_name'];
     }
 }
 
@@ -60,21 +61,21 @@ if (!(isset($_SESSION['email']) && $_SESSION['role'] === 'users')) {
                     <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Home</a>
+                                <a class="nav-link" href="../../../index.php">Home</a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="#about">About</a>
+                                <a class="nav-link" href="../../../index.php">About</a>
                             </li>
                            
                             <li class="nav-item">
-                                <a class="nav-link" href="#services">Services</a>
+                                <a class="nav-link" href="../../../index.php#our-services">Services</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#about">Packages</a>
+                                <a class="nav-link" href="#">Packages</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#contact-us">Contact Us</a>
+                                <a class="nav-link" href="../../../index.php">Contact Us</a>
                             </li>
                             <?php if ($email): ?>
                                 <div class="dropdown second-dropdown">

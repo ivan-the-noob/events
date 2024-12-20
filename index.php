@@ -58,10 +58,10 @@
                                     <a class="nav-link" href="#">Home</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#services">Services</a>
+                                    <a class="nav-link" href="#our-services">Services</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#services">Packages</a>
+                                    <a class="nav-link" href="features/users/web/packages.php">Packages</a>
                                 </li>
                                
                                 <li class="nav-item">
@@ -185,7 +185,7 @@
             </div>
         </section>   
         <section class="scope">
-            <p class="scope-title text-center mb-0">Our Event Services</p>
+            <p class="scope-title text-center mb-0" id="our-services">Our Event Services</p>
             <h3 class="text-center">Scope of our services</h3>
             <div class="container">
                 <div class="row">

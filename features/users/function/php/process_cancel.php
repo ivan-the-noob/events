@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $gcash_number = $_POST['gcash_number'];
 
     if (!empty($booking_id) && !empty($cancel_reason) && !empty($gcash_name) && !empty($gcash_number)) {
-        $stmt = $conn->prepare("UPDATE booking SET cancel_reason = ?, gcash_name = ?, gcash_number = ?, status = 'Cancel' WHERE id = ?");
+        $stmt = $conn->prepare("UPDATE booking SET cancel_reason = ?, gcash_name = ?, gcash_number = ?, status = 'Cancel-pending' WHERE id = ?");
         $stmt->bind_param('sssi', $cancel_reason, $gcash_name, $gcash_number, $booking_id);
 
         if ($stmt->execute()) {
