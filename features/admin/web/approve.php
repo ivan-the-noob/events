@@ -178,6 +178,8 @@ $result = $stmt->get_result();
                     <li><a class="dropdown-item" href="front_cms.php">Front CMS</a></li>
                     <li><a class="dropdown-item" href="scope_service.php">Scope Service</a></li>
                     <li><a class="dropdown-item" href="extras.php">Extras</a></li>
+                    <li><a class="dropdown-item" href="features.php">Venue Features</a></li>
+                    <li><a class="dropdown-item" href="terms_condition.php">Terms & Condition</a></li>
                 </ul>
             </div>
         </div>
@@ -300,9 +302,13 @@ $result = $stmt->get_result();
                                 <td>₱<?php echo number_format($row['cost'] - $row['payment_amount'], 2); ?></td>
                                 <td>
                                 <select class="form-select form-select-sm" onchange="updateStatus(this, <?php echo $row['id']; ?>)">
-                                    <option value="Waiting" <?php echo ($row['status'] === 'Waiting' ? 'selected' : ''); ?>>Waiting</option>
+                                    <option value="Waiting" <?php echo ($row['status'] === 'Cancel-booking' ? 'selected' : ''); ?>>Cancel Booking</option>
+                                    <option value="Waiting" <?php echo ($row['status'] === 'Update-payment' ? 'selected' : ''); ?>>Update Payment</option>
+                                    <option value="Waiting" <?php echo ($row['status'] === 'resched' ? 'selected' : ''); ?>>Reschedule Booking</option>
+                                    <option value="Waiting" <?php sdecho ($row['status'] === 'Waiting' ? 'selected' : ''); ?>>Waiting</option>
                                     <option value="On-going" <?php echo ($row['status'] === 'On-going' ? 'selected' : ''); ?>>On-going</option>
                                     <option value="Finished" <?php echo ($row['status'] === 'Finished' ? 'selected' : ''); ?>>Finished</option>
+
                                 </select>
                                 </td>
                             </tr>

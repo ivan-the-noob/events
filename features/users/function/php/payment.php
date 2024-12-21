@@ -41,13 +41,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Update booking with payment details
-    $query = "UPDATE booking SET payment_image = ?, reference_no = ?, payment_amount = ?, status_paid = 1 WHERE id = ?";
+    // Update booking with payment details and set status to 'Pending'
+    $query = "UPDATE booking SET payment_image = ?, reference_no = ?, payment_amount = ?, status_paid = 1, status = 'Pending' WHERE id = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param('ssii', $payment_image, $reference_no, $payment_amount, $id);
 
     if ($stmt->execute()) {
-        $_SESSION['status_message'] = 'Payment details successfully submitted! Status updated to Paid.';
+        $_SESSION['status_message'] = 'Payment details successfully submitted! Status updated to Pending.';
     } else {
         $_SESSION['status_message'] = 'Failed to submit payment details. Error: ' . $stmt->error;
     }
@@ -56,5 +56,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Location: ../../web/appointment.php');
     exit;
 }
-
 ?>

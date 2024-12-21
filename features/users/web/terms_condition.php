@@ -41,7 +41,7 @@ if (!(isset($_SESSION['email']) && $_SESSION['role'] === 'users')) {
 </head>
 
 <body>
-<div class="navbar-container">
+    <div class="navbar-container">
         <div class="col-10 col-md-10">
         <div class="d-flex justify-content-between">
                         <div class="d-flex gap-3">
@@ -113,79 +113,59 @@ if (!(isset($_SESSION['email']) && $_SESSION['role'] === 'users')) {
         </div>
     </div>
 
-
     <section class="body">
-        <p class="calendar-title text-center mb-0">Explore Our Exclusive Packages</p>
-        <h3 class="text-center calendar-h3">Find the Perfect Package for Your Needs</h3>
-        <div class="container package">
-    <div class="row">
-        <?php
-        $eventTypes = [
-            'Kiddie Party',
-            'Adult Party',
-            'Christening',
-            'Christmas Year End Party',
-            'Debut',
-            'Despedida',
-            'Wedding'
-        ];
-
-        function displayEventImages($eventType) {
-            global $conn;
-            $query = "SELECT * FROM event_packages WHERE type_of_event = '$eventType'";
+    <p class="calendar-title text-center mb-0">Explore Our Exclusive Terms & Conditions</p>
+    <h3 class="text-center calendar-h3">View Our Terms & Conditions</h3>
+    <div class="container package">
+        <div class="row">
+            <?php
+            $query = "SELECT * FROM terms_condition";
             $result = $conn->query($query);
 
             if ($result && $result->num_rows > 0) {
-                echo '<h3>' . htmlspecialchars($eventType) . '</h3>';
                 while ($row = $result->fetch_assoc()) {
-                    $imagePath = "../../../assets/packages/" . htmlspecialchars($row['package_image'], ENT_QUOTES, 'UTF-8');
-                    echo '<div class="col-md-3 mb-4">
+                    $imagePath = "../../../assets/terms_condition/" . htmlspecialchars($row['image'], ENT_QUOTES, 'UTF-8');
+                    echo '<div class="col-md-4 mb-4">
                             <div class="card">
-                                <img src="' . $imagePath . '" alt="' . htmlspecialchars($eventType) . ' Image" class="card-img-top" data-bs-toggle="modal" data-bs-target="#imageModal" data-bs-imgsrc="' . $imagePath . '">
+                                <img src="' . $imagePath . '" alt="Terms Image" class="card-img-top" data-bs-toggle="modal" data-bs-target="#imageModal" data-bs-imgsrc="' . $imagePath . '">
                             </div>
                           </div>';
                 }
             } else {
-                echo '<div class="col-md-3 mb-4"><p>No ' . htmlspecialchars($eventType) . ' packages found.</p></div>';
+                echo '<div class="col-md-3 mb-4"><p>No terms images found.</p></div>';
             }
-        }
-
-        foreach ($eventTypes as $eventType) {
-            displayEventImages($eventType);
-        }
-        ?>
+            ?>
+        </div>
     </div>
-</div>
 
-
-<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body text-center">
-                <img src="" id="modalImage" alt="Zoomed Image" class="img-fluid">
+    <!-- Modal for Image Zoom -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="" id="modalImage" alt="Zoomed Image" class="img-fluid">
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<script>
+    <script>
+        // Modal Image script
+        var modalImage = document.getElementById('modalImage');
+        var imgElements = document.querySelectorAll('[data-bs-toggle="modal"]');
 
-    var modalImage = document.getElementById('modalImage');
-    var imgElements = document.querySelectorAll('[data-bs-toggle="modal"]');
-
-    imgElements.forEach(function(img) {
-        img.addEventListener('click', function() {
-            var imgSrc = img.getAttribute('data-bs-imgsrc');
-            modalImage.src = imgSrc; 
+        imgElements.forEach(function(img) {
+            img.addEventListener('click', function() {
+                var imgSrc = img.getAttribute('data-bs-imgsrc');
+                modalImage.src = imgSrc; 
+            });
         });
-    });
-</script>
+    </script>
+</section>
 
-</div>
-    </section>
     
 
 

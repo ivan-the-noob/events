@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     echo 'Event Options: ' . $event_options;
 
-    $status = 'Pending';
+    $status = 'To-pay';
 
     // Prepare the SQL query
     $sql = "INSERT INTO booking (full_name, celebrants_name, email, phone_number, events_date, guest_count, event_duration, event_starttime, event_endtime, event_type, event_package, event_options, cost, status, beef_dish, pork_dish, chicken_dish, pasta_dish, dessert_dish, fish_dish, drinks_dish) 

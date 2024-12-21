@@ -40,69 +40,83 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="navbar-container">
+<div class="navbar-container">
         <div class="col-10 col-md-10">
-        <nav class="navbar navbar-expand-lg navbar-light">
-            <div class="container">
-                <a class="navbar-brand d-none d-lg-block" href="#">
-                    <img src="../../../assets/logo.png" alt="Logo" width="30" height="30">
-                </a>
-
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                        style="stroke: #000; fill: none;">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16m-7 6h7"></path>
-                    </svg>
-                </button>
-
-                <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-                    <ul class="navbar-nav"> 
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Home</a>
-                        </li>
-                       
-                        <li class="nav-item">
-                            <a class="nav-link" href="#about">About</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#services">Services</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#contact-us">Contact Us</a>
-                        </li>
-                        <?php if ($email): ?>
-                            <div class="dropdown second-dropdown">
+        <div class="d-flex justify-content-between">
+                        <div class="d-flex gap-3">
+                            <img src="../../../assets/logo.png" alt="Logo" style="width: 60px; height: 60px;">
+                            <h5 class="text-black d-flex align-items-center fw-bold mb-0">Amiel's MOM</h5>
+                        </div>
+                        <div class="d-flex align-items-center">
+                        <p class="mb-0 text-black fw-bold w-100 d-flex">Where Memories Begin, and Moments Last Forever</p>
+                        </div>
+                    </div>
+                <nav class="navbar navbar-expand-lg navbar-light">
+                    
+                    <div class="container">
+                        
+    
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                style="stroke: #000; fill: none;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 6h16M4 12h16m-7 6h7"></path>
+                            </svg>
+                        </button>
+    
+                        <div class="collapse navbar-collapse justify-content-center align-items-center" id="navbarNav">
+                            <ul class="navbar-nav d-flex align-items-center "> 
+                                <li class="nav-item">
+                                    <a class="nav-link" href="../../../index.php">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="../../../index.php#our-services">Services</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="packages.php">Packages</a>
+                                </li>
+                               
+                                <li class="nav-item">
+                                    <a class="nav-link" href="about_us.php">About</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="contact_us.php">Contact Us</a>
+                                </li>
+                                <div class="d-flex gap-2 navbar-btn">
+                              
+                                <?php if ($email): ?>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="history.php">Booking History</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="terms_condition.php">Terms & Conditions</a>
+                                </li>
+                                <div class="dropdown second-dropdown d-flex align-items-center">
                                 <button class="btn" type="button" id="dropdownMenuButton2"
                                         data-bs-toggle="dropdown" aria-expanded="false" style="padding: 0; margin-top: 2px;">
                                     <img src="../../../assets/profile/user.png" alt="Profile Image" class="profile" style="width: 30px; height: 30px; margin-left: 5px; margin-right: 5px;">
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                                    <li><a class="dropdown-item" href="user-dashboard.php">Profile</a></li>
+                                    <li><a class="dropdown-item" href="dashboard.php">Profile</a></li>
                                     <li><a class="dropdown-item" href="../function/authentication/logout.php">Logout</a></li>
                                 </ul>
                             </div>
-
-
-                        <?php else: ?>
-                            <a href="features/users/web/login.php" class="sign-in">Sign In</a>
                         <?php endif; ?>
-            
-                    </ul>
-               
-                </div>
-             
-            </div>
-        </nav>       
+                               
+                            </div>            
+                            </ul>
+                        </div>        
+                    </div>
+                </nav>   
+        </div>
     </div>
-    </div>
+
 
     <section class="body">
     <p class="calendar-title text-center mb-0">Book your event today</p>
     <h3 class="text-center calendar-h3">Let's Plan Your Perfect Event</h3>
     <div class="container">
-    <a href="user-dashboard.php" class="btn btn-success mb-4 d-flex" style="width: 80px; margin-left: auto;">History</a>
     <?php if (!empty($bookings)): ?>
     <?php foreach ($bookings as $booking): ?>
         <div class="card p-4 mb-4">
@@ -259,25 +273,55 @@
                         <?php echo strtolower($booking['status']) === 'cancel' ? 'Cancelled' : (strtolower($booking['status']) === 'cancel-pending' ? 'Cancel on Pending' : htmlspecialchars($booking['status'])); ?>
                     </span>
 
-                    <?php if ($booking['status'] === 'Pending'): ?>
+                    <?php if ($booking['status'] === 'To-pay'): ?>
                         <?php if ($booking['status_paid'] != 1): ?>
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#payNowModal-<?php echo $booking['id']; ?>">
                                 Pay Now
                             </button>
-                        <?php else: ?>
-                            <span class="btn btn-success">Paid</span>
                         <?php endif; ?>
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelModal-<?php echo $booking['id']; ?>">
-                            Cancel
-                        </button>
+                       
                     <?php endif; ?>
+                    <?php if ($booking['status'] === 'Pending'): ?>
+                        <?php
+                        $cost = $booking['cost']; 
+                        $min_payment = $cost * 0.5;
+                        $payment_amount = $booking['payment_amount']; 
+                        ?>
+                         <?php if ($payment_amount < $min_payment): ?>
+                            <span class="btn btn-success">Paid half</span>
+                           
+                        <?php elseif ($payment_amount == $cost): ?>
+                            <span class="btn btn-success">Paid in full</span>
+                        <?php else: ?>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#payInFullModal-<?php echo $booking['id']; ?>">
+                                Pay in full
+                            </button>
+                        <?php endif; ?>
+                         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelModal-<?php echo $booking['id']; ?>">
+                                Cancel
+                            </button>
+                       
+                    <?php endif; ?>
+
                 </div>
             </div>
             <hr>
             <div class="card-body p-0">
                 <div class="d-flex justify-content-between">
-                    <p class="mb-1">Event Date:</p>
-                    <p><?php echo (new DateTime($booking['events_date']))->format('F j, Y'); ?></p>
+                        <p class="mb-1"><span class="info-label">Event Date:</span></p>
+                        <p><?php echo (new DateTime($booking['events_date']))->format('F j, Y'); ?></p>
+                    </div>
+                <div class="d-flex justify-content-between">
+                    <p class="mb-1"><span class="info-label">Event's Time</span></p>
+                    <p><?php echo htmlspecialchars($booking['event_starttime']); ?> AM to <?php echo htmlspecialchars($booking['event_endtime']); ?>PM</p>
+                </div>
+                <div class="d-flex justify-content-between">       
+                    <p class="mb-1"><span class="info-label">Celebrant's Name</span></p>
+                    <p><?php echo htmlspecialchars($booking['celebrants_name']); ?></p>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <p class="mb-1"><span class="info-label">Phone Number</span></p>
+                    <p><?php echo htmlspecialchars($booking['phone_number']); ?></p>
                 </div>
                 <div class="d-flex justify-content-between">
                     <p class="mb-1"><span class="info-label">Package:</span></p>
@@ -332,6 +376,42 @@
 <?php endif; ?>
 
 
+</div>
+
+<div class="modal fade" id="payInFullModal-<?php echo $booking['id']; ?>" tabindex="-1" aria-labelledby="payInFullModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="payInFullModalLabel">Pay in Full</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="../function/php/pay_in_full.php" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="id" value="<?php echo $booking['id']; ?>">
+                    <div class="mb-3">
+                        <label class="form-label">Amount to Pay:</label>
+                        <?php 
+                        $remaining_amount = $booking['cost'] - $booking['payment_amount']; 
+                        ?>
+                        <p><strong>PHP <?php echo number_format($remaining_amount, 2); ?></strong></p>
+                        <input type="hidden" name="payment_amount" value="<?php echo $remaining_amount; ?>">
+                    </div>
+                    <div class="mb-3">
+                        <label for="payment_image" class="form-label">Upload Payment Image:</label>
+                        <input type="file" class="form-control" id="payment_image" name="payment_image" accept="image/*" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="reference_no" class="form-label">Reference No:</label>
+                        <input type="text" class="form-control" id="reference_no" name="reference_no" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit Payment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 </section>
 

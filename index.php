@@ -73,7 +73,13 @@
                                 <div class="d-flex gap-2 navbar-btn">
                               
                                 <?php if ($email): ?>
-                            <div class="dropdown second-dropdown d-flex align-items-center">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="features/users/web/history.php">Booking History</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="features/users/web/terms_condition.php">Terms & Conditions</a>
+                                </li>
+                                <div class="dropdown second-dropdown d-flex align-items-center">
                                 <button class="btn" type="button" id="dropdownMenuButton2"
                                         data-bs-toggle="dropdown" aria-expanded="false" style="padding: 0; margin-top: 2px;">
                                     <img src="assets/profile/user.png" alt="Profile Image" class="profile" style="width: 30px; height: 30px; margin-left: 5px; margin-right: 5px;">
@@ -122,7 +128,7 @@
         </section>
         <section class="slider-container">
             <p class="slider-heading mb-0">Services we have</p>
-            <h1 class="slider-subheading">What We Offer</h1>
+            <h1 class="slider-subheading">Moments Captured at Amiel's MOM Event's Place</h1>
             <div class="slider">
               <button class="slider-btn prev">&lt;</button> 
               <div class="slider-wrapper">
@@ -273,25 +279,34 @@
                             </div>
                             <div class="col-md-7">
                                 <p class="chooseus-title text-center mb-0">The Difference We Bring</p>
-                                <h3 class="text-center">Why choose us</h3>
-                                <p class="text-center choose-p">When it comes to creating memorable dining expectations, our clients choose us for our professionalism, attention to detail, and unparalleled taste.</p>
-                                <div class="check-p">
-                                    <div class="d-flex">
-                                        <span class="check"><img src="assets/check.png" alt="" srcset=""></span><p class="check-p">Customizable menus that is tailored to your tastes and dietary needs.</p>
-                                    </div>
-                                    <div class="d-flex">
-                                        <span class="check"><img src="assets/check.png" alt="" srcset=""></span><p class="check-p">professional experienced staff, chefs, waitstaff, and event coordinators.</p>
-                                    </div>
-                                    <div class="d-flex">
-                                        <span class="check"><img src="assets/check.png" alt="" srcset=""></span><p class="check-p">Exceptional Quality, Only the freshest ingredients and exquisite presentation.</p>
-                                    </div>
-                                    <div class="d-flex">
-                                        <span class="check"><img src="assets/check.png" alt="" srcset=""></span><p class="check-p">Full-Service Experience, From setup to cleanup, we take care of it all.</p>
-                                    </div>
-                                </div>
+                                <h3 class="text-center">Venue Features and Amenities</h3>
+                                <p class="text-center choose-p">At Amiel's MOM Events Place, we take pride in offering a venue that blends elegance, comfort, 
+                                and functionality to ensure your event is unforgettable. Explore our outstanding features and 
+                                amenities designed to cater to all your needs: </p>
+                                <?php
+                                    require 'db.php';
+                                    $query = "SELECT venue FROM features";
+                                    $result = $conn->query($query);
+
+                                    if ($result->num_rows > 0) {
+                                        while ($row = $result->fetch_assoc()) {
+                                            $venue = $row['venue'];
+                                            ?>
+                                            <div class="check-p">
+                                                <div class="d-flex">
+                                                    <span class="check"><img src="assets/check.png" alt=""></span>
+                                                    <p class="check-p"><?php echo htmlspecialchars($venue); ?></p>
+                                                </div>
+                                            </div>
+                                            <?php
+                                        }
+                                    } else {
+                                        echo "No features found.";
+                                    }
+                                    ?>
                                 <div class="chooseus-button mt-3 d-flex gap-3">
-                                    <button class="book-event">Book event now</button>
-                                    <button class="discover">Discover Packages</button>
+                                    <a href="features/users/web/calendar.php" class="book-event">Book event now</a>
+                                    <a href="features/users/web/packages.php" class="discover text-decoration-none">Discover Packages</a>
                                 </div>
                             </div>
                         </div>
@@ -433,14 +448,32 @@
                     </div>
                     <div class="footer-back">
                         <div class="container">
-                            <ul>
-                                <li><a href="#">Home</a></li>
-                                <li><a href="#">About</a></li>
-                                <li><a href="#">Services</a></li>
-                                <li><a href="#">Contact Us</a></li>
-                            </ul>
+                            <div class="row">
+                                <div class="col-md-4 mt-4 d-flex flex-column align-items-center">
+                                    <div class="div">
+                                    <h5>Quick Links</h5>
+                                    <ul>
+                                        <li><a href="#">Home</a></li>
+                                        <li><a href="#our-services">Services</a></li>
+                                        <li><a href="features/users/web/package.php">Packages</a></li>
+                                        <li><a href="#">About</a></li>
+                                        <li><a href="#">Contact Us</a></li>
+                                    </ul>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mt-4 d-flex flex-column align-items-cente">
+                                    <h5>Contact Information</h5>
+                                    <p class="mb-0">Email: amiels_mom@yahoo.com</p>
+                                    <p class="mb-0">Phone: 09057965873</p>
+                                    <p class="mb-0">Address: Epza-Bacao Road, General Trias Cavite </p>
+                                </div>
+                                <div class="col-md-4 text-start mt-4  align-items-cente">
+                                    <h5>Follow Us</h5>
+                                    <a href="https://www.facebook.com/profile.php?id=100064087956020" class="me-3"><i class="fab fa-facebook"></i></a>
+                                </div>
+                            </div>
                             <hr>
-                            <p class="text-center mt-4">&copy;2024 All Rights Reserved @ Amiel's MOM</p>
+                            <p class="text-center mt-4">&copy; 2024 All Rights Reserved @ Amiel's MOM</p>
                         </div>
                     </div>
                 </div>

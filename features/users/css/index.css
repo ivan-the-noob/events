@@ -743,6 +743,9 @@ footer .footer-title {
   text-align: center;
 }
 
+footer li:hover{
+  text-decoration: underline;
+}
 
 
 footer h2 {
@@ -822,17 +825,15 @@ footer .book{
 }
 
 .footer-back{
-  background-color: #000;
+  background-color: var(--blue-color);
   color: #fff;
   height: 200px;
-  display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
 .footer-back ul{
   list-style-type: none;
-  display: flex;
   gap: 5%;
   justify-content: center;
   margin-bottom: 50px;

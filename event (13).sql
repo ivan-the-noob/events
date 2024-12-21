@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 17, 2024 at 03:44 AM
+-- Generation Time: Dec 21, 2024 at 09:11 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `booking` (
   `id` int(11) NOT NULL,
-  `status` enum('Pending','Waiting','On-going','Finished','Cancel-pending','Cancel') NOT NULL,
+  `status` enum('To-pay','Pending','Waiting','On-going','Finished','Cancel-pending','Cancel') NOT NULL,
   `full_name` varchar(255) NOT NULL,
   `celebrants_name` varchar(255) DEFAULT NULL,
   `email` varchar(255) NOT NULL,
@@ -58,17 +58,18 @@ CREATE TABLE `booking` (
   `created_at` datetime DEFAULT current_timestamp(),
   `gcash_name` varchar(255) NOT NULL,
   `gcash_number` varchar(20) NOT NULL,
-  `review_status` int(11) DEFAULT 0
+  `review_status` int(11) DEFAULT 0,
+  `second_payment_amount` varchar(255) DEFAULT NULL,
+  `second_reference_no` int(11) DEFAULT NULL,
+  `second_payment_image` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `booking`
 --
 
-INSERT INTO `booking` (`id`, `status`, `full_name`, `celebrants_name`, `email`, `phone_number`, `events_date`, `guest_count`, `event_duration`, `event_starttime`, `event_endtime`, `event_type`, `event_package`, `event_options`, `cost`, `cancel_reason`, `payment_image`, `reference_no`, `payment_amount`, `status_paid`, `beef_dish`, `pork_dish`, `chicken_dish`, `pasta_dish`, `dessert_dish`, `fish_dish`, `drinks_dish`, `created_at`, `gcash_name`, `gcash_number`, `review_status`) VALUES
-(97, 'Finished', 'Ivans', 'Ivan', 'ejivancablanida@gmail.com', '09957939703', '2024-12-17', 50, 5, 14, 7, 'Despedida', 'Package A (Despedida (50 pax)', 'None', 20000.00, NULL, 'gcash.jpg', '312312412', 10000.00, 1, 'Beef Caldereta', 'Pork Menudo', 'Sweet & Sour Chicken', 'Pancit', 'Mango Tapioca', 'Fish Fillet', 'Red Tea', '2024-12-15 22:15:36', '', '', 1),
-(98, 'Finished', 'Ivane', 'Ivan', 'ejivancablanida@gmail.com', '09957939703', '2024-12-17', 50, 5, 14, 7, 'Despedida', 'Package A (Despedida (50 pax)', 'None', 20000.00, NULL, 'gcash.jpg', '312312412', 10000.00, 1, 'Beef Caldereta', 'Pork Menudo', 'Sweet & Sour Chicken', 'Pancit', 'Mango Tapioca', 'Fish Fillet', 'Red Tea', '2024-12-16 22:15:36', '', '', 1),
-(99, 'Cancel', 'Ej Ivan Ablanida', 'Ivan Ablanida', 'ejivancablanida@gmail.com', '09957939703', '2024-12-26', 50, 5, 12, 5, 'Christmas Year End party', 'Package A (Christmas / Year end party (50 pax)', 'None', 20000.00, 'I just want to cancel', 'Star 1.png', '31231231', 10000.00, 1, 'Beef Caldereta', 'Pork Menudo', 'Sweet & Sour Chicken', 'Pancit', 'Fruit Salad', 'Fish Fillet', 'Red Tea', '2024-12-15 23:51:25', 'Ernesto A.', '09957939703', 0);
+INSERT INTO `booking` (`id`, `status`, `full_name`, `celebrants_name`, `email`, `phone_number`, `events_date`, `guest_count`, `event_duration`, `event_starttime`, `event_endtime`, `event_type`, `event_package`, `event_options`, `cost`, `cancel_reason`, `payment_image`, `reference_no`, `payment_amount`, `status_paid`, `beef_dish`, `pork_dish`, `chicken_dish`, `pasta_dish`, `dessert_dish`, `fish_dish`, `drinks_dish`, `created_at`, `gcash_name`, `gcash_number`, `review_status`, `second_payment_amount`, `second_reference_no`, `second_payment_image`) VALUES
+(105, 'Waiting', 'Ej Ivan Ablanida', 'Ivan', 'ejthecoder@gmail.com', '9957939', '2024-12-22', 50, 5, 11, 4, 'Christening', 'Package A (Christening (50 pax)', 'None', 20000.00, NULL, 'gcash.jpg', '2312321', 20000.00, 1, 'Beef Caldereta', 'Pork Menudo', 'Sweet & Sour Chicken', 'Pancit', 'Mango Tapioca', 'Fish Fillet', 'Cucumber', '2024-12-20 22:23:29', '', '', 0, '10000', 12321312, '1734768113_gcash.jpg');
 
 -- --------------------------------------------------------
 
@@ -254,6 +255,29 @@ INSERT INTO `extras` (`id`, `image`, `title`, `description`, `created_at`) VALUE
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `features`
+--
+
+CREATE TABLE `features` (
+  `id` int(11) NOT NULL,
+  `venue` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `features`
+--
+
+INSERT INTO `features` (`id`, `venue`) VALUES
+(2, 'We offer entertainment solutions to keep your guests delighted throughout your event.'),
+(3, 'Enjoy delicious, professionally prepared meals tailored to your event’s theme and preferences.'),
+(4, 'Hassle-free and secure parking for all your guests, ensuring convenience and accessibility.'),
+(5, '\r\nA charming outdoor space perfect for intimate gatherings, photo sessions, or pre-event cocktails.'),
+(6, 'A comfortable and exclusive space for celebrants or event hosts to prepare and relax before the festivities.'),
+(7, 'High-quality sound equipment to enhance your event, whether for music, speeches, or entertainment.');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `pax`
 --
 
@@ -393,6 +417,29 @@ INSERT INTO `scope_services` (`id`, `image`, `title`, `description`, `created_at
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `terms_condition`
+--
+
+CREATE TABLE `terms_condition` (
+  `id` int(11) NOT NULL,
+  `image` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `terms_condition`
+--
+
+INSERT INTO `terms_condition` (`id`, `image`, `created_at`) VALUES
+(1, 'terms1.png', '2024-12-20 19:52:37'),
+(2, 'terms2.png', '2024-12-20 19:56:49'),
+(3, 'terms3.png', '2024-12-20 19:56:52'),
+(4, 'terms4.png', '2024-12-20 19:56:56'),
+(5, 'terms5.png', '2024-12-20 19:56:59');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `unavailable_days`
 --
 
@@ -489,6 +536,12 @@ ALTER TABLE `extras`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `features`
+--
+ALTER TABLE `features`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `pax`
 --
 ALTER TABLE `pax`
@@ -514,6 +567,12 @@ ALTER TABLE `scope_services`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `terms_condition`
+--
+ALTER TABLE `terms_condition`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `unavailable_days`
 --
 ALTER TABLE `unavailable_days`
@@ -534,7 +593,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=109;
 
 --
 -- AUTO_INCREMENT for table `cms`
@@ -573,6 +632,12 @@ ALTER TABLE `extras`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `features`
+--
+ALTER TABLE `features`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
 -- AUTO_INCREMENT for table `pax`
 --
 ALTER TABLE `pax`
@@ -595,6 +660,12 @@ ALTER TABLE `reviews`
 --
 ALTER TABLE `scope_services`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `terms_condition`
+--
+ALTER TABLE `terms_condition`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `unavailable_days`

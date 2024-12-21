@@ -114,6 +114,8 @@ if ($result && $row = $result->fetch_assoc()) {
                     <li><a class="dropdown-item" href="front_cms.php">Front CMS</a></li>
                     <li><a class="dropdown-item" href="scope_service.php">Scope Service</a></li>
                     <li><a class="dropdown-item" href="extras.php">Extras</a></li>
+                    <li><a class="dropdown-item" href="features.php">Venue Features</a></li>
+                    <li><a class="dropdown-item" href="terms_condition.php">Terms & Condition</a></li>
                 </ul>
             </div>
         </div>

@@ -6,7 +6,7 @@ if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'admin') {
 }
 require '../../../db.php';
 
-$query = "SELECT * FROM extras";
+$query = "SELECT * FROM features";
 $result = $conn->query($query);
 
 
@@ -18,7 +18,7 @@ $result = $conn->query($query);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Extras | Admin</title>
+    <title>Venue Features and Amneties | Admin</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -136,10 +136,10 @@ $result = $conn->query($query);
 
         <div class="container mt-4">
             <div class="d-flex justify-content-between mb-2">
-                <h3>Extras</h3>
+                <h3>Venue Features and Amneties</h3>
                 <div class="d-flex gap-2">
-                <button class="btn btn-primary data-bs-toggle="modal" data-bs-target="#addModal">
-                    Add Extra
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">
+                    Add Venue Features
                 </button>
 
                     <input type="text" class="search" placeholder="Search.." id="searchInput">
@@ -150,9 +150,7 @@ $result = $conn->query($query);
                 <thead>
                     <tr>
                         <th scope="col">ID</th>
-                        <th scope="col">Image</th>
-                        <th scope="col">Title</th>
-                        <th scope="col">Description</th>
+                        <th scope="col">Venue Features and Amneties</th>
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
@@ -161,20 +159,13 @@ $result = $conn->query($query);
                     <?php while ($row = $result->fetch_assoc()): ?>
                         <tr>
                             <td><?php echo $row['id']; ?></td>
-                            <td>
-                                <img src="../../../assets/extras/<?php echo htmlspecialchars($row['image']); ?>" 
-                                    alt="<?php echo htmlspecialchars($row['title']); ?>" 
-                                    style="width: 50px; height: 50px;">
-                            </td>
-                            <td><?php echo htmlspecialchars($row['title']); ?></td>
-                            <td><?php echo htmlspecialchars($row['description']); ?></td>
+                          
+                            <td><?php echo htmlspecialchars($row['venue']); ?></td>
                             <td>
                                 <!-- Edit Button -->
                                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal" 
                                         data-id="<?php echo $row['id']; ?>" 
-                                        data-title="<?php echo htmlspecialchars($row['title']); ?>" 
-                                        data-description="<?php echo htmlspecialchars($row['description']); ?>"
-                                        data-image="<?php echo htmlspecialchars($row['image']); ?>">
+                                        data-venue="<?php echo htmlspecialchars($row['venue']); ?>">
                                     Edit
                                 </button>
 
@@ -193,25 +184,17 @@ $result = $conn->query($query);
             </table>
 
             <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <form action="../function/php/add_extras.php" method="POST" enctype="multipart/form-data">
+                <div class="modal-dialog modal-md">
+                    <form action="../function/php/add_venue.php" method="POST">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="addModalLabel">Add Service</h5>
+                                <h5 class="modal-title" id="addModalLabel">Add Venue</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 <div class="mb-3">
-                                    <label for="image" class="form-label">Image</label>
-                                    <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="title" class="form-label">Title</label>
-                                    <input type="text" class="form-control" id="title" name="title" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="description" class="form-label">Description</label>
-                                    <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                                    <label for="venue" class="form-label">Venue</label>
+                                    <textarea class="form-control" id="venue" name="venue" rows="3" required></textarea>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -224,27 +207,18 @@ $result = $conn->query($query);
             </div>
 
             <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <form action="../function/php/update_extras.php" method="POST" enctype="multipart/form-data">
+                <div class="modal-dialog modal-dialog-md">
+                    <form action="../function/php/update_venue.php" method="POST">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="editModalLabel">Edit Service</h5>
+                                <h5 class="modal-title" id="editModalLabel">Edit Venue</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 <input type="hidden" id="edit_id" name="id">
                                 <div class="mb-3">
-                                    <label for="edit_title" class="form-label">Title</label>
-                                    <input type="text" class="form-control" id="edit_title" name="title" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="edit_description" class="form-label">Description</label>
-                                    <textarea class="form-control" id="edit_description" name="description" rows="3" required></textarea>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="edit_image" class="form-label">Image</label>
-                                    <input type="file" class="form-control" id="edit_image" name="image" accept="image/*">
-                                    <img id="edit_image_display" src="" alt="Current Image" class="mt-2" style="max-width: 100%; height: auto;">
+                                    <label for="edit_venue" class="form-label">Venue</label>
+                                    <textarea class="form-control" id="edit_venue" name="venue" rows="3" required></textarea>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -255,6 +229,7 @@ $result = $conn->query($query);
                     </form>
                 </div>
             </div>
+
 
             <!-- Delete Modal -->
             <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -274,34 +249,24 @@ $result = $conn->query($query);
                     </div>
                 </div>
             </div>
-
-
-
-
-
-
-             
+      
 
                 <script>
                  // Delete Function
                  document.querySelectorAll('[data-bs-toggle="modal"][data-bs-target="#editModal"]').forEach(button => {
                     button.addEventListener('click', function () {
                         const id = this.getAttribute('data-id');
-                        const title = this.getAttribute('data-title');
-                        const description = this.getAttribute('data-description');
-                        const image = this.getAttribute('data-image');
+                        const venue = this.getAttribute('data-venue');
 
                         document.querySelector('#editModal #edit_id').value = id;
-                        document.querySelector('#editModal #edit_title').value = title;
-                        document.querySelector('#editModal #edit_description').value = description;
-                        document.querySelector('#editModal #edit_image_display').src = "../../../assets/extras/" + image; 
+                        document.querySelector('#editModal #edit_venue').value = venue;
                     });
                 });
 
                 // Delete function
                 function deleteService(id) {
                     const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
-                    document.getElementById('delete_confirm_btn').href = `../function/php/delete_extra.php?id=${id}`;
+                    document.getElementById('delete_confirm_btn').href = `../function/php/delete_venue.php?id=${id}`;
                     deleteModal.show();
                 }
 
