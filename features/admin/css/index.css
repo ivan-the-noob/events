@@ -325,6 +325,11 @@ th,tr{
     color:#382D31;
   }
   
+  .ongoing-card input[type="text"], 
+  .ongoing-card input[type="number"] {
+      background-color: #fff !important;
+  }
+  
 /*Table Booking Section End*/
 
 /*History Section*/

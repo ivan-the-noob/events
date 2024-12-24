@@ -268,9 +268,8 @@
                     </div>
 
 
-
                     <span class="status-badge <?php echo strtolower($booking['status']) === 'cancel' ? 'bg-danger text-white' : (strtolower($booking['status']) === 'cancel-pending' ? 'bg-warning text-black text-bold' : ''); ?>">
-                        <?php echo strtolower($booking['status']) === 'cancel' ? 'Cancelled' : (strtolower($booking['status']) === 'cancel-pending' ? 'Cancel on Pending' : htmlspecialchars($booking['status'])); ?>
+                        <?php echo strtolower($booking['status']) === 'cancel' ? 'Cancelled' : (strtolower($booking['status']) === 'cancel-pending' ? 'Refund on Pending' : htmlspecialchars($booking['status'])); ?>
                     </span>
 
                     <?php if ($booking['status'] === 'To-pay'): ?>
@@ -334,6 +333,10 @@
                 <div class="d-flex justify-content-between">
                     <p class="mb-1"><span class="info-label">Type of Event:</span></p>
                     <p><?php echo htmlspecialchars($booking['event_type']); ?></p>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <p class="mb-1"><span class="info-label">Theme of Event</span></p>
+                    <p><?php echo htmlspecialchars($booking['theme']); ?></p>
                 </div>
                 <div class="d-flex justify-content-between">
                     <p class="mb-1"><span class="info-label">Total Payment</span></p>

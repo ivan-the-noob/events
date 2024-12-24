@@ -1,76 +1,106 @@
 <?php
-    session_start();
-    if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'admin') {
-        header('Location: ../../users/web/login.php');
-        exit();
-    }
-    require '../../../db.php';
-    
-    $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-    $limit = 5;
-    $offset = ($page - 1) * $limit;
-    
-    // Retrieve search term, month, and year from GET parameters
-    $search = isset($_GET['search']) ? $_GET['search'] : '';
-    $month = isset($_GET['month']) ? intval($_GET['month']) : null;
-    $year = isset($_GET['year']) ? intval($_GET['year']) : null;
-    
-    $search_term = "%" . $search . "%";
-    
-    $total_query = "SELECT COUNT(*) as total FROM booking WHERE status = 'Finished'";
-    
-    if (!empty($search)) {
-        $total_query .= " AND (full_name LIKE ? OR celebrants_name LIKE ? OR email LIKE ?)";
-    }
-    
-    if ($month && $year) {
-        $total_query .= " AND MONTH(events_date) = $month AND YEAR(events_date) = $year";
-    }
-    
-    $stmt = $conn->prepare($total_query);
-    if (!empty($search)) {
-        $stmt->bind_param("sss", $search_term, $search_term, $search_term);
-    } else {
-        $stmt->execute();
-    }
-    $total_result = $stmt->get_result();
-    $total_row = $total_result->fetch_assoc();
-    $total_records = $total_row['total'];
-    $total_pages = ceil($total_records / $limit);
-    
-    $query = "SELECT * FROM booking WHERE status = 'Finished'";
-    
-    if (!empty($search)) {
-        $query .= " AND (full_name LIKE ? OR celebrants_name LIKE ? OR email LIKE ?)";
-    }
-    
-    if ($month && $year) {
-        $query .= " AND MONTH(events_date) = $month AND YEAR(events_date) = $year";
-    }
-    
-    $query .= " LIMIT $limit OFFSET $offset";
-    
-    $stmt = $conn->prepare($query);
-    if (!empty($search)) {
-        $stmt->bind_param("sss", $search_term, $search_term, $search_term);
-    }
-    $stmt->execute();
-    $result = $stmt->get_result();
-    
+session_start();
+if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'admin') {
+    header('Location: ../../users/web/login.php');
+    exit();
+}
+
+require '../../../db.php';
+
+// Retrieve search, month, and year from GET parameters
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+$month = isset($_GET['month']) ? intval($_GET['month']) : null;
+$year = isset($_GET['year']) ? intval($_GET['year']) : null;
+
+$results_per_page = 5;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1; 
+$start_from = ($page - 1) * $results_per_page; 
+
+$search_term = "%" . $search . "%";
+
+$total_query = "SELECT COUNT(*) FROM booking WHERE (
+        full_name LIKE ? OR 
+        celebrants_name LIKE ? OR 
+        email LIKE ? OR 
+        phone_number LIKE ? OR
+        events_date LIKE ? OR
+        guest_count LIKE ? OR
+        event_starttime LIKE ? OR
+        event_type LIKE ? OR
+        event_package LIKE ? OR
+        event_options LIKE ? OR
+        reference_no LIKE ?
+    )";
+
+if ($month && $year) {
+    $total_query .= " AND MONTH(events_date) = $month AND YEAR(events_date) = $year";
+}
+
+$stmt = $conn->prepare($total_query);
+$stmt->bind_param("sssssssssss", $search_term, $search_term, $search_term, $search_term, $search_term, $search_term, $search_term, $search_term, $search_term, $search_term, $search_term);
+$stmt->execute();
+$total_result = $stmt->get_result();
+$total_row = $total_result->fetch_row();
+$total_bookings = $total_row[0];
+$total_pages = ceil($total_bookings / $results_per_page);
+
+$query = "SELECT * FROM booking WHERE ( 
+        full_name LIKE ? OR 
+        celebrants_name LIKE ? OR 
+        email LIKE ? OR 
+        phone_number LIKE ? OR
+        events_date LIKE ? OR
+        guest_count LIKE ? OR
+        event_starttime LIKE ? OR
+        event_type LIKE ? OR
+        event_package LIKE ? OR
+        event_options LIKE ? OR
+        reference_no LIKE ?
+    )";
+
+if ($month && $year) {
+    $query .= " AND MONTH(events_date) = $month AND YEAR(events_date) = $year";
+}
+
+$query .= " LIMIT ?, ?";
+
+$stmt = $conn->prepare($query);
+$stmt->bind_param(
+    "ssssssssssiii", 
+    $search_term, 
+    $search_term, 
+    $search_term, 
+    $search_term, 
+    $search_term, 
+    $search_term, 
+    $search_term, 
+    $search_term, 
+    $search_term, 
+    $search_term, 
+    $search_term, 
+    $start_from, 
+    $results_per_page
+);
+$stmt->execute();
+$result = $stmt->get_result();
 ?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>History | Admin</title>
+    <title>Reports & Analytics | Admin</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.5.0/dist/sweetalert2.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.5.0/dist/sweetalert2.all.min.js"></script>
     <link rel="stylesheet" href="../css/index.css">
+
 </head>
 
 <body>
@@ -120,7 +150,7 @@
             <i class="fa-solid fa-star"></i>
             <span>Reviews</span>
         </a>
-        <a href="#" class="navbar-highlight">
+        <a href="history.php">
             <i class="fa-solid fa-clock-rotate-left"></i>
             <span>History</span>
         </a>
@@ -137,7 +167,7 @@
                 <li><a class="dropdown-item" href="dish.php">Dish</a></li>
             </ul>
         </div>
-        <a href="reports.php">
+        <a href="#" class="navbar-highlight">
             <i class="fa-solid fa-chart-line"></i>
             <span>Reports & Analytics</span>
         </a>
@@ -188,7 +218,7 @@
 
 
         <div class="container mt-4">
-                <div class="date-filter-form mb-2">
+        <div class="date-filter-form mb-2">
                     <form action="" method="get">
                         <div class="date-filter">
                             <select name="month" id="month" class="form-control">
@@ -217,18 +247,14 @@
                     </form>
                 </div>
             <div class="d-flex justify-content-between mb-2">
-                <h3>History Booking</h3>
-                
+                <h3>Reports and Analytics</h3>
                 <div class="search-form">
                     <form action="" method="get">
                         <input type="text" id="searchInput" name="search" value="<?php echo htmlspecialchars($search); ?>" placeholder="Search...">
                         <button type="submit">Search</button>
                     </form>
                 </div>
-                
             </div>
-            
-
             <div class="table-responsive">
             <table class="table mt-4">
                 <thead class="table-booking">
@@ -281,16 +307,15 @@
                                 <td>₱<?php echo number_format($row['payment_amount'], 2); ?></td>
                                 <td>₱<?php echo number_format($row['cost'] - $row['payment_amount'], 2); ?></td>
                                 <td>
-                                    <form method="POST" action="../function/php/pending.php" style="display:inline;">
-                                        <input type="hidden" name="booking_id" value="<?php echo $row['id']; ?>">
-                                        <input type="hidden" name="action" value="accept">
-                                        <button type="submit" class="btn btn-success">Approve</button>
-                                    </form>
-                                    <form method="POST" action="../function/php/pending.php" style="display:inline;">
-                                        <input type="hidden" name="booking_id" value="<?php echo $row['id']; ?>">
-                                        <input type="hidden" name="action" value="decline">
-                                        <button type="submit" class="btn btn-danger">Decline</button>
-                                    </form>
+                                <select class="form-select form-select-sm" onchange="updateStatus(this, <?php echo $row['id']; ?>)">
+                                    <option value="Waiting" <?php echo ($row['status'] === 'Cancel' ? 'selected' : ''); ?>>Cancel Booking</option>
+                                    <option value="Waiting" <?php echo ($row['status'] === 'Update-payment' ? 'selected' : ''); ?>>Update Payment</option>
+                                    <option value="Waiting" <?php echo ($row['status'] === 'resched' ? 'selected' : ''); ?>>Reschedule Booking</option>
+                                    <option value="Waiting" <?php sdecho ($row['status'] === 'Waiting' ? 'selected' : ''); ?>>Waiting</option>
+                                    <option value="On-going" <?php echo ($row['status'] === 'On-going' ? 'selected' : ''); ?>>On-going</option>
+                                    <option value="Finished" <?php echo ($row['status'] === 'Finished' ? 'selected' : ''); ?>>Finished</option>
+
+                                </select>
                                 </td>
                             </tr>
 
@@ -344,51 +369,64 @@
                 </tbody>
             </table>
             </div>
-        <nav>
-            <ul class="pagination d-flex justify-content-end">
-                <?php
-                if ($total_pages > 3) {
-                    if ($page > 1) {
-                        echo '<li class="page-item"><a class="page-link" href="?page=' . ($page - 1) . '">&laquo;</a></li>';
-                    }
-                    $start = max(1, $page - 1);
-                    $end = min($total_pages, $start + 2);
-                    for ($i = $start; $i <= $end; $i++) {
-                        echo '<li class="page-item ' . ($i == $page ? 'active' : '') . '"><a class="page-link" href="?page=' . $i . '">' . $i . '</a></li>';
-                    }
-                    if ($page < $total_pages) {
-                        echo '<li class="page-item"><a class="page-link" href="?page=' . ($page + 1) . '">&raquo;</a></li>';
-                    }
-                } else {
-                    for ($i = 1; $i <= $total_pages; $i++) {
-                        echo '<li class="page-item ' . ($i == $page ? 'active' : '') . '"><a class="page-link" href="?page=' . $i . '">' . $i . '</a></li>';
-                    }
-                }
-                ?>
-            </ul>
-        </nav>
-    </div>
-    <?php $conn->close(); ?>
+            <div class="modal fade" id="paymentImageModal" tabindex="-1" aria-labelledby="paymentImageModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="paymentImageModalLabel">Payment Image</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <img src="" id="paymentImage" class="img-fluid" alt="Payment Image" style="max-width: 60%; display: flex; margin: auto;">
+                        </div>
+                        </div>
+                    </div>
+                </div>
 
-    <?php
-    if (isset($_SESSION['status_message'])) {
-        echo "<script>
-                                            Swal.fire({
-                                                icon: 'success',
-                                                title: 'Success!',
-                                                text: '" . $_SESSION['status_message'] . "',
-                                                showConfirmButton: false,
-                                                timer: 1500
-                                            });
-                                        </script>";
-        unset($_SESSION['status_message']);
-    }
-    ?>
+                <script>
+                    const paymentImageButtons = document.querySelectorAll('[data-bs-target="#paymentImageModal"]');
+                    paymentImageButtons.forEach(button => {
+                        button.addEventListener('click', function() {
+                        const paymentImage = this.getAttribute('data-payment-image');
+                        document.getElementById('paymentImage').src = "../../../assets/gcash-payments/" + paymentImage;
+                        });
+                    });
+                </script>
+
+            
+                <nav aria-label="Page navigation">
+                    <ul class="pagination d-flex justify-content-end">
+                        <?php if ($page > 1): ?>
+                            <li class="page-item pg-btn"><a class="page-links" href="?page=<?php echo $page - 1; ?>&search=<?php echo urlencode($search); ?>">&laquo;</a></li>
+                        <?php else: ?>
+                            <li class="page-item pg-btn disabled"><span class="page-links">&laquo;</span></li>
+                        <?php endif; ?>
+
+                        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                            <li class="page-item <?php echo ($i == $page) ? 'active' : ''; ?>">
+                                <a class="page-link" href="?page=<?php echo $i; ?>&search=<?php echo urlencode($search); ?>"><?php echo $i; ?></a>
+                            </li>
+                        <?php endfor; ?>
+
+                        <?php if ($page < $total_pages): ?>
+                            <li class="page-item pg-btn"><a class="page-links" href="?page=<?php echo $page + 1; ?>&search=<?php echo urlencode($search); ?>">&raquo;</a></li>
+                        <?php else: ?>
+                            <li class="page-item pg-btn disabled"><span class="page-links">&raquo;</span></li>
+                        <?php endif; ?>
+                    </ul>
+                </nav>
+
+        </div>
+        <?php $conn->close(); ?>
 </body>
 
 
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.5.0/dist/sweetalert2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="../function/script/status.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+   
 
 </html>

@@ -265,6 +265,11 @@ function isTimeAvailable($time, $bookedTimes) {
                                             ?>
                                         </select>
                                     </div>
+                                    <div class="form-group mt-4">
+                                            <label for="celebrants-name" class="form-label">Theme</label>
+                                            <input type="text" id="celebrants-name" name="theme"
+                                                class="form-control" placeholder="Enter your text here">
+                                        </div>
                                     </div>
 
                                 <div class="col-md-3">

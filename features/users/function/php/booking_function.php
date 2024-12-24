@@ -19,6 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $event_type = $_POST['event_type'];
     $event_package = $_POST['event_package'];
     $cost = $_POST['cost'];
+    $theme = $_POST['theme'];
 
     // Get dish options
     $beef_dish = isset($_POST['beef_dish']) ? $_POST['beef_dish'] : null;
@@ -36,12 +37,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $status = 'To-pay';
 
     // Prepare the SQL query
-    $sql = "INSERT INTO booking (full_name, celebrants_name, email, phone_number, events_date, guest_count, event_duration, event_starttime, event_endtime, event_type, event_package, event_options, cost, status, beef_dish, pork_dish, chicken_dish, pasta_dish, dessert_dish, fish_dish, drinks_dish) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO booking (full_name, celebrants_name, email, phone_number, events_date, guest_count, event_duration, event_starttime, event_endtime, event_type, event_package, event_options, cost, theme, status, beef_dish, pork_dish, chicken_dish, pasta_dish, dessert_dish, fish_dish, drinks_dish) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     if ($stmt = $conn->prepare($sql)) {
         // Bind the parameters
-        $stmt->bind_param("sssssiissssssssssssss", $full_name, $celebrants_name, $email, $phone_number, $events_date, $guest_count, $event_duration, $event_starttime, $event_endtime, $event_type, $event_package, $event_options, $cost, $status, $beef_dish, $pork_dish, $chicken_dish, $pasta_dish, $dessert_dish, $fish_dish, $drinks_dish);
+        $stmt->bind_param("sssssiisssssssssssssss", $full_name, $celebrants_name, $email, $phone_number, $events_date, $guest_count, $event_duration, $event_starttime, $event_endtime, $event_type, $event_package, $event_options, $cost, $theme, $status, $beef_dish, $pork_dish, $chicken_dish, $pasta_dish, $dessert_dish, $fish_dish, $drinks_dish);
 
         if ($stmt->execute()) {
             header("Location: ../../web/appointment.php");

@@ -42,52 +42,52 @@ $result = $conn->query($query);
                 <img src="../../../assets/logo.png" alt="Logo">
             </a>
             <a href="dashboard.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
+                <i class="fa-solid fa-gauge-high"></i>
                 <span>Dashboard</span>
             </a>
             <a href="calendar.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
+                <i class="fa-solid fa-calendar-days"></i>
                 <span>Calendar</span>
             </a>
             <a href="pending.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
+                <i class="fa-solid fa-clock"></i>
                 <span>Pending Booking</span>
             </a>
             <a href="approve.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
+                <i class="fa-solid fa-check-circle"></i>
                 <span>Approved Booking</span>
             </a>
             <a href="on-going.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
-                <span>On going Booking</span>
+                <i class="fa-solid fa-spinner"></i>
+                <span>On-going Booking</span>
             </a>
             <a href="refund.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
+                <i class="fa-solid fa-money-bill-wave"></i>
                 <span>Refund Pending</span>
             </a>
             <a href="cancel.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
+                <i class="fa-solid fa-ban"></i>
                 <span>Cancelled Booking</span>
             </a>
             <a href="unavailable.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
+                <i class="fa-solid fa-exclamation-circle"></i>
                 <span>Unavailable</span>
             </a>
             <a href="invoice.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
+                <i class="fa-solid fa-file-invoice"></i>
                 <span>Invoice</span>
             </a>
             <a href="reviews.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
+                <i class="fa-solid fa-star"></i>
                 <span>Reviews</span>
             </a>
             <a href="history.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
+                <i class="fa-solid fa-clock-rotate-left"></i>
                 <span>History</span>
             </a>
             <div class="dropdown dropup">
-                <a href="#" class=" dropdown-toggle" id="eventsListDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fa-solid fa-tachometer-alt"></i>
+                <a href="#" class="dropdown-toggle" id="eventsListDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fa-solid fa-list"></i>
                     <span>Events List</span>
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="eventsListDropdown">
@@ -98,17 +98,21 @@ $result = $conn->query($query);
                     <li><a class="dropdown-item" href="dish.php">Dish</a></li>
                 </ul>
             </div>
-            <a href="#">
-                <i class="fa-solid fa-tachometer-alt"></i>
+            <a href="reports.php">
+                <i class="fa-solid fa-chart-line"></i>
+                <span>Reports & Analytics</span>
+            </a>
+            <a href="admin-user.php">
+                <i class="fa-solid fa-users-gear"></i>
                 <span>Manage Admin Users</span>
             </a>
-            <div class="dropdown dropup" >
-                <a href="#" class="navbar-highlight dropdown-toggle" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fa-solid fa-tachometer-alt"></i>
+            <div class="dropdown dropup">
+                <a href="#" class="dropdown-toggle" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fa-solid fa-pen-to-square"></i>
                     <span>CMS</span>
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
-                    <li><a class="dropdown-item" href="front_cms.php" >Front CMS</a></li>
+                    <li><a class="dropdown-item" href="front_cms.php">Front CMS</a></li>
                     <li><a class="dropdown-item" href="scope_service.php">Scope Service</a></li>
                     <li><a class="dropdown-item" href="extras.php">Extras</a></li>
                     <li><a class="dropdown-item" href="features.php">Venue Features</a></li>

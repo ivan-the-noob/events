@@ -4,9 +4,11 @@ if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'admin') {
     header('Location: ../../users/web/login.php');
     exit();
 }
-require '../../../db.php';
+require '../../../db.php';  
+
+
+
 include '../function/php/table-dashboard.php';
-include '../function/php/reminder.php';
 $queryWaiting = "SELECT COUNT(*) AS waiting_count FROM booking WHERE status = 'Waiting'";
 $queryDeclined = "SELECT COUNT(*) AS declined_count FROM booking WHERE status = 'Declined'";
 $resultWaiting = $conn->query($queryWaiting);
@@ -24,6 +26,8 @@ if ($result && $row = $result->fetch_assoc()) {
 } else {
     $payment_amount = 0; 
 }
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -43,83 +47,91 @@ if ($result && $row = $result->fetch_assoc()) {
 <body>
     <!--Navigation Links-->
     <div class="navbar flex-column bg-white shadow-sm p-3 collapse d-md-flex" id="navbar">
-        <div class="navbar-links">
-            <a class="navbar-brand d-none d-md-block logo-container" href="#">
-                <img src="../../../assets/logo.png" alt="Logo">
+    <div class="navbar-links">
+        <a class="navbar-brand d-none d-md-block logo-container" href="#">
+            <img src="../../../assets/logo.png" alt="Logo">
+        </a>
+        <a href="dashboard.php" class="navbar-highlight">
+            <i class="fa-solid fa-gauge-high"></i>
+            <span>Dashboard</span>
+        </a>
+        <a href="calendar.php">
+            <i class="fa-solid fa-calendar-days"></i>
+            <span>Calendar</span>
+        </a>
+        <a href="pending.php">
+            <i class="fa-solid fa-clock"></i>
+            <span>Pending Booking</span>
+        </a>
+        <a href="approve.php">
+            <i class="fa-solid fa-check-circle"></i>
+            <span>Approved Booking</span>
+        </a>
+        <a href="on-going.php">
+            <i class="fa-solid fa-spinner"></i>
+            <span>On-going Booking</span>
+        </a>
+        <a href="refund.php">
+            <i class="fa-solid fa-money-bill-wave"></i>
+            <span>Refund Pending</span>
+        </a>
+        <a href="cancel.php">
+            <i class="fa-solid fa-ban"></i>
+            <span>Cancelled Booking</span>
+        </a>
+        <a href="unavailable.php">
+            <i class="fa-solid fa-exclamation-circle"></i>
+            <span>Unavailable</span>
+        </a>
+        <a href="invoice.php">
+            <i class="fa-solid fa-file-invoice"></i>
+            <span>Invoice</span>
+        </a>
+        <a href="reviews.php">
+            <i class="fa-solid fa-star"></i>
+            <span>Reviews</span>
+        </a>
+        <a href="history.php">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <span>History</span>
+        </a>
+        <div class="dropdown dropup">
+            <a href="#" class="dropdown-toggle" id="eventsListDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-list"></i>
+                <span>Events List</span>
             </a>
-            <a href="#dashboard" class="navbar-highlight">
-                <i class="fa-solid fa-tachometer-alt"></i>
-                <span>Dashboard</span>
-            </a>
-            <a href="calendar.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
-                <span>Calendar</span>
-            </a>
-            <a href="pending.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
-                <span>Pending Booking</span>
-            </a>
-            <a href="approve.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
-                <span>Approved Booking</span>
-            </a>
-            <a href="on-going.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
-                <span>On going Booking</span>
-            </a>
-            <a href="refund.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
-                <span>Refund Pending</span>
-            </a>
-
-           
-            <a href="unavailable.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
-                <span>Unavailable</span>
-            </a>
-            <a href="invoice.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
-                <span>Invoice</span>
-            </a>
-            <a href="reviews.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
-                <span>Reviews</span>
-            </a>
-            <a href="history.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
-                <span>History</span>
-            </a>
-            <div class="dropdown dropup">
-                <a href="#" class=" dropdown-toggle" id="eventsListDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fa-solid fa-tachometer-alt"></i>
-                    <span>Events List</span>
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="eventsListDropdown">
-                    <li><a class="dropdown-item" href="events_list.php">Events List</a></li>
-                    <li><a class="dropdown-item" href="package_list.php">Package List</a></li>
-                    <li><a class="dropdown-item" href="extra.php">Extra</a></li>
-                    <li><a class="dropdown-item" href="pax.php">Pax</a></li>
-                    <li><a class="dropdown-item" href="dish.php">Dish</a></li>
-                </ul>
-            </div>
-            <a href="admin-user.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
-                <span>Manage Admin Users</span>
-            </a>
-            <div class="dropdown dropup">
-                <a href="#" class="dropdown-toggle" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fa-solid fa-tachometer-alt"></i>
-                    <span>CMS</span>
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
-                    <li><a class="dropdown-item" href="front_cms.php">Front CMS</a></li>
-                    <li><a class="dropdown-item" href="scope_service.php">Scope Service</a></li>
-                    <li><a class="dropdown-item" href="extras.php">Extras</a></li>
-                    <li><a class="dropdown-item" href="features.php">Venue Features</a></li>
-                    <li><a class="dropdown-item" href="terms_condition.php">Terms & Condition</a></li>
-                </ul>
-            </div>
+            <ul class="dropdown-menu" aria-labelledby="eventsListDropdown">
+                <li><a class="dropdown-item" href="events_list.php">Events List</a></li>
+                <li><a class="dropdown-item" href="package_list.php">Package List</a></li>
+                <li><a class="dropdown-item" href="extra.php">Extra</a></li>
+                <li><a class="dropdown-item" href="pax.php">Pax</a></li>
+                <li><a class="dropdown-item" href="dish.php">Dish</a></li>
+            </ul>
         </div>
+        <a href="reports.php">
+            <i class="fa-solid fa-chart-line"></i>
+            <span>Reports & Analytics</span>
+        </a>
+        <a href="admin-user.php">
+            <i class="fa-solid fa-users-gear"></i>
+            <span>Manage Admin Users</span>
+        </a>
+        <div class="dropdown dropup">
+            <a href="#" class="dropdown-toggle" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-pen-to-square"></i>
+                <span>CMS</span>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
+                <li><a class="dropdown-item" href="front_cms.php">Front CMS</a></li>
+                <li><a class="dropdown-item" href="scope_service.php">Scope Service</a></li>
+                <li><a class="dropdown-item" href="extras.php">Extras</a></li>
+                <li><a class="dropdown-item" href="features.php">Venue Features</a></li>
+                <li><a class="dropdown-item" href="terms_condition.php">Terms & Condition</a></li>
+            </ul>
+        </div>
+    </div>
+
+
 
     </div>
     </div>
@@ -256,52 +268,52 @@ if ($result && $row = $result->fetch_assoc()) {
                 </div>
 
                 <!-- Reminders -->
+              
                 <div class="col-md-3 mt-4">
                     <div class="d-flex justify-content-between mb-2">
                         <h5 class="mt-0 d-flex align-items-center mb-0">Reminders</h5>
                         <button class="reminder-notif"> <i class="fa-regular fa-bell fa-xl"></i></button>
                     </div>
-                    <div class="card-container" style="height: 50vh; overflow-y: auto; padding: 10px;">
-                        <?php
-                        if ($result->num_rows > 0):
-                            while ($row = $result->fetch_assoc()):
-                        ?>
-                                <div class="col-md-12 mb-2">
-                                    <div class="card p-0">
-                                        <div class="card-body d-flex justify-content-between gap-3">
-                                            <div class="event-content">
-                                                <p class="mb-0 date-detail"><?php echo htmlspecialchars($row['description']); ?>
-                                                </p>
-                                                <p class="mb-0 date">
-                                                    <?php echo htmlspecialchars(date('F j, Y', strtotime($row['date']))); ?></p>
-                                                <div class="d-flex align-items-center gap-1">
-                                                    <p class="mb-0 date">
-                                                        <?php echo htmlspecialchars(date('g:i A', strtotime($row['start_time']))); ?>
-                                                    </p> -
-                                                    <p class="mb-0 date">
-                                                        <?php echo htmlspecialchars(date('g:i A', strtotime($row['finish_time']))); ?>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div class="event-button">
-                                                <button class="d-flex justify-content-center mx-auto">
-                                                    <i class="fa fa-ellipsis-vertical fa-xl"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php
-                            endwhile;
-                        else:
-                            ?>
-                            <p>Empty Reminders.</p>
-                        <?php
-                        endif;
-                        ?>
-                        <button class="reminder-btn mt-3" data-bs-toggle="modal" data-bs-target="#addReminderModal">+
-                            Add Reminder</button>
-                    </div>
+
+                    <?php
+                    require '../../../db.php'; 
+
+                    $query = "SELECT full_name, event_type 
+                    FROM booking
+                    WHERE events_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 3 DAY)";
+
+                    $result = mysqli_query($conn, $query);
+
+                    $pastEvents = [];
+
+                    if (mysqli_num_rows($result) > 0) {
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            $pastEvents[] = $row;   
+                        }
+                    } else {
+                        $pastEvents = null;  
+                    }
+                    ?>
+
+                    <div class="card">
+                            <div class="card-header">
+                                <p class="text-center fw-bold mb-0">Incoming Events</p>
+                            </div>
+                            <div class="card-body">
+                                <?php if ($pastEvents): ?>
+                                    <ul class="list-group">
+                                        <?php foreach ($pastEvents as $event): ?>
+                                            <li class="list-group-item">
+                                                <strong>Full Name:<br></strong> <?php echo htmlspecialchars($event['full_name']); ?><br>
+                                                <strong>Event Type:<br></strong> <?php echo htmlspecialchars($event['event_type']); ?>
+                                            </li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                <?php else: ?>
+                                    <p>No events before 3 days ago.</p>
+                                <?php endif; ?>
+                            </div>
+                        </div>
                 </div>
             </div>
         </div>

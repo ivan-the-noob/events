@@ -7,85 +7,15 @@ if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'admin') {
 
 require '../../../db.php';
 
-// Retrieve search, month, and year from GET parameters
-$search = isset($_GET['search']) ? $_GET['search'] : '';
-$month = isset($_GET['month']) ? intval($_GET['month']) : null;
-$year = isset($_GET['year']) ? intval($_GET['year']) : null;
-
-$results_per_page = 5;
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1; 
-$start_from = ($page - 1) * $results_per_page; 
-
-$search_term = "%" . $search . "%";
-
-$total_query = "SELECT COUNT(*) FROM booking WHERE status IN ('On-going') 
-    AND (
-        full_name LIKE ? OR 
-        celebrants_name LIKE ? OR 
-        email LIKE ? OR 
-        phone_number LIKE ? OR
-        events_date LIKE ? OR
-        guest_count LIKE ? OR
-        event_starttime LIKE ? OR
-        event_type LIKE ? OR
-        event_package LIKE ? OR
-        event_options LIKE ? OR
-        reference_no LIKE ?
-    )";
-
-if ($month && $year) {
-    $total_query .= " AND MONTH(events_date) = $month AND YEAR(events_date) = $year";
-}
-
-$stmt = $conn->prepare($total_query);
-$stmt->bind_param("sssssssssss", $search_term, $search_term, $search_term, $search_term, $search_term, $search_term, $search_term, $search_term, $search_term, $search_term, $search_term);
-$stmt->execute();
-$total_result = $stmt->get_result();
-$total_row = $total_result->fetch_row();
-$total_bookings = $total_row[0];
-$total_pages = ceil($total_bookings / $results_per_page);
-
-$query = "SELECT * FROM booking WHERE status IN ('Waiting', 'On-going') 
-    AND (
-        full_name LIKE ? OR 
-        celebrants_name LIKE ? OR 
-        email LIKE ? OR 
-        phone_number LIKE ? OR
-        events_date LIKE ? OR
-        guest_count LIKE ? OR
-        event_starttime LIKE ? OR
-        event_type LIKE ? OR
-        event_package LIKE ? OR
-        event_options LIKE ? OR
-        reference_no LIKE ?
-    )";
-
-if ($month && $year) {
-    $query .= " AND MONTH(events_date) = $month AND YEAR(events_date) = $year";
-}
-
-$query .= " LIMIT ?, ?";
-
+// Fetch the booking record to get the 'id' (auto-increment field)
+$query = "SELECT * FROM booking WHERE status = 'On-going'";
 $stmt = $conn->prepare($query);
-$stmt->bind_param(
-    "ssssssssssiii", 
-    $search_term, 
-    $search_term, 
-    $search_term, 
-    $search_term, 
-    $search_term, 
-    $search_term, 
-    $search_term, 
-    $search_term, 
-    $search_term, 
-    $search_term, 
-    $search_term, 
-    $start_from, 
-    $results_per_page
-);
 $stmt->execute();
 $result = $stmt->get_result();
+
+
 ?>
+
 
 
 
@@ -108,85 +38,89 @@ $result = $stmt->get_result();
 <body>
     <!--Navigation Links-->
     <div class="navbar flex-column bg-white shadow-sm p-3 collapse d-md-flex" id="navbar">
-        <div class="navbar-links">
-            <a class="navbar-brand d-none d-md-block logo-container" href="#">
-                <img src="../../../assets/logo.png" alt="Logo">
+    <div class="navbar-links">
+        <a class="navbar-brand d-none d-md-block logo-container" href="#">
+            <img src="../../../assets/logo.png" alt="Logo">
+        </a>
+        <a href="dashboard.php">
+            <i class="fa-solid fa-gauge-high"></i>
+            <span>Dashboard</span>
+        </a>
+        <a href="calendar.php">
+            <i class="fa-solid fa-calendar-days"></i>
+            <span>Calendar</span>
+        </a>
+        <a href="pending.php">
+            <i class="fa-solid fa-clock"></i>
+            <span>Pending Booking</span>
+        </a>
+        <a href="approve.php">
+            <i class="fa-solid fa-check-circle"></i>
+            <span>Approved Booking</span>
+        </a>
+        <a href="#" class="navbar-highlight">
+            <i class="fa-solid fa-spinner"></i>
+            <span>On-going Booking</span>
+        </a>
+        <a href="refund.php">
+            <i class="fa-solid fa-money-bill-wave"></i>
+            <span>Refund Pending</span>
+        </a>
+        <a href="cancel.php">
+            <i class="fa-solid fa-ban"></i>
+            <span>Cancelled Booking</span>
+        </a>
+        <a href="unavailable.php">
+            <i class="fa-solid fa-exclamation-circle"></i>
+            <span>Unavailable</span>
+        </a>
+        <a href="invoice.php">
+            <i class="fa-solid fa-file-invoice"></i>
+            <span>Invoice</span>
+        </a>
+        <a href="reviews.php">
+            <i class="fa-solid fa-star"></i>
+            <span>Reviews</span>
+        </a>
+        <a href="history.php">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <span>History</span>
+        </a>
+        <div class="dropdown dropup">
+            <a href="#" class="dropdown-toggle" id="eventsListDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-list"></i>
+                <span>Events List</span>
             </a>
-            <a href="dashboard.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
-                <span>Dashboard</span>
-            </a>
-            <a href="calendar.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
-                <span>Calendar</span>
-            </a>
-            <a href="pending.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
-                <span>Pending Booking</span>
-            </a>
-            <a href="approve.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
-                <span>Approved Booking</span>
-            </a>
-            <a href="#" class="navbar-highlight">
-                <i class="fa-solid fa-tachometer-alt"></i>
-                <span>On going Booking</span>
-            </a>
-            <a href="refund.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
-                <span>Refund Pending</span>
-            </a>
-            <a href="cancel.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
-                <span>Cancelled Booking</span>
-            </a>
-            <a href="unavailable.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
-                <span>Unavailable</span>
-            </a>
-            <a href="invoice.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
-                <span>Invoice</span>
-            </a>
-            <a href="reviews.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
-                <span>Reviews</span>
-            </a>
-            <a href="history.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
-                <span>History</span>
-            </a>
-            <div class="dropdown dropup">
-                <a href="#" class=" dropdown-toggle" id="eventsListDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fa-solid fa-tachometer-alt"></i>
-                    <span>Events List</span>
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="eventsListDropdown">
-                    <li><a class="dropdown-item" href="events_list.php">Events List</a></li>
-                    <li><a class="dropdown-item" href="package_list.php">Package List</a></li>
-                    <li><a class="dropdown-item" href="extra.php">Extra</a></li>
-                    <li><a class="dropdown-item" href="pax.php">Pax</a></li>
-                    <li><a class="dropdown-item" href="dish.php">Dish</a></li>
-                </ul>
-            </div>
-            <a href="admin-user.php">
-                <i class="fa-solid fa-tachometer-alt"></i>
-                <span>Manage Admin Users</span>
-            </a>
-            <div class="dropdown dropup">
-                <a href="#" class="dropdown-toggle" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fa-solid fa-tachometer-alt"></i>
-                    <span>CMS</span>
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
-                    <li><a class="dropdown-item" href="front_cms.php">Front CMS</a></li>
-                    <li><a class="dropdown-item" href="scope_service.php">Scope Service</a></li>
-                    <li><a class="dropdown-item" href="extras.php">Extras</a></li>
-                    <li><a class="dropdown-item" href="features.php">Venue Features</a></li>
-                    <li><a class="dropdown-item" href="terms_condition.php">Terms & Condition</a></li>
-                </ul>
-            </div>
+            <ul class="dropdown-menu" aria-labelledby="eventsListDropdown">
+                <li><a class="dropdown-item" href="events_list.php">Events List</a></li>
+                <li><a class="dropdown-item" href="package_list.php">Package List</a></li>
+                <li><a class="dropdown-item" href="extra.php">Extra</a></li>
+                <li><a class="dropdown-item" href="pax.php">Pax</a></li>
+                <li><a class="dropdown-item" href="dish.php">Dish</a></li>
+            </ul>
         </div>
+        <a href="reports.php">
+            <i class="fa-solid fa-chart-line"></i>
+            <span>Reports & Analytics</span>
+        </a>
+        <a href="admin-user.php">
+            <i class="fa-solid fa-users-gear"></i>
+            <span>Manage Admin Users</span>
+        </a>
+        <div class="dropdown dropup">
+            <a href="#" class="dropdown-toggle" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-pen-to-square"></i>
+                <span>CMS</span>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
+                <li><a class="dropdown-item" href="front_cms.php">Front CMS</a></li>
+                <li><a class="dropdown-item" href="scope_service.php">Scope Service</a></li>
+                <li><a class="dropdown-item" href="extras.php">Extras</a></li>
+                <li><a class="dropdown-item" href="features.php">Venue Features</a></li>
+                <li><a class="dropdown-item" href="terms_condition.php">Terms & Condition</a></li>
+            </ul>
+        </div>
+    </div>
 
     </div>
     </div>
@@ -216,83 +150,114 @@ $result = $stmt->get_result();
 
 
         <div class="container mt-4">
-        <div class="date-filter-form mb-2">
-                    <form action="" method="get">
-                        <div class="date-filter">
-                            <select name="month" id="month" class="form-control">
-                                <option value="">Select Month</option>
-                                <?php 
-                                $months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-                                foreach ($months as $index => $month) {
-                                    $selected = (isset($_GET['month']) && $_GET['month'] == $index + 1) ? 'selected' : '';
-                                    echo "<option value='" . ($index + 1) . "' $selected>$month</option>";
-                                }
-                                ?>
-                            </select>
-                            <select name="year" id="year" class="form-control">
-                                <option value="">Select Year</option>
-                                <?php
-                                $current_year = date('Y');
-                                for ($i = $current_year - 5; $i <= $current_year; $i++) {
-                                    $selected = (isset($_GET['year']) && $_GET['year'] == $i) ? 'selected' : '';
-                                    echo "<option value='$i' $selected>$i</option>";
-                                }
-                                ?>
-                            </select>
-
-                            <button type="submit">Filter</button>
-                        </div>
-                    </form>
-                </div>
+                   
             <div class="d-flex justify-content-between mb-2">
                 <h3>On going Booking</h3>
-                <div class="search-form">
-                    <form action="" method="get">
-                        <input type="text" id="searchInput" name="search" value="<?php echo htmlspecialchars($search); ?>" placeholder="Search...">
-                        <button type="submit">Search</button>
-                    </form>
-                </div>
+              
             </div>
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-    <?php $id = 1; while ($row = $result->fetch_assoc()): ?>
-        <div class="col">
-            <div class="card h-100">
+            <?php ; while ($row = $result->fetch_assoc()): ?>
+            <div class="card h-100 ongoing-card">
                 <div class="card-body">
-                    <h5 class="card-title">Booking #<?php echo $id++; ?></h5>
-                    <p class="card-text"><strong>Full Name:</strong> <?php echo htmlspecialchars($row['full_name']); ?></p>
-                    <p class="card-text"><strong>Celebrant's Name:</strong> <?php echo htmlspecialchars($row['celebrants_name']); ?></p>
-                    <p class="card-text"><strong>Email:</strong> <?php echo htmlspecialchars($row['email']); ?></p>
-                    <p class="card-text"><strong>Type of Event:</strong> <?php echo htmlspecialchars($row['event_type']); ?></p>
-                    <p class="card-text"><strong>Type of Package:</strong> <?php echo htmlspecialchars($row['event_package']); ?></p>
-                    <p class="card-text"><strong>Amount:</strong> ₱<?php echo number_format($row['payment_amount'], 2); ?></p>
-
+                    <div class="row">
+                        <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label for="full_name" class="form-label"><strong>Full Name:</strong></label>
+                        <input type="text" id="full_name" class="form-control" value="<?php echo htmlspecialchars($row['full_name']); ?>" readonly>
+                    </div>
                     
+                    <div class="form-group mb-3">
+                        <label for="event_type" class="form-label"><strong>Type of Event:</strong></label>
+                        <input type="text" id="event_type" class="form-control" value="<?php echo htmlspecialchars($row['event_type']); ?>" readonly>
+                    </div>
 
-                    <!-- Modal button for payment image -->
-                     <div class="d-flex gap-1 mt-2 justify-content-center">
+                    <div class="form-group mb-3">
+                        <label for="event_package" class="form-label"><strong>Type of Package:</strong></label>
+                        <input type="text" id="event_package" class="form-control" value="<?php echo htmlspecialchars($row['event_package']); ?>" readonly>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="payment_amount" class="form-label"><strong>Amount:</strong></label>
+                        <input type="text" id="payment_amount" class="form-control" value="₱<?php echo number_format($row['payment_amount'], 2); ?>" readonly>
+                    </div>
+                    <div class="d-flex gap-1 mt-2 justify-content-center">
                     <button type="button" class="btn btn-info text-white fw-bold" data-bs-toggle="modal" data-bs-target="#paymentImageModal_<?php echo $row['id']; ?>">Payment</button>
 
                     <!-- Modal button for second payment image -->
                     <?php if (!empty($row['second_payment_image'])): ?>
                         <button type="button" class="btn btn-info text-white fw-bold" data-bs-toggle="modal" data-bs-target="#secondPaymentImageModal_<?php echo $row['id']; ?>">Second Payment</button>
                     <?php endif; ?>
+                    <button type="button" class="btn btn-primary text-white fw-bold" data-bs-toggle="modal" data-bs-target="#detailsModal_<?php echo $row['id']; ?>">View Full Info</button>
                     
+                    
+            
                 </div>
-                <!-- Modal button for full info -->
-                <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#detailsModal_<?php echo $row['id']; ?>">View Full Info</button>
+                    </div>
+                    <div style="width: 2px; border-left:1px solid #808080; opacity: 30%;"></div>
+                    <div class="col-md-5 d-flex flex-column justify-content-center mx-auto">
+
+                    <h5 class="text-center">UPDATE EVENTS DETAILS</h5>
+                    <form action="../function/php/update_booking.php" method="POST">
+                    <input type="hidden" name="id" value="<?php echo htmlspecialchars($row['id']); ?>">
+                        <div class="d-flex flex-column">
+                        <div class="d-flex gap-1">
+                        <div class="form-group mb-3">
+                            <label for="additional-pax" class="form-label"><strong>Additional Pax</strong></label>
+                            <input type="number" id="additional-pax" name="add_pax" class="form-control" min="0" placeholder="Enter Pax" value="<?php echo htmlspecialchars($row['add_pax']); ?>">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="total-pax" class="form-label"><strong>Total Pax Cost:</strong></label>
+                            <input type="text" id="total-pax" class="form-control" value="₱<?php echo number_format($row['add_pax'] * 400, 2); ?>" readonly>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-1 align-items-center">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="corkage-fee" name="corkage_fee" <?php echo ($row['corkage_fee'] == 1) ? 'checked' : ''; ?>>
+                            <label class="form-check-label" for="corkage-fee"><strong>Include Corkage Fee (₱500)</strong></label>
+                        </div>
+                        <div class="form-group mb-3 flex-grow-1">
+                            <label for="total-cost" class="form-label"><strong>Total Corkage Fee:</strong></label>
+                            <input type="text" id="total-cost" class="form-control" value="₱<?php echo ($row['corkage_fee'] == 1) ? '500.00' : '0.00'; ?>" readonly>
+                        </div>
+                    </div>
+                    <?php 
+                    $baseCost = $row['cost'];
+                    $addPaxCost = $row['add_pax'] * 400;
+                    $corkageFee = ($row['corkage_fee'] == 1) ? 500 : 0;
+                    $totalAmount = $baseCost + $addPaxCost + $corkageFee;
+                    ?>
+                    <div class="form-group mb-3 w-50 d-flex flex-column" style="margin-left: auto;">
+                        <hr class="mb-1 mt-0">
+                        <label for="amount" class="form-label"><strong>Amount: </strong></label>
+                        <input type="text" id="amount" class="form-control" value="₱<?php echo number_format(($row['add_pax'] * 400) + ($row['corkage_fee'] == 1 ? 500 : 0), 2); ?>" readonly>
+                    </div>
+    </div>
+    <div class="form-group mb-3 w-75 d-flex flex-column mt-4" style="margin-left: auto;">
+    <label for="total-amount" class="form-label"><strong>Total Amount: </strong></label>
+    <input type="text" id="total-amount" class="form-control" value="₱<?php echo number_format($totalAmount, 2); ?>" readonly>
+</div>
+
+    <input type="hidden" id="initial-cost" value="<?php echo number_format($row['cost'], 2); ?>" />
+    <button type="submit" name="update" class="btn btn-primary mt-3 w-100 d-flex justify-content-center">Update</button>
+</form>
+                                        
+                    </div>
+                    </div>       
                 </div>
             </div>
 
+         
             <!-- Modal for full details -->
             <div class="modal fade" id="detailsModal_<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="detailsModalLabel">Full Details for <?php echo htmlspecialchars($row['full_name']); ?></h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
+                            <p><strong>Celebrant's Name:</strong> <?php echo htmlspecialchars($row['celebrants_name']); ?></p>
                             <p><strong>Phone Number:</strong> <?php echo htmlspecialchars($row['phone_number']); ?></p>
+                            <p><strong>Email:</strong> <?php echo htmlspecialchars($row['email']); ?></p>
                             <p><strong>Event Date:</strong> <?php echo htmlspecialchars($row['events_date']); ?></p>
                             <p><strong>Guest Count:</strong> <?php echo htmlspecialchars($row['guest_count']); ?> guests</p>
                             <p><strong>Event Start Time:</strong> <?php echo htmlspecialchars($row['event_starttime']); ?>:00</p>
@@ -319,14 +284,14 @@ $result = $stmt->get_result();
 
             <!-- Modal for payment image -->
             <div class="modal fade" id="paymentImageModal_<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="paymentImageModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="paymentImageModalLabel">Payment Image</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <img src="<?php echo htmlspecialchars($row['payment_image']); ?>" class="img-fluid" alt="Payment Image">
+                            <img src="../../../assets/gcash-payments/<?php echo htmlspecialchars($row['payment_image']); ?>" class="img-fluid" alt="Payment Image">
                             <p><strong>Reference No:</strong> <?php echo htmlspecialchars($row['reference_no']); ?></p>
                         </div>
                         <div class="modal-footer">
@@ -339,14 +304,14 @@ $result = $stmt->get_result();
             <!-- Modal for second payment image -->
             <?php if (!empty($row['second_payment_image'])): ?>
             <div class="modal fade" id="secondPaymentImageModal_<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="secondPaymentImageModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="secondPaymentImageModalLabel">Second Payment Image</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <img src="<?php echo htmlspecialchars($row['second_payment_image']); ?>" class="img-fluid" alt="Second Payment Image">
+                            <img src="../../../assets/gcash-payments/<?php echo htmlspecialchars($row['second_payment_image']); ?>" class="img-fluid" alt="Second Payment Image">
                             <p><strong>Second Reference No:</strong> <?php echo htmlspecialchars($row['second_reference_no']); ?></p>
                         </div>
                         <div class="modal-footer">
@@ -384,27 +349,7 @@ $result = $stmt->get_result();
                 </script>
 
             
-                <nav aria-label="Page navigation">
-                    <ul class="pagination d-flex justify-content-end">
-                        <?php if ($page > 1): ?>
-                            <li class="page-item pg-btn"><a class="page-links" href="?page=<?php echo $page - 1; ?>&search=<?php echo urlencode($search); ?>">&laquo;</a></li>
-                        <?php else: ?>
-                            <li class="page-item pg-btn disabled"><span class="page-links">&laquo;</span></li>
-                        <?php endif; ?>
-
-                        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                            <li class="page-item <?php echo ($i == $page) ? 'active' : ''; ?>">
-                                <a class="page-link" href="?page=<?php echo $i; ?>&search=<?php echo urlencode($search); ?>"><?php echo $i; ?></a>
-                            </li>
-                        <?php endfor; ?>
-
-                        <?php if ($page < $total_pages): ?>
-                            <li class="page-item pg-btn"><a class="page-links" href="?page=<?php echo $page + 1; ?>&search=<?php echo urlencode($search); ?>">&raquo;</a></li>
-                        <?php else: ?>
-                            <li class="page-item pg-btn disabled"><span class="page-links">&raquo;</span></li>
-                        <?php endif; ?>
-                    </ul>
-                </nav>
+               
 
         </div>
         <?php $conn->close(); ?>
@@ -415,6 +360,7 @@ $result = $stmt->get_result();
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.5.0/dist/sweetalert2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="../function/script/status.js"></script>
+<script src="../function/script/additional_pax.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
    

@@ -92,6 +92,10 @@ $result = $conn->query($query);
                     <li><a class="dropdown-item" href="dish.php">Dish</a></li>
                 </ul>
             </div>
+            <a href="reports.php">
+                <i class="fa-solid fa-tachometer-alt"></i>
+                <span>Reports & Analytics</span>
+            </a>
             <a href="admin-user.php">
                 <i class="fa-solid fa-tachometer-alt"></i>  
                 <span>Manage Admin Users</span>
