@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 21, 2024 at 09:11 AM
+-- Generation Time: Dec 25, 2024 at 12:59 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -61,15 +61,19 @@ CREATE TABLE `booking` (
   `review_status` int(11) DEFAULT 0,
   `second_payment_amount` varchar(255) DEFAULT NULL,
   `second_reference_no` int(11) DEFAULT NULL,
-  `second_payment_image` varchar(255) DEFAULT NULL
+  `second_payment_image` varchar(255) DEFAULT NULL,
+  `add_pax` int(11) NOT NULL DEFAULT 0,
+  `corkage_fee` tinyint(1) NOT NULL DEFAULT 0,
+  `theme` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `booking`
 --
 
-INSERT INTO `booking` (`id`, `status`, `full_name`, `celebrants_name`, `email`, `phone_number`, `events_date`, `guest_count`, `event_duration`, `event_starttime`, `event_endtime`, `event_type`, `event_package`, `event_options`, `cost`, `cancel_reason`, `payment_image`, `reference_no`, `payment_amount`, `status_paid`, `beef_dish`, `pork_dish`, `chicken_dish`, `pasta_dish`, `dessert_dish`, `fish_dish`, `drinks_dish`, `created_at`, `gcash_name`, `gcash_number`, `review_status`, `second_payment_amount`, `second_reference_no`, `second_payment_image`) VALUES
-(105, 'Waiting', 'Ej Ivan Ablanida', 'Ivan', 'ejthecoder@gmail.com', '9957939', '2024-12-22', 50, 5, 11, 4, 'Christening', 'Package A (Christening (50 pax)', 'None', 20000.00, NULL, 'gcash.jpg', '2312321', 20000.00, 1, 'Beef Caldereta', 'Pork Menudo', 'Sweet & Sour Chicken', 'Pancit', 'Mango Tapioca', 'Fish Fillet', 'Cucumber', '2024-12-20 22:23:29', '', '', 0, '10000', 12321312, '1734768113_gcash.jpg');
+INSERT INTO `booking` (`id`, `status`, `full_name`, `celebrants_name`, `email`, `phone_number`, `events_date`, `guest_count`, `event_duration`, `event_starttime`, `event_endtime`, `event_type`, `event_package`, `event_options`, `cost`, `cancel_reason`, `payment_image`, `reference_no`, `payment_amount`, `status_paid`, `beef_dish`, `pork_dish`, `chicken_dish`, `pasta_dish`, `dessert_dish`, `fish_dish`, `drinks_dish`, `created_at`, `gcash_name`, `gcash_number`, `review_status`, `second_payment_amount`, `second_reference_no`, `second_payment_image`, `add_pax`, `corkage_fee`, `theme`) VALUES
+(105, 'Pending', 'Ej Ivan Ablanida', 'Ivan', 'ejthecoder@gmail.com', '9957939', '2024-12-22', 50, 5, 11, 4, 'Christening', 'Package A (Christening (50 pax)', 'None', 20000.00, NULL, 'gcash.jpg', '2312321', 20000.00, 1, 'Beef Caldereta', 'Pork Menudo', 'Sweet & Sour Chicken', 'Pancit', 'Mango Tapioca', 'Fish Fillet', 'Cucumber', '2024-12-20 22:23:29', '', '', 0, '10000', 12321312, '1734768113_gcash.jpg', 11, 1, ''),
+(116, 'To-pay', 'Ej Ivan Ablanida', 'Ivan', 'ejthecoder@gmail.com', '9957939', '2024-12-25', 60, 5, 9, 2, 'Christening', 'Package B (Christening (60 pax)', 'None', 25000.00, NULL, NULL, NULL, 0.00, 0, 'Beef Caldereta', 'Pork Menudo', 'Sweet & Sour Chicken', 'Pancit', 'Mango Tapioca', 'Fish Fillet', 'Blue Lemonade', '2024-12-24 14:17:34', '', '', 0, NULL, NULL, NULL, 0, 0, 'dsadasdas');
 
 -- --------------------------------------------------------
 
@@ -593,7 +597,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=109;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=117;
 
 --
 -- AUTO_INCREMENT for table `cms`
