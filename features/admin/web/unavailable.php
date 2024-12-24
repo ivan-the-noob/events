@@ -60,6 +60,10 @@ $result = $conn->query($query);
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Approved Booking</span>
             </a>
+            <a href="on-going.php">
+                <i class="fa-solid fa-tachometer-alt"></i>
+                <span>On going Booking</span>
+            </a>
             <a href="cancel.php">
                 <i class="fa-solid fa-tachometer-alt"></i>
                 <span>Cancelled Booking</span>
