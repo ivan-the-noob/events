@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 25, 2024 at 12:59 AM
+-- Generation Time: Dec 25, 2024 at 05:46 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -64,16 +64,19 @@ CREATE TABLE `booking` (
   `second_payment_image` varchar(255) DEFAULT NULL,
   `add_pax` int(11) NOT NULL DEFAULT 0,
   `corkage_fee` tinyint(1) NOT NULL DEFAULT 0,
-  `theme` varchar(255) NOT NULL
+  `theme` varchar(255) NOT NULL,
+  `refund_status` enum('full-refund','half-refund','no-refund') DEFAULT NULL,
+  `refunded_amount` decimal(10,2) DEFAULT 0.00,
+  `cancel_time` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `booking`
 --
 
-INSERT INTO `booking` (`id`, `status`, `full_name`, `celebrants_name`, `email`, `phone_number`, `events_date`, `guest_count`, `event_duration`, `event_starttime`, `event_endtime`, `event_type`, `event_package`, `event_options`, `cost`, `cancel_reason`, `payment_image`, `reference_no`, `payment_amount`, `status_paid`, `beef_dish`, `pork_dish`, `chicken_dish`, `pasta_dish`, `dessert_dish`, `fish_dish`, `drinks_dish`, `created_at`, `gcash_name`, `gcash_number`, `review_status`, `second_payment_amount`, `second_reference_no`, `second_payment_image`, `add_pax`, `corkage_fee`, `theme`) VALUES
-(105, 'Pending', 'Ej Ivan Ablanida', 'Ivan', 'ejthecoder@gmail.com', '9957939', '2024-12-22', 50, 5, 11, 4, 'Christening', 'Package A (Christening (50 pax)', 'None', 20000.00, NULL, 'gcash.jpg', '2312321', 20000.00, 1, 'Beef Caldereta', 'Pork Menudo', 'Sweet & Sour Chicken', 'Pancit', 'Mango Tapioca', 'Fish Fillet', 'Cucumber', '2024-12-20 22:23:29', '', '', 0, '10000', 12321312, '1734768113_gcash.jpg', 11, 1, ''),
-(116, 'To-pay', 'Ej Ivan Ablanida', 'Ivan', 'ejthecoder@gmail.com', '9957939', '2024-12-25', 60, 5, 9, 2, 'Christening', 'Package B (Christening (60 pax)', 'None', 25000.00, NULL, NULL, NULL, 0.00, 0, 'Beef Caldereta', 'Pork Menudo', 'Sweet & Sour Chicken', 'Pancit', 'Mango Tapioca', 'Fish Fillet', 'Blue Lemonade', '2024-12-24 14:17:34', '', '', 0, NULL, NULL, NULL, 0, 0, 'dsadasdas');
+INSERT INTO `booking` (`id`, `status`, `full_name`, `celebrants_name`, `email`, `phone_number`, `events_date`, `guest_count`, `event_duration`, `event_starttime`, `event_endtime`, `event_type`, `event_package`, `event_options`, `cost`, `cancel_reason`, `payment_image`, `reference_no`, `payment_amount`, `status_paid`, `beef_dish`, `pork_dish`, `chicken_dish`, `pasta_dish`, `dessert_dish`, `fish_dish`, `drinks_dish`, `created_at`, `gcash_name`, `gcash_number`, `review_status`, `second_payment_amount`, `second_reference_no`, `second_payment_image`, `add_pax`, `corkage_fee`, `theme`, `refund_status`, `refunded_amount`, `cancel_time`) VALUES
+(105, 'Cancel-pending', 'Ej Ivan Ablanida', 'Ivan', 'ejthecoder@gmail.com', '9957939', '2024-12-22', 50, 5, 11, 4, 'Christening', 'Package A (Christening (50 pax)', 'None', 20000.00, NULL, 'gcash.jpg', '2312321', 20000.00, 1, 'Beef Caldereta', 'Pork Menudo', 'Sweet & Sour Chicken', 'Pancit', 'Mango Tapioca', 'Fish Fillet', 'Cucumber', '2024-12-20 22:23:29', '', '', 0, '10000', 12321312, '1734768113_gcash.jpg', 11, 1, '', 'full-refund', 2000.00, NULL),
+(116, 'Cancel-pending', 'Ej Ivan Ablanida', 'Ivan', 'ejthecoder@gmail.com', '9957939', '2024-12-25', 60, 5, 9, 2, 'Christening', 'Package B (Christening (60 pax)', 'None', 25000.00, 'Hi', NULL, NULL, 0.00, 0, 'Beef Caldereta', 'Pork Menudo', 'Sweet & Sour Chicken', 'Pancit', 'Mango Tapioca', 'Fish Fillet', 'Blue Lemonade', '2024-12-24 14:17:34', 'Ivan', '09957939703', 0, NULL, NULL, NULL, 0, 0, 'dsadasdas', NULL, 0.00, '2024-12-25 04:44:33');
 
 -- --------------------------------------------------------
 

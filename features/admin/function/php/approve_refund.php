@@ -5,17 +5,25 @@ require '../../../../PHPMailer/src/PHPMailer.php';
 require '../../../../PHPMailer/src/SMTP.php';
 require '../../../../PHPMailer/src/Exception.php';
 
-
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-if (isset($_POST['action']) && isset($_POST['booking_id'])) {
-    $booking_id = $_POST['booking_id'];
-    $action = $_POST['action'];
+if (isset($_POST['refund_status'], $_POST['id'], $_POST['refunded_amount'])) {
+    $id = $_POST['id']; // Use `id` as the identifier
+    $refund_status = $_POST['refund_status'];
+    $refunded_amount = $_POST['refunded_amount'];
 
+    // Validate refund amount
+    if (!is_numeric($refunded_amount) || $refunded_amount < 0) {
+        $_SESSION['status_message'] = 'Invalid refund amount.';
+        header('Location: ../../web/pending.php');
+        exit;
+    }
+
+    // Fetch user details for the email
     $query = "SELECT email, full_name FROM booking WHERE id = ?";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param('i', $booking_id);
+    $stmt->bind_param('i', $id);
     $stmt->execute();
     $result = $stmt->get_result();
     $user = $result->fetch_assoc();
@@ -30,48 +38,52 @@ if (isset($_POST['action']) && isset($_POST['booking_id'])) {
     $user_email = $user['email'];
     $user_name = $user['full_name'];
 
-    if ($action == 'accept') {
-        $status = 'cancel';
-        $_SESSION['status_message'] = 'Booking has been canceled and refunded!';
-        $mail_message = "Dear $user_name, <br><br>Your booking has been canceled and refunded! We look forward to serving you on your event day.";
-    } elseif ($action == 'decline') {
-        $status = 'Declined';
-        $_SESSION['status_message'] = 'Booking refund canceled!';
-        $mail_message = "Dear $user_name, <br><br>We regret to inform you that your cancellation has been declined.";
-    }
-
-    $update_query = "UPDATE booking SET status = ? WHERE id = ?";
+    // Update refund_status and refunded_amount
+    $update_query = "UPDATE booking SET refund_status = ?, refunded_amount = ? WHERE id = ?";
     $stmt = $conn->prepare($update_query);
-    $stmt->bind_param('si', $status, $booking_id);
-    $stmt->execute();
-    $stmt->close();
+    $stmt->bind_param('sdi', $refund_status, $refunded_amount, $id);
 
-    if ($action == 'accept') {
-        $mail = new PHPMailer(true);
+    if ($stmt->execute()) {
+        $_SESSION['status_message'] = 'Refund status updated successfully.';
 
-        try {
-            $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';
-            $mail->SMTPAuth = true;
-            $mail->Username = 'ejivancablanida@gmail.com'; 
-            $mail->Password = 'acjf ngko qlfb cuju';
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port = 587;
+        // Send email for refundable statuses
+        if ($refund_status == 'full-refund' || $refund_status == 'half-refund') {
+            $mail = new PHPMailer(true);
+            $mail_message = "Dear $user_name, <br><br>Your booking refund request has been processed. ";
+            $mail_message .= "You have been refunded: <strong>PHP " . number_format($refunded_amount, 2) . "</strong>.";
 
-            $mail->setFrom('AmielsMOM@gmail.com', 'Amiels Mom Events'); 
-            $mail->addAddress($user_email, $user_name);
+            try {
+                $mail->isSMTP();
+                $mail->Host = 'smtp.gmail.com';
+                $mail->SMTPAuth = true;
+                $mail->Username = 'ejivancablanida@gmail.com'; 
+                $mail->Password = 'acjf ngko qlfb cuju';
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                $mail->Port = 587;
 
-            $mail->isHTML(true);
-            $mail->Subject = 'Booking Approval Notification';
-            $mail->Body = $mail_message;
+                $mail->setFrom('AmielsMOM@gmail.com', 'Amiels Mom Events');
+                $mail->addAddress($user_email, $user_name);
 
-            $mail->send();
-        } catch (Exception $e) {
-            error_log("Mailer Error: {$mail->ErrorInfo}"); 
+                $mail->isHTML(true);
+                $mail->Subject = 'Booking Refund Notification';
+                $mail->Body = $mail_message;
+
+                $mail->send();
+            } catch (Exception $e) {
+                error_log("Mailer Error: {$mail->ErrorInfo}"); 
+            }
         }
+    } else {
+        $_SESSION['status_message'] = 'Failed to update refund status.';
     }
 
-    header('Location: ../../web/cancel.php');
+    $stmt->close();
+    $conn->close();
+
+    header('Location: ../../web/pending.php');
+    exit;
+} else {
+    $_SESSION['status_message'] = 'Invalid request.';
+    header('Location: ../../web/pending.php');
     exit;
 }
-?>

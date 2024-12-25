@@ -241,6 +241,7 @@
                         <th scope="col">Gcash Number</th>
                         <th scope="col">Phone Number</th>
                         <th scope="col">Event Date</th>
+                        <th scope="col">Refund Date</th>
                         <th scope="col">Guest Count</th>
                         <th scope="col">Event Start Time</th>
                         <th scope="col">Type of Event</th>
@@ -269,6 +270,7 @@
                                 <td><?php echo htmlspecialchars($row['gcash_number']); ?></td>
                                 <td><?php echo htmlspecialchars($row['phone_number']); ?></td>
                                 <td><?php echo htmlspecialchars($row['events_date']); ?></td>
+                                <td><?php echo htmlspecialchars($row['cancel_time']); ?></td>
                                 <td><?php echo htmlspecialchars($row['guest_count']); ?> guest</td>
                                 <td><?php echo htmlspecialchars($row['event_starttime']); ?>:00</td>
                                 <td><?php echo htmlspecialchars($row['event_type']); ?></td>
@@ -285,18 +287,51 @@
                                 <td>₱<?php echo number_format($row['cost'], 2); ?></td>
                                 <td>₱<?php echo number_format($row['payment_amount'], 2); ?></td>
                                 <td>₱<?php echo number_format($row['cost'] - $row['payment_amount'], 2); ?></td>
+                                <?php if (is_null($row['refund_status'])): ?>
                                 <td>
-                                    <form method="POST" action="../function/php/approve_refund.php" style="display:inline;">
-                                        <input type="hidden" name="booking_id" value="<?php echo $row['id']; ?>">
-                                        <input type="hidden" name="action" value="accept">
-                                        <button type="submit" class="btn btn-success">Approve</button>
+                                    <form method="POST" action="../function/php/approve_refund.php" id="refundForm">
+                                        <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                                        <input type="hidden" name="refund_status" id="refund_status">
+                                        <input type="hidden" name="refunded_amount" id="refunded_amount">
+                                        <select class="form-select" id="refundDropdown" style="width: 200px;">
+                                            <option value="" selected disabled>Choose Refund Status</option>
+                                            <option value="full-refund">Full Refund</option>
+                                            <option value="half-refund">Half Refund</option>
+                                            <option value="no-refund">No Refund</option>
+                                        </select>
                                     </form>
-                                    <form method="POST" action="../function/php/approve_refund.php" style="display:inline;">
-                                        <input type="hidden" name="booking_id" value="<?php echo $row['id']; ?>">
-                                        <input type="hidden" name="action" value="decline">
-                                        <button type="submit" class="btn btn-danger">Decline</button>
-                                    </form>
+
+                                    <!-- Bootstrap Modal -->
+                                    <div class="modal fade" id="refundModal" tabindex="-1" aria-labelledby="refundModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="refundModalLabel">Refund Amount</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <label for="refundAmountInput" class="form-label">Enter Refund Amount:</label>
+                                                    <input type="number" class="form-control" id="refundAmountInput" min="0">
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                    <button type="button" class="btn btn-primary" id="submitRefund">Submit</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </td>
+                            <?php else: ?>
+                                <td>
+                                    <div class="btn btn-success">
+                                        <?php echo ucfirst(str_replace('-', ' ', $row['refund_status'])); ?> - 
+                                        ₱<?php echo number_format($row['refunded_amount'], 2); ?>
+                                    </div>
+                                </td>
+                            <?php endif; ?>
+
+
+
                             </tr>
 
                             <!-- Modal to view food details -->
@@ -416,6 +451,43 @@
         }
         ?>
 </body>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const refundDropdown = document.getElementById('refundDropdown');
+    const refundModal = new bootstrap.Modal(document.getElementById('refundModal'));
+    const refundStatusInput = document.getElementById('refund_status');
+    const refundAmountInput = document.getElementById('refundAmountInput');
+    const submitRefundButton = document.getElementById('submitRefund');
+    const refundForm = document.getElementById('refundForm');
+
+    refundDropdown.addEventListener('change', function () {
+        const selectedValue = this.value;
+
+        if (selectedValue === 'full-refund' || selectedValue === 'half-refund') {
+            refundModal.show();
+        } else if (selectedValue === 'no-refund') {
+            refundStatusInput.value = selectedValue;
+            refundForm.submit(); 
+        }
+    });
+
+    submitRefundButton.addEventListener('click', () => {
+        const refundAmount = refundAmountInput.value;
+
+        if (!refundAmount || isNaN(refundAmount) || refundAmount < 0) {
+            alert('Please enter a valid refund amount.');
+            return;
+        }
+
+        refundStatusInput.value = refundDropdown.value; 
+        document.getElementById('refunded_amount').value = refundAmount; 
+        refundModal.hide(); 
+        refundForm.submit(); 
+    });
+});
+
+</script>
 
 
 
