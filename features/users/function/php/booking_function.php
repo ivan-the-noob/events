@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param("sssssiisssssssssssssss", $full_name, $celebrants_name, $email, $phone_number, $events_date, $guest_count, $event_duration, $event_starttime, $event_endtime, $event_type, $event_package, $event_options, $cost, $theme, $status, $beef_dish, $pork_dish, $chicken_dish, $pasta_dish, $dessert_dish, $fish_dish, $drinks_dish);
 
         if ($stmt->execute()) {
-            header("Location: ../../web/appointment.php");
+            header("Location: ../../web/history.php");
             exit();
         } else {
             echo "Error: " . $stmt->error;

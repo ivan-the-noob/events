@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 25, 2024 at 05:46 AM
+-- Generation Time: Dec 29, 2024 at 03:03 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `booking` (
   `id` int(11) NOT NULL,
-  `status` enum('To-pay','Pending','Waiting','On-going','Finished','Cancel-pending','Cancel') NOT NULL,
+  `status` enum('To-pay','Pending','Waiting','On-going','Finished','Cancel-pending','Cancel','Update-payment','resched') NOT NULL,
   `full_name` varchar(255) NOT NULL,
   `celebrants_name` varchar(255) DEFAULT NULL,
   `email` varchar(255) NOT NULL,
@@ -75,8 +75,7 @@ CREATE TABLE `booking` (
 --
 
 INSERT INTO `booking` (`id`, `status`, `full_name`, `celebrants_name`, `email`, `phone_number`, `events_date`, `guest_count`, `event_duration`, `event_starttime`, `event_endtime`, `event_type`, `event_package`, `event_options`, `cost`, `cancel_reason`, `payment_image`, `reference_no`, `payment_amount`, `status_paid`, `beef_dish`, `pork_dish`, `chicken_dish`, `pasta_dish`, `dessert_dish`, `fish_dish`, `drinks_dish`, `created_at`, `gcash_name`, `gcash_number`, `review_status`, `second_payment_amount`, `second_reference_no`, `second_payment_image`, `add_pax`, `corkage_fee`, `theme`, `refund_status`, `refunded_amount`, `cancel_time`) VALUES
-(105, 'Cancel-pending', 'Ej Ivan Ablanida', 'Ivan', 'ejthecoder@gmail.com', '9957939', '2024-12-22', 50, 5, 11, 4, 'Christening', 'Package A (Christening (50 pax)', 'None', 20000.00, NULL, 'gcash.jpg', '2312321', 20000.00, 1, 'Beef Caldereta', 'Pork Menudo', 'Sweet & Sour Chicken', 'Pancit', 'Mango Tapioca', 'Fish Fillet', 'Cucumber', '2024-12-20 22:23:29', '', '', 0, '10000', 12321312, '1734768113_gcash.jpg', 11, 1, '', 'full-refund', 2000.00, NULL),
-(116, 'Cancel-pending', 'Ej Ivan Ablanida', 'Ivan', 'ejthecoder@gmail.com', '9957939', '2024-12-25', 60, 5, 9, 2, 'Christening', 'Package B (Christening (60 pax)', 'None', 25000.00, 'Hi', NULL, NULL, 0.00, 0, 'Beef Caldereta', 'Pork Menudo', 'Sweet & Sour Chicken', 'Pancit', 'Mango Tapioca', 'Fish Fillet', 'Blue Lemonade', '2024-12-24 14:17:34', 'Ivan', '09957939703', 0, NULL, NULL, NULL, 0, 0, 'dsadasdas', NULL, 0.00, '2024-12-25 04:44:33');
+(121, 'Update-payment', 'Ej Ivan Ablanida', 'dasdsadas', 'ejthecoder@gmail.com', '9957939312', '2024-12-31', 60, 5, 9, 2, 'Despedida', 'Package B (Despedida (60 pax)', 'None', 25000.00, NULL, 'gcash.jpg', '321321321', 12500.00, 1, 'Creamy Beef with Mushroom', 'Pork Shanghai', 'Chicken Afritada', 'Carbonara', 'Buko Pandan', 'Fish Fillet', 'Blue Lemonade', '2024-12-28 16:24:50', '', '', 0, '123', NULL, NULL, 0, 0, 'edasdas', NULL, 0.00, NULL);
 
 -- --------------------------------------------------------
 
@@ -600,7 +599,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=117;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122;
 
 --
 -- AUTO_INCREMENT for table `cms`

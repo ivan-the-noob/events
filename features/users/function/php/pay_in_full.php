@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $conn->close();
-    header('Location: ../../web/appointment.php');
+    header('Location: ../../web/history.php');
     exit;
 }
 ?>

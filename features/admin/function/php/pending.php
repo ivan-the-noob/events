@@ -71,7 +71,7 @@ if (isset($_POST['action']) && isset($_POST['booking_id'])) {
         }
     }
 
-    header('Location: ../../web/pending.php');
+    header('Location: ../../web/approve.php');
     exit;
 }
 ?>

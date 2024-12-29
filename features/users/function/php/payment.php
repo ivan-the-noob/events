@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $stmt->close();
-    header('Location: ../../web/appointment.php');
+    header('Location: ../../web/history.php');
     exit;
 }
 ?>

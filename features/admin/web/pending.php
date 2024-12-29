@@ -15,7 +15,7 @@
 
     $search_term = "%" . $search . "%";
 
-    $total_query = "SELECT COUNT(*) FROM booking WHERE status = 'Pending' AND status_paid = 1 AND (full_name LIKE ? OR celebrants_name LIKE ? OR email LIKE ?)";
+    $total_query = "SELECT COUNT(*) FROM booking WHERE status IN ('Pending', 'to-pay') AND (full_name LIKE ? OR celebrants_name LIKE ? OR email LIKE ?)";
     $stmt = $conn->prepare($total_query);
     $stmt->bind_param("sss", $search_term, $search_term, $search_term);
     $stmt->execute();
@@ -24,7 +24,7 @@
     $total_bookings = $total_row[0];
     $total_pages = ceil($total_bookings / $results_per_page);
 
-    $query = "SELECT * FROM booking WHERE status = 'Pending' AND status_paid = 1 AND (full_name LIKE ? OR celebrants_name LIKE ? OR email LIKE ?) LIMIT ?, ?";
+    $query = "SELECT * FROM booking WHERE status IN ('Pending', 'to-pay') AND (full_name LIKE ? OR celebrants_name LIKE ? OR email LIKE ?) LIMIT ?, ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("ssiii", $search_term, $search_term, $search_term, $start_from, $results_per_page);
     $stmt->execute();
@@ -177,10 +177,12 @@
                 <thead class="table-booking">
                     <tr>
                         <th scope="col">#</th>
+                        <th scope="col">Status</th>
                         <th scope="col">Full Name</th>
                         <th scope="col">Celebrant's Name</th>
                         <th scope="col">Email</th>
                         <th scope="col">Phone Number</th>
+                        <th scope="col">Booking Date</th>
                         <th scope="col">Event Date</th>
                         <th scope="col">Guest Count</th>
                         <th scope="col">Event Start Time</th>
@@ -202,10 +204,24 @@
                         while ($row = $result->fetch_assoc()): ?>
                             <tr>
                                 <td><?php echo $id++; ?></td>
+                                <td>
+                                    <?php
+                                        if (trim(strtolower($row['status'])) === 'pending') {
+                                            if (empty(trim($row['second_payment_amount']))) {
+                                                echo 'Paid in half';
+                                            } else {
+                                                echo 'Fully paid';
+                                            }
+                                        } else {
+                                            echo htmlspecialchars($row['status']);
+                                        }
+                                    ?>
+                                </td>
                                 <td><?php echo htmlspecialchars($row['celebrants_name']); ?></td>
                                 <td><?php echo htmlspecialchars($row['full_name']); ?></td>
                                 <td><?php echo htmlspecialchars($row['email']); ?></td>
                                 <td><?php echo htmlspecialchars($row['phone_number']); ?></td>
+                                <td><?php echo htmlspecialchars($row['created_at']); ?></td>
                                 <td><?php echo htmlspecialchars($row['events_date']); ?></td>
                                 <td><?php echo htmlspecialchars($row['guest_count']); ?> guest</td>
                                 <td><?php echo htmlspecialchars($row['event_starttime']); ?>:00</td>

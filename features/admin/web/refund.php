@@ -240,6 +240,7 @@
                         <th scope="col">Gcash Name</th>
                         <th scope="col">Gcash Number</th>
                         <th scope="col">Phone Number</th>
+                        <th scope="col">Booking Date</th>
                         <th scope="col">Event Date</th>
                         <th scope="col">Refund Date</th>
                         <th scope="col">Guest Count</th>
@@ -262,6 +263,7 @@
                         while ($row = $result->fetch_assoc()): ?>
                             <tr>
                                 <td><?php echo $id++; ?></td>
+                                
                                 <td><?php echo htmlspecialchars($row['celebrants_name']); ?></td>
                                 <td><?php echo htmlspecialchars($row['full_name']); ?></td>
                                 <td><?php echo htmlspecialchars($row['email']); ?></td>
@@ -269,6 +271,7 @@
                                 <td><?php echo htmlspecialchars($row['gcash_name']); ?></td>
                                 <td><?php echo htmlspecialchars($row['gcash_number']); ?></td>
                                 <td><?php echo htmlspecialchars($row['phone_number']); ?></td>
+                                <td><?php echo htmlspecialchars($row['created_at']); ?></td>
                                 <td><?php echo htmlspecialchars($row['events_date']); ?></td>
                                 <td><?php echo htmlspecialchars($row['cancel_time']); ?></td>
                                 <td><?php echo htmlspecialchars($row['guest_count']); ?> guest</td>

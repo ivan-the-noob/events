@@ -18,7 +18,7 @@ $start_from = ($page - 1) * $results_per_page;
 
 $search_term = "%" . $search . "%";
 
-$total_query = "SELECT COUNT(*) FROM booking WHERE status IN ('Waiting', 'On-going') 
+$total_query = "SELECT COUNT(*) FROM booking WHERE status IN ('Waiting', 'On-going','resched','Update-payment') 
     AND (
         full_name LIKE ? OR 
         celebrants_name LIKE ? OR 
@@ -45,7 +45,7 @@ $total_row = $total_result->fetch_row();
 $total_bookings = $total_row[0];
 $total_pages = ceil($total_bookings / $results_per_page);
 
-$query = "SELECT * FROM booking WHERE status IN ('Waiting', 'On-going') 
+$query = "SELECT * FROM booking WHERE status IN ('Waiting', 'On-going','resched','Update-payment') 
     AND (
         full_name LIKE ? OR 
         celebrants_name LIKE ? OR 
@@ -113,7 +113,7 @@ $result = $stmt->get_result();
             <img src="../../../assets/logo.png" alt="Logo">
         </a>
         <a href="dashboard.php">
-            <i class="fa-solid fa-tachometer-alt"></i>
+            <i class="fa-solid fa-gauge-high"></i>
             <span>Dashboard</span>
         </a>
         <a href="calendar.php">
@@ -125,7 +125,7 @@ $result = $stmt->get_result();
             <span>Pending Booking</span>
         </a>
         <a href="#" class="navbar-highlight">
-            <i class="fa-solid fa-check"></i>
+            <i class="fa-solid fa-check-circle"></i>
             <span>Approved Booking</span>
         </a>
         <a href="on-going.php">
@@ -136,8 +136,12 @@ $result = $stmt->get_result();
             <i class="fa-solid fa-money-bill-wave"></i>
             <span>Refund Pending</span>
         </a>
-        <a href="unavailable.php">
+        <a href="cancel.php">
             <i class="fa-solid fa-ban"></i>
+            <span>Cancelled Booking</span>
+        </a>
+        <a href="unavailable.php">
+            <i class="fa-solid fa-exclamation-circle"></i>
             <span>Unavailable</span>
         </a>
         <a href="invoice.php">
@@ -149,7 +153,7 @@ $result = $stmt->get_result();
             <span>Reviews</span>
         </a>
         <a href="history.php">
-            <i class="fa-solid fa-history"></i>
+            <i class="fa-solid fa-clock-rotate-left"></i>
             <span>History</span>
         </a>
         <div class="dropdown dropup">
@@ -170,12 +174,12 @@ $result = $stmt->get_result();
             <span>Reports & Analytics</span>
         </a>
         <a href="admin-user.php">
-            <i class="fa-solid fa-user-shield"></i>
+            <i class="fa-solid fa-users-gear"></i>
             <span>Manage Admin Users</span>
         </a>
         <div class="dropdown dropup">
             <a href="#" class="dropdown-toggle" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="fa-solid fa-pen-to-square"></i>
+                <i class="fa-solid fa-pen-to-square"></i>
                 <span>CMS</span>
             </a>
             <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
@@ -259,10 +263,12 @@ $result = $stmt->get_result();
                 <thead class="table-booking">
                     <tr>
                         <th scope="col">#</th>
+                        <th scope="col">Status</th>
                         <th scope="col">Full Name</th>
                         <th scope="col">Celebrant's Name</th>
                         <th scope="col">Email</th>
                         <th scope="col">Phone Number</th>
+                        <th scope="col">Booking Date</th>
                         <th scope="col">Event Date</th>
                         <th scope="col">Guest Count</th>
                         <th scope="col">Event Start Time</th>
@@ -284,10 +290,24 @@ $result = $stmt->get_result();
                         while ($row = $result->fetch_assoc()): ?>
                             <tr>
                                 <td><?php echo $id++; ?></td>
+                                <td>
+                                    <?php
+                                        if (trim(strtolower($row['status'])) === 'update-payment') {
+                                            if (empty(trim($row['second_payment_amount']))) {
+                                                echo 'Paid in half';
+                                            } else {
+                                                echo 'Fully paid';
+                                            }
+                                        } else {
+                                            echo htmlspecialchars($row['status']);
+                                        }
+                                    ?>
+                                </td>
                                 <td><?php echo htmlspecialchars($row['celebrants_name']); ?></td>
                                 <td><?php echo htmlspecialchars($row['full_name']); ?></td>
                                 <td><?php echo htmlspecialchars($row['email']); ?></td>
                                 <td><?php echo htmlspecialchars($row['phone_number']); ?></td>
+                                <td><?php echo htmlspecialchars($row['created_at']); ?></td>
                                 <td><?php echo htmlspecialchars($row['events_date']); ?></td>
                                 <td><?php echo htmlspecialchars($row['guest_count']); ?> guest</td>
                                 <td><?php echo htmlspecialchars($row['event_starttime']); ?>:00</td>
@@ -307,13 +327,12 @@ $result = $stmt->get_result();
                                 <td>₱<?php echo number_format($row['cost'] - $row['payment_amount'], 2); ?></td>
                                 <td>
                                 <select class="form-select form-select-sm" onchange="updateStatus(this, <?php echo $row['id']; ?>)">
-                                    <option value="Waiting" <?php echo ($row['status'] === 'Cancel' ? 'selected' : ''); ?>>Cancel Booking</option>
-                                    <option value="Waiting" <?php echo ($row['status'] === 'Update-payment' ? 'selected' : ''); ?>>Update Payment</option>
-                                    <option value="Waiting" <?php echo ($row['status'] === 'resched' ? 'selected' : ''); ?>>Reschedule Booking</option>
-                                    <option value="Waiting" <?php sdecho ($row['status'] === 'Waiting' ? 'selected' : ''); ?>>Waiting</option>
+                                    <option value="Waiting" <?php echo ($row['status'] === 'Waiting' ? 'selected' : ''); ?>>Waiting</option>
+                                    <option value="Cancel" <?php echo ($row['status'] === 'Cancel' ? 'selected' : ''); ?>>Cancel Booking</option>
+                                    <option value="Update-payment" <?php echo ($row['status'] === 'Update-payment' ? 'selected' : ''); ?>>Update Payment</option>
+                                    <option value="resched" <?php echo ($row['status'] === 'resched' ? 'selected' : ''); ?>>Reschedule Booking</option>
                                     <option value="On-going" <?php echo ($row['status'] === 'On-going' ? 'selected' : ''); ?>>On-going</option>
                                     <option value="Finished" <?php echo ($row['status'] === 'Finished' ? 'selected' : ''); ?>>Finished</option>
-
                                 </select>
                                 </td>
                             </tr>
@@ -364,6 +383,30 @@ $result = $stmt->get_result();
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="modal fade" id="updatePaymentModal" tabindex="-1" aria-labelledby="updatePaymentModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <form action="../function/php/update_second.php" method="post">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="updatePaymentModalLabel">Update Second Payment Amount</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <input type="hidden" name="id" id="bookingId" value="">
+                                                <div class="mb-3">
+                                                    <label for="secondPaymentAmount" class="form-label">Second Payment Amount</label>
+                                                    <input type="text" class="form-control" name="second_payment_amount" id="secondPaymentAmount" value="<?php echo number_format($row['payment_amount'], 2); ?>" required>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                         <?php endwhile; ?>
                 </tbody>
             </table>
@@ -381,6 +424,9 @@ $result = $stmt->get_result();
                         </div>
                     </div>
                 </div>
+
+                
+
 
                 <script>
                     const paymentImageButtons = document.querySelectorAll('[data-bs-target="#paymentImageModal"]');

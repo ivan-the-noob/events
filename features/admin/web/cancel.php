@@ -240,6 +240,7 @@
                         <th scope="col">Email</th>
                         <th scope="col">Phone Number</th>
                         <th scope="col">Event Date</th>
+                        <th scope="col">Event Date</th>
                         <th scope="col">Guest Count</th>
                         <th scope="col">Event Start Time</th>
                         <th scope="col">Type of Event</th>
@@ -263,6 +264,7 @@
                                 <td><?php echo htmlspecialchars($row['full_name']); ?></td>
                                 <td><?php echo htmlspecialchars($row['email']); ?></td>
                                 <td><?php echo htmlspecialchars($row['phone_number']); ?></td>
+                                <td><?php echo htmlspecialchars($row['created_at']); ?></td>
                                 <td><?php echo htmlspecialchars($row['events_date']); ?></td>
                                 <td><?php echo htmlspecialchars($row['guest_count']); ?> guest</td>
                                 <td><?php echo htmlspecialchars($row['event_starttime']); ?>:00</td>
