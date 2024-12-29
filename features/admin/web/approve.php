@@ -396,7 +396,14 @@ $result = $stmt->get_result();
                                                 <input type="hidden" name="id" id="bookingId" value="">
                                                 <div class="mb-3">
                                                     <label for="secondPaymentAmount" class="form-label">Second Payment Amount</label>
-                                                    <input type="text" class="form-control" name="second_payment_amount" id="secondPaymentAmount" value="<?php echo number_format($row['payment_amount'], 2); ?>" required>
+                                                    <?php
+                                                        $cost = $row['cost']; 
+                                                        $payment_amount = $row['payment_amount']; 
+                                                        $remaining_amount = $cost - $payment_amount;
+                                                    ?>
+
+                                                        <p>Remaining Amount: <?php echo number_format($remaining_amount); ?></p>
+                                                    <input type="text" class="form-control" name="second_payment_amount" id="secondPaymentAmount" required>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
