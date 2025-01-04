@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->bind_param('sssi', $cancel_reason, $gcash_name, $gcash_number, $booking_id);
 
         if ($stmt->execute()) {
-            header("Location: ../../web/appointment.php");
+            header("Location: ../../web/history.php");
             exit;
         } else {
             echo "Error updating record.";

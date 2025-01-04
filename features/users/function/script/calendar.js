@@ -2,6 +2,19 @@ document.addEventListener('DOMContentLoaded', async function () {
     const calendarEl = document.getElementById('calendar');
     const eventStarttimeSelect = document.getElementById('event-starttime');
 
+    // Fetch unavailable days from the PHP file
+    let unavailableDays = [];
+    try {
+        const response = await fetch('../function/php/unavailable.php');
+        if (response.ok) {
+            unavailableDays = await response.json();
+        } else {
+            console.error('Failed to fetch unavailable days:', response.status);
+        }
+    } catch (error) {
+        console.error('Error fetching unavailable days:', error);
+    }
+
     const calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
         headerToolbar: {
@@ -15,7 +28,12 @@ document.addEventListener('DOMContentLoaded', async function () {
                 info.el.style.backgroundColor = 'white';
                 info.el.style.opacity = 0.2;
                 info.el.style.cursor = 'not-allowed';
-            } else {
+            }
+            else if (unavailableDays.includes(selectedDate)) {
+                info.el.style.backgroundColor = '#FFBFBD';
+                info.el.style.cursor = 'not-allowed';
+            }
+            else {
                 try {
                     const response = await fetch(`../function/php/check_date_availability.php?date=${selectedDate}`);
                     if (!response.ok) {
@@ -29,7 +47,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                         info.el.style.cursor = 'not-allowed';
                         info.el.style.setProperty('color', 'white', 'important');
                     } else {
-                        info.el.style.backgroundColor = '#FFFFFF'; 
+                        info.el.style.backgroundColor = '#FFFFFF';
 
                         info.el.addEventListener('mouseenter', function () {
                             info.el.style.backgroundColor = '#100E44';
@@ -38,7 +56,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
                         info.el.addEventListener('mouseleave', function () {
                             info.el.style.backgroundColor = '#FFFFFF';
-                            info.el.style.color = ''; 
+                            info.el.style.color = '';
                         });
 
                         info.el.addEventListener('click', async function () {

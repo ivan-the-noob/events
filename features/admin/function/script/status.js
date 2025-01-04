@@ -1,6 +1,7 @@
 function updateStatus(selectElement, bookingId) {
     const status = selectElement.value;
 
+    // Remove all status-related classes
     selectElement.classList.remove(
         'bg-warning',
         'bg-info',
@@ -10,6 +11,7 @@ function updateStatus(selectElement, bookingId) {
         'text-white'
     );
 
+    // Add classes based on the selected status
     switch (status) {
         case 'Waiting':
             selectElement.classList.add('bg-warning');
@@ -26,9 +28,9 @@ function updateStatus(selectElement, bookingId) {
         case 'Update-payment':
             selectElement.classList.add('bg-info', 'text-white');
             const modal = new bootstrap.Modal(document.getElementById('updatePaymentModal'));
-            modal.show();
+            modal.show();     
             document.getElementById('bookingId').value = bookingId;
-            break;
+            return;
         case 'resched':
             selectElement.classList.add('bg-warning', 'text-white');
             break;
@@ -65,26 +67,28 @@ function updateStatus(selectElement, bookingId) {
 }
 
 function handleModalSubmit(event) {
-    event.preventDefault(); 
+    event.preventDefault();  
 
     const form = event.target;
     const formData = new FormData(form);
 
     const xhr = new XMLHttpRequest();
     xhr.open("POST", form.action, true);
+
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             if (xhr.responseText.trim() === "success") {
                 const modal = bootstrap.Modal.getInstance(document.getElementById('updatePaymentModal'));
                 modal.hide();
-            
+
                 Swal.fire({
                     title: 'Success!',
                     text: 'Second payment updated successfully!',
                     icon: 'success',
                     confirmButtonText: 'OK'
                 }).then(() => {
-                    window.location.href = "../../web/approve.php?message=Payment updated successfully";
+                    window.location.reload();
+               
                 });
             } else {
                 Swal.fire({

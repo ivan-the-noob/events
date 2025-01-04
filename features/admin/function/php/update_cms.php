@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("ssss", $system_name, $front_line, $welcome_message, $imagePath);
 
     if ($stmt->execute()) {
-        header("Location: ../../web/cms.php");
+        header("Location: ../../web/front_cms.php");
         exit();
     } else {
         echo "Error: " . $stmt->error;

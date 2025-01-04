@@ -80,10 +80,10 @@ if (isset($_POST['refund_status'], $_POST['id'], $_POST['refunded_amount'])) {
     $stmt->close();
     $conn->close();
 
-    header('Location: ../../web/pending.php');
+    header('Location: ../../web/cancel.php');
     exit;
 } else {
     $_SESSION['status_message'] = 'Invalid request.';
-    header('Location: ../../web/pending.php');
+    header('Location: ../../web/cancel.php');
     exit;
 }

@@ -198,7 +198,20 @@ $result = $stmt->get_result();
                     <h5 class="text-center">UPDATE EVENTS DETAILS</h5>
                     <form action="../function/php/update_booking.php" method="POST">
                     <input type="hidden" name="id" value="<?php echo htmlspecialchars($row['id']); ?>">
+        
+
                         <div class="d-flex flex-column">
+                            
+                    <div class="d-flex gap-1">
+                        <div class="form-group mb-3 w-100">
+                            <label for="additional-extend" class="form-label"><strong>Additional Hr</strong></label>
+                            <input type="number" id="additional-extend" name="add_extend" class="form-control w-100" min="0" max="2" value="<?php echo number_format($row['add_extend']); ?>">
+                        </div>
+                        <div class="form-group mb-3 w-100">
+                            <label for="total-extend" class="form-label"><strong>Total Extend Cost:</strong></label>
+                            <input type="text" id="total-extend" class="form-control w-100" value="₱<?php echo number_format($row['add_extend'] * 1000); ?>" readonly>
+                        </div>
+                    </div>
                         <div class="d-flex gap-1">
                         <div class="form-group mb-3">
                             <label for="additional-pax" class="form-label"><strong>Additional Pax</strong></label>
@@ -220,11 +233,15 @@ $result = $stmt->get_result();
                         </div>
                     </div>
                     <?php 
-                    $baseCost = $row['cost'];
-                    $addPaxCost = $row['add_pax'] * 400;
-                    $corkageFee = ($row['corkage_fee'] == 1) ? 500 : 0;
-                    $totalAmount = $baseCost + $addPaxCost + $corkageFee;
-                    ?>
+                        $baseCost = $row['cost'];
+                        $addPaxCost = $row['add_pax'] * 400;
+                        $corkageFee = ($row['corkage_fee'] == 1) ? 500 : 0;
+                        $extendCost = 0; 
+                        if ($row['add_extend'] > 0) {
+                            $extendCost = $row['add_extend'] * 1000; 
+                        }
+                        $totalAmount = $baseCost + $addPaxCost + $corkageFee + $extendCost;
+                        ?>
                     <div class="form-group mb-3 w-50 d-flex flex-column" style="margin-left: auto;">
                         <hr class="mb-1 mt-0">
                         <label for="amount" class="form-label"><strong>Amount: </strong></label>
@@ -236,7 +253,9 @@ $result = $stmt->get_result();
     <input type="text" id="total-amount" class="form-control" value="₱<?php echo number_format($totalAmount, 2); ?>" readonly>
 </div>
 
+
     <input type="hidden" id="initial-cost" value="<?php echo number_format($row['cost'], 2); ?>" />
+    
     <button type="submit" name="update" class="btn btn-primary mt-3 w-100 d-flex justify-content-center">Update</button>
 </form>
                                         

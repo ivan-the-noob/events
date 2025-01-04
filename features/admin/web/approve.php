@@ -334,6 +334,7 @@ $result = $stmt->get_result();
                                     <option value="On-going" <?php echo ($row['status'] === 'On-going' ? 'selected' : ''); ?>>On-going</option>
                                     <option value="Finished" <?php echo ($row['status'] === 'Finished' ? 'selected' : ''); ?>>Finished</option>
                                 </select>
+                                
                                 </td>
                             </tr>
 
@@ -385,35 +386,28 @@ $result = $stmt->get_result();
                             </div>
 
                             <div class="modal fade" id="updatePaymentModal" tabindex="-1" aria-labelledby="updatePaymentModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <form action="../function/php/update_second.php" method="post">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="updatePaymentModalLabel">Update Second Payment Amount</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <input type="hidden" name="id" id="bookingId" value="">
-                                                <div class="mb-3">
-                                                    <label for="secondPaymentAmount" class="form-label">Second Payment Amount</label>
-                                                    <?php
-                                                        $cost = $row['cost']; 
-                                                        $payment_amount = $row['payment_amount']; 
-                                                        $remaining_amount = $cost - $payment_amount;
-                                                    ?>
-
-                                                        <p>Remaining Amount: <?php echo number_format($remaining_amount); ?></p>
-                                                    <input type="text" class="form-control" name="second_payment_amount" id="secondPaymentAmount" required>
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <form action="../function/php/update_second.php" method="post" onsubmit="handleModalSubmit(event)">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="updatePaymentModalLabel">Update Second Payment Amount</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="submit" class="btn btn-primary">Save Changes</button>
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            </div>
-                                        </form>
+                                                <div class="modal-body">
+                                                    <input type="hidden" name="id" id="bookingId" value="">
+                                                    <div class="mb-3">
+                                                        <label for="secondPaymentAmount" class="form-label">Second Payment Amount</label>
+                                                        <input type="text" class="form-control" name="second_payment_amount" id="secondPaymentAmount" required>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
                         <?php endwhile; ?>
                 </tbody>
             </table>

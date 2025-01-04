@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 29, 2024 at 03:03 AM
+-- Generation Time: Jan 04, 2025 at 02:47 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -59,7 +59,7 @@ CREATE TABLE `booking` (
   `gcash_name` varchar(255) NOT NULL,
   `gcash_number` varchar(20) NOT NULL,
   `review_status` int(11) DEFAULT 0,
-  `second_payment_amount` varchar(255) DEFAULT NULL,
+  `second_payment_amount` decimal(10,2) NOT NULL DEFAULT 0.00,
   `second_reference_no` int(11) DEFAULT NULL,
   `second_payment_image` varchar(255) DEFAULT NULL,
   `add_pax` int(11) NOT NULL DEFAULT 0,
@@ -67,15 +67,17 @@ CREATE TABLE `booking` (
   `theme` varchar(255) NOT NULL,
   `refund_status` enum('full-refund','half-refund','no-refund') DEFAULT NULL,
   `refunded_amount` decimal(10,2) DEFAULT 0.00,
-  `cancel_time` timestamp NULL DEFAULT NULL
+  `cancel_time` timestamp NULL DEFAULT NULL,
+  `add_extend` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `booking`
 --
 
-INSERT INTO `booking` (`id`, `status`, `full_name`, `celebrants_name`, `email`, `phone_number`, `events_date`, `guest_count`, `event_duration`, `event_starttime`, `event_endtime`, `event_type`, `event_package`, `event_options`, `cost`, `cancel_reason`, `payment_image`, `reference_no`, `payment_amount`, `status_paid`, `beef_dish`, `pork_dish`, `chicken_dish`, `pasta_dish`, `dessert_dish`, `fish_dish`, `drinks_dish`, `created_at`, `gcash_name`, `gcash_number`, `review_status`, `second_payment_amount`, `second_reference_no`, `second_payment_image`, `add_pax`, `corkage_fee`, `theme`, `refund_status`, `refunded_amount`, `cancel_time`) VALUES
-(121, 'Update-payment', 'Ej Ivan Ablanida', 'dasdsadas', 'ejthecoder@gmail.com', '9957939312', '2024-12-31', 60, 5, 9, 2, 'Despedida', 'Package B (Despedida (60 pax)', 'None', 25000.00, NULL, 'gcash.jpg', '321321321', 12500.00, 1, 'Creamy Beef with Mushroom', 'Pork Shanghai', 'Chicken Afritada', 'Carbonara', 'Buko Pandan', 'Fish Fillet', 'Blue Lemonade', '2024-12-28 16:24:50', '', '', 0, '123', NULL, NULL, 0, 0, 'edasdas', NULL, 0.00, NULL);
+INSERT INTO `booking` (`id`, `status`, `full_name`, `celebrants_name`, `email`, `phone_number`, `events_date`, `guest_count`, `event_duration`, `event_starttime`, `event_endtime`, `event_type`, `event_package`, `event_options`, `cost`, `cancel_reason`, `payment_image`, `reference_no`, `payment_amount`, `status_paid`, `beef_dish`, `pork_dish`, `chicken_dish`, `pasta_dish`, `dessert_dish`, `fish_dish`, `drinks_dish`, `created_at`, `gcash_name`, `gcash_number`, `review_status`, `second_payment_amount`, `second_reference_no`, `second_payment_image`, `add_pax`, `corkage_fee`, `theme`, `refund_status`, `refunded_amount`, `cancel_time`, `add_extend`) VALUES
+(126, 'Update-payment', 'Ej Ivan Ablanida', 'dasdasdas', 'ejthecoder@gmail.com', '9957939', '2025-01-03', 50, 5, 9, 2, 'Debut', 'Package A (Debut (50 pax)', 'None', 25000.00, NULL, 'gcash.jpg', '312312', 12506.00, 1, 'Beef Caldereta', 'Pork Menudo', 'Sweet & Sour Chicken', 'Carbonara', 'Fruit Salad', 'Fish Fillet', 'Blue Lemonade', '2025-01-03 12:59:34', '', '', 0, 5.00, NULL, NULL, 0, 0, 'dsadasdas', NULL, 0.00, NULL, 0),
+(128, 'On-going', 'test', 'dasdasdas', 'ejthecoder@gmail.com', '9957939', '2025-01-06', 50, 5, 10, 3, 'Despedida', 'Package A (Despedida (50 pax)', 'None', 20000.00, NULL, 'gcash.jpg', '12312312', 10062.00, 1, 'Creamy Beef with Mushroom', 'Pork Menudo', 'Sweet & Sour Chicken', 'Pancit', 'Buko Pandan', 'Fish Fillet', 'Blue Lemonade', '2025-01-03 14:26:29', '', '', 0, 12.00, NULL, NULL, 12, 0, 'dsadasdas', NULL, 0.00, NULL, 2);
 
 -- --------------------------------------------------------
 
@@ -460,9 +462,7 @@ CREATE TABLE `unavailable_days` (
 --
 
 INSERT INTO `unavailable_days` (`id`, `date`, `reason`) VALUES
-(1, '2024-11-21', 'boss?!'),
-(8, '2024-11-26', 'Trip ko lang bat ba'),
-(9, '2024-11-28', 'ewan ko');
+(11, '2025-01-04', 'dasdsa');
 
 -- --------------------------------------------------------
 
@@ -599,7 +599,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=130;
 
 --
 -- AUTO_INCREMENT for table `cms`
@@ -677,7 +677,7 @@ ALTER TABLE `terms_condition`
 -- AUTO_INCREMENT for table `unavailable_days`
 --
 ALTER TABLE `unavailable_days`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `users`
