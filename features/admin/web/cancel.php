@@ -75,8 +75,8 @@
 
 <body>
    
-<div class="d-flex">   
-        <div class="navbar flex-column bg-white shadow-sm p-3 collapse show" id="navbar">
+<div class="">   
+        <div class="navbar flex-column shadow-sm p-3 collapse show" id="navbar">
             <div class="navbar-header d-flex justify-content-between align-items-center w-100">
                 <a class="navbar-brand d-none d-md-block logo-container" href="#">
                     <img src="../../../assets/logo.png" alt="Logo">
