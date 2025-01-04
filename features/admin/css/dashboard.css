@@ -12,6 +12,10 @@ body {
     display: flex;
 }
 
+.toggle-nav {
+    height: 5vh;
+}
+
 /*Navbar Section*/
 .navbar {
     background-color: #FFFFFF;
