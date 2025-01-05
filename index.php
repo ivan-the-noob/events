@@ -65,7 +65,7 @@
                                 </li>
                                
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#about">About</a>
+                                    <a class="nav-link" href="features/users/web/about-us.php">About</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="#contact-us">Contact Us</a>
@@ -162,6 +162,15 @@
       <!-- Slide 3 -->
       <div class="carousel-item">
         <img src="assets/slider/slide3.jpg" class="d-block w-100" alt="Birthday Celebration">
+        <div class="carousel-caption d-flex flex-column flex-start">
+          <p class="d-flex fw-bold text-white text-start">
+            Make birthdays memorable with our themed decorations, delicious food, and entertainment options, creating joyful experiences for all ages.
+          </p>
+        </div>
+      </div>
+      <!-- Slide 4 -->
+      <div class="carousel-item">
+        <img src="assets/slider/slide4.jpg" class="d-block w-100" alt="Birthday Celebration">
         <div class="carousel-caption d-flex flex-column flex-start">
           <p class="d-flex fw-bold text-white text-start">
             Make birthdays memorable with our themed decorations, delicious food, and entertainment options, creating joyful experiences for all ages.

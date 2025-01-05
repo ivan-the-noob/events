@@ -79,7 +79,7 @@ if (!(isset($_SESSION['email']) && $_SESSION['role'] === 'users')) {
                                 </li>
                                
                                 <li class="nav-item">
-                                    <a class="nav-link" href="about_us.php">About</a>
+                                    <a class="nav-link" href="about-us.php">About</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="contact_us.php">Contact Us</a>
