@@ -279,7 +279,7 @@
                         <?php endif; ?>
                        
                     <?php endif; ?>
-                    <?php if ($booking['status'] === 'Pending'): ?>
+                    <?php if ($booking['status'] === 'Pending' || $booking['status'] === 'Waiting'): ?>
                         <?php
                         $cost = $booking['cost']; 
                         $min_payment = $cost * 0.5;
@@ -372,15 +372,8 @@
 
             </div>
         </div>
-    <?php endforeach; ?>
-<?php else: ?>
-    <p>No bookings found.</p>
-<?php endif; ?>
 
-
-</div>
-
-<div class="modal fade" id="payInFullModal-<?php echo $booking['id']; ?>" tabindex="-1" aria-labelledby="payInFullModalLabel" aria-hidden="true">
+        <div class="modal fade" id="payInFullModal-<?php echo $booking['id']; ?>" tabindex="-1" aria-labelledby="payInFullModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -415,6 +408,15 @@
         </div>
     </div>
 </div>
+    <?php endforeach; ?>
+<?php else: ?>
+    <p>No bookings found.</p>
+<?php endif; ?>
+
+
+</div>
+
+
 </section>
 
 

@@ -127,69 +127,61 @@
 
         </section>
         <section class="slider-container">
-            <p class="slider-heading mb-0">Services we have</p>
-            <h1 class="slider-subheading">Moments Captured at Amiel's MOM Event's Place</h1>
-            <div class="slider">
-              <button class="slider-btn prev">&lt;</button> 
-              <div class="slider-wrapper">
-                <!-- Slide 1 -->
-                <div class="slider-item">
-                  <img src="assets/events/birthday.png" class="card-img-top" alt="Wedding Image">
-                  <div class="slider-text">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h3>Catering Services</h3>
-                            <button>Discover Packages</button>
-                        </div>
-                        <div class="col-md-6">
-                            <p>
-                                Turn your event into an unforgettable experience with our premium catering services.
-                            </p>          
-                        </div>
-                    </div>
-                  </div>
-                </div>
-          
-                <!-- Slide 2 -->
-                <div class="slider-item">
-                  <img src="assets/events/birthday.png" class="card-img-top" alt="Corporate Event">
-                  <div class="slider-text">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h3>Corporate Events</h3>
-                            <button>Discover Packages</button>
-                        </div>
-                        <div class="col-md-6">
-                            <p>
-                                Elevate your corporate events with our top-notch services, tailored to impress clients.
-                              </p>
-                        </div>
-                    </div>
-                  </div>
-                </div>
-          
-                <!-- Slide 3 -->
-                <div class="slider-item">
-                  <img src="assets/events/birthday.png" class="card-img-top" alt="Birthday Celebration">
-                  <div class="slider-text">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h3>Birthday Parties</h3>
-                            <button>Discover Packages</button>
-                        </div>
-                        <div class="col-md-6">
-                            <p>Make birthdays memorable with our themed decorations, delicious food, and entertainment options, creating joyful experiences for all ages.
-                              </p>
-                        </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- Slide 4 -->
-                
-              </div>
-              <button class="slider-btn next">&gt;</button> 
-            </div>
-        </section>   
+  <p class="slider-heading mb-0">Services we have</p>
+  <h1 class="slider-subheading">Moments Captured at Amiel's MOM Event's Place</h1>
+  <div id="servicesCarousel" class="carousel slide" data-bs-ride="carousel">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+      <li data-bs-target="#servicesCarousel" data-bs-slide-to="0" class="active"></li>
+      <li data-bs-target="#servicesCarousel" data-bs-slide-to="1"></li>
+      <li data-bs-target="#servicesCarousel" data-bs-slide-to="2"></li>
+    </ol>
+
+    <!-- Carousel items -->
+    <div class="carousel-inner">
+      <!-- Slide 1 -->
+      <div class="carousel-item active">
+        <img src="assets/slider/slide1.jpg" class="d-block w-100" alt="Wedding Image">
+        <div class="carousel-caption d-flex flex-column flex-start">
+          <p class="d-flex fw-bold text-white text-start">
+            Turn your event into an unforgettable experience with our premium catering services.
+          </p>
+        </div>
+      </div>
+
+      <!-- Slide 2 -->
+      <div class="carousel-item">
+        <img src="assets/slider/slide2.jpg" class="d-block w-100" alt="Corporate Event">
+        <div class="carousel-caption d-flex flex-column flex-start">
+          <p class="d-flex fw-bold text-white text-start">
+            Elevate your corporate events with our top-notch services, tailored to impress clients.
+          </p>
+        </div>
+      </div>
+
+      <!-- Slide 3 -->
+      <div class="carousel-item">
+        <img src="assets/slider/slide3.jpg" class="d-block w-100" alt="Birthday Celebration">
+        <div class="carousel-caption d-flex flex-column flex-start">
+          <p class="d-flex fw-bold text-white text-start">
+            Make birthdays memorable with our themed decorations, delicious food, and entertainment options, creating joyful experiences for all ages.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#servicesCarousel" data-bs-slide="prev" style="margin: 0;">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#servicesCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+</section>
+ 
         <section class="scope">
             <p class="scope-title text-center mb-0" id="our-services">Our Event Services</p>
             <h3 class="text-center">Scope of our services</h3>

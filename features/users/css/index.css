@@ -209,6 +209,13 @@ body{
     line-height: 24px;
 }
 
+.slider-container img {
+  filter: brightness(70%);
+  height: 80vh;
+}
+
+
+
 .highlight{
     color: var(--text-color);
 }
