@@ -135,6 +135,7 @@
       <li data-bs-target="#servicesCarousel" data-bs-slide-to="0" class="active"></li>
       <li data-bs-target="#servicesCarousel" data-bs-slide-to="1"></li>
       <li data-bs-target="#servicesCarousel" data-bs-slide-to="2"></li>
+      <li data-bs-target="#servicesCarousel" data-bs-slide-to="3"></li>
     </ol>
 
     <!-- Carousel items -->
@@ -142,8 +143,9 @@
       <!-- Slide 1 -->
       <div class="carousel-item active">
         <img src="assets/slider/slide1.jpg" class="d-block w-100" alt="Wedding Image">
-        <div class="carousel-caption d-flex flex-column flex-start">
-          <p class="d-flex fw-bold text-white text-start">
+        <div class="carousel-caption">
+          <h3 class="fw-bold text-white">Unforgettable Catering Experience</h3>
+          <p class="text-white">
             Turn your event into an unforgettable experience with our premium catering services.
           </p>
         </div>
@@ -152,8 +154,9 @@
       <!-- Slide 2 -->
       <div class="carousel-item">
         <img src="assets/slider/slide2.jpg" class="d-block w-100" alt="Corporate Event">
-        <div class="carousel-caption d-flex flex-column flex-start">
-          <p class="d-flex fw-bold text-white text-start">
+        <div class="carousel-caption">
+          <h3 class="fw-bold text-white">Professional Corporate Events</h3>
+          <p class="text-white">
             Elevate your corporate events with our top-notch services, tailored to impress clients.
           </p>
         </div>
@@ -162,25 +165,28 @@
       <!-- Slide 3 -->
       <div class="carousel-item">
         <img src="assets/slider/slide3.jpg" class="d-block w-100" alt="Birthday Celebration">
-        <div class="carousel-caption d-flex flex-column flex-start">
-          <p class="d-flex fw-bold text-white text-start">
-            Make birthdays memorable with our themed decorations, delicious food, and entertainment options, creating joyful experiences for all ages.
+        <div class="carousel-caption">
+          <h3 class="fw-bold text-white">Memorable Birthday Celebrations</h3>
+          <p class="text-white">
+            Make birthdays memorable with themed decorations, delicious food, and fun entertainment.
           </p>
         </div>
       </div>
+
       <!-- Slide 4 -->
       <div class="carousel-item">
-        <img src="assets/slider/slide4.jpg" class="d-block w-100" alt="Birthday Celebration">
-        <div class="carousel-caption d-flex flex-column flex-start">
-          <p class="d-flex fw-bold text-white text-start">
-            Make birthdays memorable with our themed decorations, delicious food, and entertainment options, creating joyful experiences for all ages.
+        <img src="assets/slider/slide4.jpg" class="d-block w-100" alt="Anniversary Celebration">
+        <div class="carousel-caption">
+          <h3 class="fw-bold text-white">Kiddie Birthday Events</h3>
+          <p class="text-white">
+            Celebrate love and milestones with our exceptional Kiddie Party event packages.
           </p>
         </div>
       </div>
     </div>
 
     <!-- Controls -->
-    <button class="carousel-control-prev" type="button" data-bs-target="#servicesCarousel" data-bs-slide="prev" style="margin: 0;">
+    <button class="carousel-control-prev" type="button" data-bs-target="#servicesCarousel" data-bs-slide="prev">
       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
       <span class="visually-hidden">Previous</span>
     </button>
