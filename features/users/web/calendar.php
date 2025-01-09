@@ -207,7 +207,7 @@ function isTimeAvailable($time, $bookedTimes) {
                                             <option value="50">50</option>
                                             <option value="60">60</option>
                                             <option value="80">80</option>
-                                            <option value="11">11</option>
+                                            <option value="100">100</option>
                                         </select>
                                     </div>
 
