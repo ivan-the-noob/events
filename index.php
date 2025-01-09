@@ -85,7 +85,7 @@
                                     <img src="assets/profile/user.png" alt="Profile Image" class="profile" style="width: 30px; height: 30px; margin-left: 5px; margin-right: 5px;">
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                                    <li><a class="dropdown-item" href="features/users/web/api/dashboard.php">Profile</a></li>
+                                    <li><a class="dropdown-item" href="features/users/web/profile.php">Profile</a></li>
                                     <li><a class="dropdown-item" href="features/users/function/authentication/logout.php">Logout</a></li>
                                 </ul>
                             </div>

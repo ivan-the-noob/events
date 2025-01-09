@@ -339,16 +339,46 @@
                 </div>
                 <div class="d-flex justify-content-between">
                     <p class="mb-1"><span class="info-label">Total Payment</span></p>
-                    <p>₱<?php echo number_format(htmlspecialchars($booking['cost']), 2); ?></p>
+                    <p>₱<?php echo number_format(htmlspecialchars($booking['cost'] + ($booking['add_pax'] * 400) + ($booking['corkage_fee'] == 1 ? 500 : 0) + ($booking['add_extend'] * 1000)), 2); ?></p>
                 </div>
+                <?php if ($booking['add_pax'] != 0): ?>
+                    <div class="d-flex justify-content-between">
+                        <p class="mb-1"><span class="info-label">Add pax</span></p>
+                        <p>₱<?php echo number_format(htmlspecialchars($booking['add_pax'] * 400), 2); ?></p>
+
+                    </div>
+                <?php endif; ?>
+
+                <?php if ($booking['add_extend'] != 0): ?>
+                    <div class="d-flex justify-content-between">
+                        <p class="mb-1"><span class="info-label">Additional Hr.</span></p>
+                        <p>₱<?php echo number_format(htmlspecialchars($booking['add_extend'] * 1000), 2); ?></p>
+                    </div>
+                <?php endif; ?>
+                <?php if ($booking['corkage_fee'] != 0): ?>
+                    <div class="d-flex justify-content-between">
+                        <p class="mb-1"><span class="info-label">Additional Hr.</span></p>
+                        <p>₱<?php echo number_format(htmlspecialchars($booking['corkage_fee']), 2); ?></p>
+                    </div>
+                <?php endif; ?>
+
+
+
+
                 <?php if (!empty($booking['payment_amount']) && !empty($booking['reference_no'])): ?>
                     <div class="d-flex justify-content-between">
                         <p class="mb-1"><span class="info-label">Downpayment</span></p>
                         <p>₱<?php echo number_format($booking['payment_amount'], 2); ?></p>
                     </div>
+                    <?php if ($booking['add_payment'] != 0): ?>
+                        <div class="d-flex justify-content-between">
+                            <p class="mb-1"><span class="info-label">Additional Payment</span></p>
+                            <p>₱<?php echo number_format(htmlspecialchars($booking['add_payment']), 2); ?></p>
+                        </div>
+                    <?php endif; ?>
                     <div class="d-flex justify-content-between">
                         <p class="mb-1"><span class="info-label">Remaining Amount</span></p>
-                        <p class="remaining">₱<?php echo number_format($booking['cost'] - $booking['payment_amount'], 2); ?></p>
+                        <p class="remaining">₱<?php echo number_format($booking['cost'] - $booking['payment_amount'] - $booking['add_payment'], 2); ?></p>
                     </div>
                 <?php endif; ?>
                 

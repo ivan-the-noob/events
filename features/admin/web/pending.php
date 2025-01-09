@@ -29,6 +29,7 @@
     $stmt->bind_param("ssiii", $search_term, $search_term, $search_term, $start_from, $results_per_page);
     $stmt->execute();
     $result = $stmt->get_result();
+
 ?>
 
 
@@ -151,10 +152,12 @@
 
             <div class="profile-admin">
                 <div class="dropdown">
-                    <button class="" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="../../../assets/profile/user.png"
-                            style="width: 40px; height: 40px; object-fit: cover;">
-                    </button>
+                   <?php if (!empty($image)): ?>
+                        <button class="" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="../../../assets/profile/<?php echo htmlspecialchars($image); ?>" 
+                                style="width: 40px; height: 40px; object-fit: cover;">
+                        </button>
+                    <?php endif; ?>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="../../users/function/authentication/logout.php">Logout</a>
                         </li>
@@ -207,20 +210,20 @@
                             <tr>
                                 <td><?php echo $id++; ?></td>
                                 <td>
-                                    <?php
-                                        if (trim(strtolower($row['status'])) === 'pending') {
-                                            if (empty(trim($row['second_payment_amount']))) {
-                                                echo 'Paid in half';
-                                            } else {
-                                                echo 'Fully paid';
-                                            }
+                                <?php
+                                    if (strtolower($row['status']) === 'pending') {
+                                        if ($row['second_payment_amount'] === 0.00 || $row['second_payment_amount'] <= 0) {
+                                            echo 'Paid in half';
                                         } else {
-                                            echo htmlspecialchars($row['status']);
+                                            echo 'Fully paid';
                                         }
-                                    ?>
+                                    } else {
+                                        echo htmlspecialchars($row['status']);
+                                    }
+                                ?>
                                 </td>
-                                <td><?php echo htmlspecialchars($row['celebrants_name']); ?></td>
                                 <td><?php echo htmlspecialchars($row['full_name']); ?></td>
+                                <td><?php echo htmlspecialchars($row['celebrants_name']); ?></td>
                                 <td><?php echo htmlspecialchars($row['email']); ?></td>
                                 <td><?php echo htmlspecialchars($row['phone_number']); ?></td>
                                 <td><?php echo htmlspecialchars($row['created_at']); ?></td>

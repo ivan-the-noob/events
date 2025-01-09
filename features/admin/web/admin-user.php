@@ -22,6 +22,19 @@ $result = $conn->query($query);
 
 $query = "SELECT * FROM users WHERE role = 'admin'";
 $result = $conn->query($query);
+
+$email = $_SESSION['email'];
+$query = "SELECT image_profile FROM users WHERE email = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param('s', $email);
+$stmt->execute();
+$result = $stmt->get_result();
+
+$image = null;
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $image = $row['image_profile'];
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -140,10 +153,12 @@ $result = $conn->query($query);
 
             <div class="profile-admin">
                 <div class="dropdown">
-                    <button class="" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="../../../assets/profile/user.png"
-                            style="width: 40px; height: 40px; object-fit: cover;">
-                    </button>
+                    <?php if (!empty($image)): ?>
+                        <button class="" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="../../../assets/profile/<?php echo htmlspecialchars($image); ?>" 
+                                style="width: 40px; height: 40px; object-fit: cover;">
+                        </button>
+                    <?php endif; ?>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="../../users/function/authentication/logout.php">Logout</a>
                         </li>

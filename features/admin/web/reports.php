@@ -83,6 +83,19 @@ $stmt->bind_param(
 );
 $stmt->execute();
 $result = $stmt->get_result();
+
+$email = $_SESSION['email'];
+$query = "SELECT image_profile FROM users WHERE email = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param('s', $email);
+$stmt->execute();
+$result = $stmt->get_result();
+
+$image = null;
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $image = $row['image_profile'];
+}
 ?>
 
 
@@ -126,7 +139,7 @@ $result = $stmt->get_result();
                     <span>Pending Booking</span>
                 </a>
                 <a href="approve.php">
-                   <i class="fas fa-clipboard-check"></i>
+                    <i class="fa-solid fa-check-circle"></i>
                     <span>Approved Booking</span>
                 </a>
                 <a href="on-going.php">
@@ -206,10 +219,12 @@ $result = $stmt->get_result();
 
             <div class="profile-admin">
                 <div class="dropdown">
-                    <button class="" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="../../../assets/profile/user.png"
-                            style="width: 40px; height: 40px; object-fit: cover;">
-                    </button>
+                   <?php if (!empty($image)): ?>
+                        <button class="" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="../../../assets/profile/<?php echo htmlspecialchars($image); ?>" 
+                                style="width: 40px; height: 40px; object-fit: cover;">
+                        </button>
+                    <?php endif; ?>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="../../users/function/authentication/logout.php">Logout</a>
                         </li>
@@ -258,88 +273,92 @@ $result = $stmt->get_result();
                 </div>
             </div>
             <div class="table-responsive">
-            <table class="table mt-4">
-                <thead class="table-booking">
+    <table class="table mt-4">
+        <thead class="table-booking">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Full Name</th>
+                <th scope="col">Celebrant's Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Phone Number</th>
+                <th scope="col">Event Date</th>
+                <th scope="col">Guest Count</th>
+                <th scope="col">Event Start Time</th>
+                <th scope="col">Type of Event</th>
+                <th scope="col">Type of Package</th>
+                <th scope="col">Event Options</th>
+                <th scope="col">Foods</th>
+                <th scope="col">Payment Image</th>
+                <th scope="col">Reference No</th>
+                <th scope="col">Total</th>
+                <th scope="col">Payment Amount</th>
+                <th scope="col">Remaining</th>
+                <th scope="col">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php 
+                $id = 1; 
+                while ($row = $result->fetch_assoc()): ?>
                     <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Full Name</th>
-                        <th scope="col">Celebrant's Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Phone Number</th>
-                        <th scope="col">Event Date</th>
-                        <th scope="col">Guest Count</th>
-                        <th scope="col">Event Start Time</th>
-                        <th scope="col">Type of Event</th>
-                        <th scope="col">Type of Package</th>
-                        <th scope="col">Event Options</th>
-                        <th scope="col">Foods</th>
-                        <th scope="col">Payment Image</th>
-                        <th scope="col">Reference No</th>
-                        <th scope="col">Total</th>
-                        <th scope="col">Payment Amount</th>
-                        <th scope="col">Remaining</th>
-                        <th scope="col">Actions</th>
+                        <td><?php echo $id++; ?></td>
+                        <td><?php echo htmlspecialchars($row['full_name']); ?></td>
+                        <td><?php echo htmlspecialchars($row['celebrants_name']); ?></td>
+                        <td><?php echo htmlspecialchars($row['email']); ?></td>
+                        <td><?php echo htmlspecialchars($row['phone_number']); ?></td>
+                        <td><?php echo htmlspecialchars($row['events_date']); ?></td>
+                        <td><?php echo htmlspecialchars($row['guest_count']); ?> guest</td>
+                        <td><?php echo htmlspecialchars($row['event_starttime']); ?>:00</td>
+                        <td><?php echo htmlspecialchars($row['event_type']); ?></td>
+                        <td><?php echo htmlspecialchars($row['event_package']); ?></td>
+                        <td><?php echo htmlspecialchars($row['event_options']); ?></td>
+                        <td>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#foodModal_<?php echo $row['id']; ?>">View</button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#paymentImageModal" data-payment-image="<?php echo htmlspecialchars($row['payment_image']); ?>">View</button>
+                        </td>
+                        <td><?php echo htmlspecialchars($row['reference_no']); ?></td>
+                        <td>₱<?php echo number_format($row['cost'], 2); ?></td>
+                        <td>₱<?php echo number_format($row['payment_amount'], 2); ?></td>
+                        <td>₱<?php echo number_format($row['cost'] - $row['payment_amount'], 2); ?></td>
+                        <td>
+                            <?php
+                            // Determine status
+                            if ($row['refund_status'] === 'full-refund' || $row['refund_status'] === 'half-refund') {
+                                echo '<span class="badge bg-danger">Refund</span>';
+                            } elseif ($row['status'] === 'Cancelled') {
+                                echo '<span class="badge bg-secondary">Cancelled</span>';
+                            } elseif ($row['status'] === 'Finished') {
+                                echo '<span class="badge bg-success">Finished</span>';
+                            } elseif ($row['status'] === 'Approved') {
+                                echo '<span class="badge bg-primary">Approved</span>';
+                            } else {
+                                echo '<span class="badge bg-warning">Pending</span>';
+                            }
+                            ?>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    <?php 
-                        $id = 1; 
-                        while ($row = $result->fetch_assoc()): ?>
-                            <tr>
-                                <td><?php echo $id++; ?></td>
-                                <td><?php echo htmlspecialchars($row['celebrants_name']); ?></td>
-                                <td><?php echo htmlspecialchars($row['full_name']); ?></td>
-                                <td><?php echo htmlspecialchars($row['email']); ?></td>
-                                <td><?php echo htmlspecialchars($row['phone_number']); ?></td>
-                                <td><?php echo htmlspecialchars($row['events_date']); ?></td>
-                                <td><?php echo htmlspecialchars($row['guest_count']); ?> guest</td>
-                                <td><?php echo htmlspecialchars($row['event_starttime']); ?>:00</td>
-                                <td><?php echo htmlspecialchars($row['event_type']); ?></td>
-                                <td><?php echo htmlspecialchars($row['event_package']); ?></td>
-                                <td><?php echo htmlspecialchars($row['event_options']); ?></td>
-                                <td>
-                                    <!-- View button for opening the modal -->
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#foodModal_<?php echo $row['id']; ?>">View</button>
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#paymentImageModal" data-payment-image="<?php echo htmlspecialchars($row['payment_image']); ?>">View</button>
-                                </td>
-                                <td><?php echo htmlspecialchars($row['reference_no']); ?></td>
-                                <td>₱<?php echo number_format($row['cost'], 2); ?></td>
-                                <td>₱<?php echo number_format($row['payment_amount'], 2); ?></td>
-                                <td>₱<?php echo number_format($row['cost'] - $row['payment_amount'], 2); ?></td>
-                                <td>
-                                <select class="form-select form-select-sm" onchange="updateStatus(this, <?php echo $row['id']; ?>)">
-                                    <option value="Waiting" <?php echo ($row['status'] === 'Cancel' ? 'selected' : ''); ?>>Cancel Booking</option>
-                                    <option value="Waiting" <?php echo ($row['status'] === 'Update-payment' ? 'selected' : ''); ?>>Update Payment</option>
-                                    <option value="Waiting" <?php echo ($row['status'] === 'resched' ? 'selected' : ''); ?>>Reschedule Booking</option>
-                                    <option value="Waiting" <?php sdecho ($row['status'] === 'Waiting' ? 'selected' : ''); ?>>Waiting</option>
-                                    <option value="On-going" <?php echo ($row['status'] === 'On-going' ? 'selected' : ''); ?>>On-going</option>
-                                    <option value="Finished" <?php echo ($row['status'] === 'Finished' ? 'selected' : ''); ?>>Finished</option>
-
-                                </select>
-                                </td>
-                            </tr>
-
-                            <!-- Modal to view food details -->
-                            <div class="modal fade" id="foodModal_<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="foodModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="foodModalLabel">Food Options for <?php echo htmlspecialchars($row['full_name']); ?></h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    
+                    <!-- Modal to view food details -->
+                    <div class="modal fade" id="foodModal_<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="foodModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="foodModalLabel">Food Options for <?php echo htmlspecialchars($row['full_name']); ?></h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form>
+                                        <div class="mb-3">
+                                            <label class="form-label">Beef Dish</label>
+                                            <input type="text" class="form-control" value="<?php echo htmlspecialchars($row['beef_dish']); ?>" readonly>
                                         </div>
-                                        <div class="modal-body">
-                                            <form>
-                                                <div class="mb-3">
-                                                    <label for="beef_dish_<?php echo $row['id']; ?>" class="form-label">Beef Dish</label>
-                                                    <input type="text" class="form-control" id="beef_dish_<?php echo $row['id']; ?>" value="<?php echo htmlspecialchars($row['beef_dish']); ?>" readonly>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="pork_dish_<?php echo $row['id']; ?>" class="form-label">Pork Dish</label>
-                                                    <input type="text" class="form-control" id="pork_dish_<?php echo $row['id']; ?>" value="<?php echo htmlspecialchars($row['pork_dish']); ?>" readonly>
-                                                </div>
-                                                <div class="mb-3">
+                                        <div class="mb-3">
+                                            <label class="form-label">Pork Dish</label>
+                                            <input type="text" class="form-control" value="<?php echo htmlspecialchars($row['pork_dish']); ?>" readonly>
+                                        </div>
+                                        <div class="mb-3">
                                                     <label for="chicken_dish_<?php echo $row['id']; ?>" class="form-label">Chicken Dish</label>
                                                     <input type="text" class="form-control" id="chicken_dish_<?php echo $row['id']; ?>" value="<?php echo htmlspecialchars($row['chicken_dish']); ?>" readonly>
                                                 </div>
@@ -359,18 +378,16 @@ $result = $stmt->get_result();
                                                     <label for="drinks_dish_<?php echo $row['id']; ?>" class="form-label">Drinks</label>
                                                     <input type="text" class="form-control" id="drinks_dish_<?php echo $row['id']; ?>" value="<?php echo htmlspecialchars($row['drinks_dish']); ?>" readonly>
                                                 </div>
-                                            </form>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        </div>
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
-                        <?php endwhile; ?>
-                </tbody>
-            </table>
-            </div>
+                        </div>
+                    </div>
+            <?php endwhile; ?>
+        </tbody>
+    </table>
+</div>
+
             <div class="modal fade" id="paymentImageModal" tabindex="-1" aria-labelledby="paymentImageModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 04, 2025 at 02:47 AM
+-- Generation Time: Jan 09, 2025 at 07:18 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -68,16 +68,21 @@ CREATE TABLE `booking` (
   `refund_status` enum('full-refund','half-refund','no-refund') DEFAULT NULL,
   `refunded_amount` decimal(10,2) DEFAULT 0.00,
   `cancel_time` timestamp NULL DEFAULT NULL,
-  `add_extend` int(11) DEFAULT 0
+  `add_extend` int(11) DEFAULT 0,
+  `payment_method` varchar(10) DEFAULT NULL,
+  `add_payment` decimal(10,2) DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `booking`
 --
 
-INSERT INTO `booking` (`id`, `status`, `full_name`, `celebrants_name`, `email`, `phone_number`, `events_date`, `guest_count`, `event_duration`, `event_starttime`, `event_endtime`, `event_type`, `event_package`, `event_options`, `cost`, `cancel_reason`, `payment_image`, `reference_no`, `payment_amount`, `status_paid`, `beef_dish`, `pork_dish`, `chicken_dish`, `pasta_dish`, `dessert_dish`, `fish_dish`, `drinks_dish`, `created_at`, `gcash_name`, `gcash_number`, `review_status`, `second_payment_amount`, `second_reference_no`, `second_payment_image`, `add_pax`, `corkage_fee`, `theme`, `refund_status`, `refunded_amount`, `cancel_time`, `add_extend`) VALUES
-(126, 'Update-payment', 'Ej Ivan Ablanida', 'dasdasdas', 'ejthecoder@gmail.com', '9957939', '2025-01-03', 50, 5, 9, 2, 'Debut', 'Package A (Debut (50 pax)', 'None', 25000.00, NULL, 'gcash.jpg', '312312', 12506.00, 1, 'Beef Caldereta', 'Pork Menudo', 'Sweet & Sour Chicken', 'Carbonara', 'Fruit Salad', 'Fish Fillet', 'Blue Lemonade', '2025-01-03 12:59:34', '', '', 0, 5.00, NULL, NULL, 0, 0, 'dsadasdas', NULL, 0.00, NULL, 0),
-(128, 'On-going', 'test', 'dasdasdas', 'ejthecoder@gmail.com', '9957939', '2025-01-06', 50, 5, 10, 3, 'Despedida', 'Package A (Despedida (50 pax)', 'None', 20000.00, NULL, 'gcash.jpg', '12312312', 10062.00, 1, 'Creamy Beef with Mushroom', 'Pork Menudo', 'Sweet & Sour Chicken', 'Pancit', 'Buko Pandan', 'Fish Fillet', 'Blue Lemonade', '2025-01-03 14:26:29', '', '', 0, 12.00, NULL, NULL, 12, 0, 'dsadasdas', NULL, 0.00, NULL, 2);
+INSERT INTO `booking` (`id`, `status`, `full_name`, `celebrants_name`, `email`, `phone_number`, `events_date`, `guest_count`, `event_duration`, `event_starttime`, `event_endtime`, `event_type`, `event_package`, `event_options`, `cost`, `cancel_reason`, `payment_image`, `reference_no`, `payment_amount`, `status_paid`, `beef_dish`, `pork_dish`, `chicken_dish`, `pasta_dish`, `dessert_dish`, `fish_dish`, `drinks_dish`, `created_at`, `gcash_name`, `gcash_number`, `review_status`, `second_payment_amount`, `second_reference_no`, `second_payment_image`, `add_pax`, `corkage_fee`, `theme`, `refund_status`, `refunded_amount`, `cancel_time`, `add_extend`, `payment_method`, `add_payment`) VALUES
+(126, 'On-going', 'Ej Ivan Ablanida', 'dasdasdas', 'ejthecoder@gmail.com', '9957939', '2025-01-03', 50, 5, 9, 2, 'Debut', 'Package A (Debut (50 pax)', 'None', 25000.00, NULL, 'gcash.jpg', '312312', 12506.00, 1, 'Beef Caldereta', 'Pork Menudo', 'Sweet & Sour Chicken', 'Carbonara', 'Fruit Salad', 'Fish Fillet', 'Blue Lemonade', '2025-01-03 12:59:34', '', '', 0, 5.00, NULL, NULL, 0, 0, 'dsadasdas', 'full-refund', 0.00, NULL, 1, 'gcash', 1000.00),
+(128, 'Waiting', 'test', 'dasdasdas', 'ejthecodesr@gmail.com', '9957939', '2025-04-30', 50, 5, 10, 3, 'Despedida', 'Package A (Despedida (50 pax)', 'None', 20000.00, NULL, 'gcash.jpg', '12312312', 10062.00, 1, 'Creamy Beef with Mushroom', 'Pork Menudo', 'Sweet & Sour Chicken', 'Pancit', 'Buko Pandan', 'Fish Fillet', 'Blue Lemonade', '2025-01-03 14:26:29', '', '', 0, 12.00, NULL, NULL, 12, 0, 'dsadasdas', NULL, 0.00, NULL, 2, NULL, 0.00),
+(130, 'Cancel', 'Ej Ivan Ablanida', 'Ivan', 'ejthecoders@gmail.com', '9957939', '2025-01-08', 50, 5, 9, 2, 'Despedida', 'Package A (Despedida (50 pax)', 'None', 20000.00, NULL, 'gcash.jpg', '312312', 10000.00, 1, 'Beef Caldereta', 'Pork Menudo', 'Sweet & Sour Chicken', 'Pancit', 'Fruit Salad', 'Fish Fillet', 'Red Tea', '2025-01-05 00:18:59', '', '', 0, 0.00, NULL, NULL, 0, 0, 'dsadsads', NULL, 0.00, NULL, 0, NULL, 0.00),
+(131, 'Cancel-pending', 'Ej Ivan Ablanida', 'Ivan', 'ejthecoder@gmail.com', '9957939', '2025-01-09', 50, 5, 19, 12, 'Adult Party', 'Package A (Adult Birthday Party (50 pax)', 'None', 25000.00, 'dsdas', 'gcash.jpg', '321321312312', 123412.00, 1, 'Beef Caldereta', 'Pork Menudo', 'Sweet & Sour Chicken', 'Pancit', 'Fruit Salad', 'Fish Fillet', 'Blue Lemonade', '2025-01-09 08:05:37', '321312', '312312', 0, 0.00, NULL, NULL, 0, 0, '12321321', 'full-refund', 312321.00, '2025-01-09 16:06:19', 0, NULL, 0.00),
+(132, 'Pending', 'Ej Ivan Ablanida', 'Ivan', 'ejthecoder@gmail.com', '9957939', '2025-01-10', 50, 5, 9, 2, 'Despedida', 'Package B (Despedida (60 pax)', 'None', 25000.00, NULL, 'gcash.jpg', '321312', 25000.00, 1, 'Beef Caldereta', 'Pork Menudo', 'Sweet & Sour Chicken', 'Carbonara', 'Fruit Salad', 'Fish Fillet', 'Red Tea', '2025-01-09 09:53:23', '', '', 0, 1.00, 123312312, '1736446303_about2.jpg', 0, 0, '312321', NULL, 0.00, NULL, 0, NULL, 0.00);
 
 -- --------------------------------------------------------
 
@@ -462,7 +467,8 @@ CREATE TABLE `unavailable_days` (
 --
 
 INSERT INTO `unavailable_days` (`id`, `date`, `reason`) VALUES
-(11, '2025-01-04', 'dasdsa');
+(11, '2025-01-04', 'dasdsa'),
+(12, '2025-01-07', 'wala');
 
 -- --------------------------------------------------------
 
@@ -492,7 +498,7 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `email`, `image_profile`, `password`, `created_at`, `role`, `first_name`, `last_name`, `address`, `contact_number`, `verification_code`, `status`) VALUES
 (1, 'ejivancablanida@gmail.com', 'user.png', '$2y$10$4kqdeBcgEzF95Ng.uO7rkuj07O5aqKrulTQ7PTXbTDFqcVXPUol26', '2024-11-10 06:20:57', 'users', 'Ej Ivan', 'Ablanida', '', '09957939703', 0, NULL),
 (6, 'ejivan.ablanida@cvsu.edu.ph', 'user.png', '$2y$10$kElcBjIAZd4qfSTuatmD1eDAbimR3ZEQcn.L.Z8HcY8hOh3D4Zr3y', '2024-11-18 07:16:02', 'admin', 'Ej Ivan', 'Ablanida', '', '', 0, NULL),
-(46, 'ejthecoder@gmail.com', 'user.png', '$2y$10$4T9f2Fnyk/MaDTUB/aW1NO/y1IVAu7r.3Skudvff7Qd2tpotuxjvG', '2024-12-15 08:18:50', 'users', 'Ej Ivan', 'Ablanida', 'Brgy.Agustin', '9957939', 4255, 1);
+(46, 'ejthecoder@gmail.com', 'medal (1).png', '$2y$10$8G9ZiY/6SnHdv8snELHXbenkh.Sqaiu0khKAO8UIqhHZj4f8kZUCy', '2024-12-15 08:18:50', 'users', 'Ej Ivan', 'Ablanida', 'Brgy.Agustin', '9957939', 4255, 1);
 
 --
 -- Indexes for dumped tables
@@ -599,7 +605,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=130;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=133;
 
 --
 -- AUTO_INCREMENT for table `cms`
@@ -677,7 +683,7 @@ ALTER TABLE `terms_condition`
 -- AUTO_INCREMENT for table `unavailable_days`
 --
 ALTER TABLE `unavailable_days`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `users`

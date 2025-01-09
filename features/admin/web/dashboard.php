@@ -27,6 +27,19 @@ if ($result && $row = $result->fetch_assoc()) {
     $payment_amount = 0; 
 }
 
+$email = $_SESSION['email'];
+$query = "SELECT image_profile FROM users WHERE email = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param('s', $email);
+$stmt->execute();
+$result = $stmt->get_result();
+
+$image = null;
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $image = $row['image_profile'];
+}
+
 
 ?>
 <!DOCTYPE html>
@@ -41,6 +54,7 @@ if ($result && $row = $result->fetch_assoc()) {
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.5.0/dist/sweetalert2.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.5.0/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="../css/dashboard.css">
 </head>
 
@@ -148,10 +162,12 @@ if ($result && $row = $result->fetch_assoc()) {
 
             <div class="profile-admin">
                 <div class="dropdown">
-                    <button class="" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="../../../assets/profile/user.png"
-                            style="width: 40px; height: 40px; object-fit: cover;">
-                    </button>
+                   <?php if (!empty($image)): ?>
+                        <button class="" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="../../../assets/profile/<?php echo htmlspecialchars($image); ?>" 
+                                style="width: 40px; height: 40px; object-fit: cover;">
+                        </button>
+                    <?php endif; ?>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="../../users/function/authentication/logout.php">Logout</a>
                         </li>
@@ -208,6 +224,13 @@ if ($result && $row = $result->fetch_assoc()) {
                         <canvas id="monthlySalesChart"></canvas>
                     </div>
                 </div>
+
+                <div id="chartContainer">
+                    <canvas id="ratingPieChart" width="400" height="400"></canvas>
+                </div>
+              
+                
+               
                 <div class="col-md-9 mt-4">
                     <h5>Approve Bookings</h5>
                     <div class="card">
@@ -384,7 +407,9 @@ if ($result && $row = $result->fetch_assoc()) {
 <script src="../function/script/daily-chart.js"></script>
 <script src="../function/script/month-chart.js"></script>
 <script src="../function/script/status.js"></script>
+<script src="../function/script/pie-chart.js"></script>
 <script src="../function/script/nav-toggle.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
 </html>

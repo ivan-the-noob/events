@@ -85,6 +85,10 @@ $stmt->bind_param(
 );
 $stmt->execute();
 $result = $stmt->get_result();
+
+
+
+
 ?>
 
 
@@ -208,10 +212,13 @@ $result = $stmt->get_result();
 
             <div class="profile-admin">
                 <div class="dropdown">
-                    <button class="" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="../../../assets/profile/user.png"
-                            style="width: 40px; height: 40px; object-fit: cover;">
-                    </button>
+                   
+                   <?php if (!empty($image)): ?>
+                        <button class="" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="../../../assets/profile/<?php echo htmlspecialchars($image); ?>" 
+                                style="width: 40px; height: 40px; object-fit: cover;">
+                        </button>
+                    <?php endif; ?>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="../../users/function/authentication/logout.php">Logout</a>
                         </li>
@@ -293,8 +300,8 @@ $result = $stmt->get_result();
                                 <td><?php echo $id++; ?></td>
                                 <td>
                                     <?php
-                                        if (trim(strtolower($row['status'])) === 'update-payment') {
-                                            if (empty(trim($row['second_payment_amount']))) {
+                                        if (strtolower($row['status']) === 'update-payment') {
+                                            if ($row['second_payment_amount'] === 0.00 || $row['second_payment_amount'] <= 0) {
                                                 echo 'Paid in half';
                                             } else {
                                                 echo 'Fully paid';
@@ -303,6 +310,10 @@ $result = $stmt->get_result();
                                             echo htmlspecialchars($row['status']);
                                         }
                                     ?>
+
+<?php
+                                    
+                                ?>
                                 </td>
                                 <td><?php echo htmlspecialchars($row['celebrants_name']); ?></td>
                                 <td><?php echo htmlspecialchars($row['full_name']); ?></td>

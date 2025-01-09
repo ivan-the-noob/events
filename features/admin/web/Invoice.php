@@ -56,6 +56,19 @@
     }
     $stmt->execute();
     $result = $stmt->get_result();
+
+    $email = $_SESSION['email'];
+    $query = "SELECT image_profile FROM users WHERE email = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param('s', $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $image = null;
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $image = $row['image_profile'];
+    }
     
 ?>
 <!DOCTYPE html>
@@ -177,10 +190,12 @@
 
             <div class="profile-admin">
                 <div class="dropdown">
-                    <button class="" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="../../../assets/profile/user.png"
-                            style="width: 40px; height: 40px; object-fit: cover;">
-                    </button>
+                   <?php if (!empty($image)): ?>
+                        <button class="" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="../../../assets/profile/<?php echo htmlspecialchars($image); ?>" 
+                                style="width: 40px; height: 40px; object-fit: cover;">
+                        </button>
+                    <?php endif; ?>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="../../users/function/authentication/logout.php">Logout</a>
                         </li>
@@ -284,15 +299,41 @@
                         </div>
                         <div class="info-row">
                             <div class="info-left"><strong>Total:</strong></div>
-                            <div class="info-right">₱<?php echo number_format($row['cost'], 2); ?></div>
+                            <div class="info-right">₱<?php echo number_format(htmlspecialchars($row['cost'] + ($row['add_pax'] * 400) + ($row['corkage_fee'] == 1 ? 500 : 0) + ($row['add_extend'] * 1000)), 2); ?></div>
                         </div>
+                        <?php if ($row['add_pax'] != 0): ?>
+                        <div class="info-row">
+                            <div class="info-left"><strong>Add Pax:</strong></div>
+                            <div class="info-right">₱<?php echo number_format(htmlspecialchars($row['add_pax'] * 400), 2); ?></div>
+                        </div>
+                        <?php endif; ?>
+                        <?php if ($row['add_extend'] != 0): ?>
+                            <div class="info-row">
+                            <div class="info-left"><strong>Additional Hr:</strong></div>
+                            <div class="info-right">₱<?php echo number_format(htmlspecialchars($row['add_extend'] * 1000), 2); ?></div>
+                        </div>
+                        <?php endif; ?>
+                        <?php if ($row['corkage_fee'] != 0): ?>
+                            <div class="info-row">
+                            <div class="info-left"><strong>Corkage Fee</strong></div>
+                            <div class="info-right">₱<?php echo number_format(htmlspecialchars($row['corkage_fee']), 2); ?></div>
+                        </div>
+                        <?php endif; ?>
                         <div class="info-row">
                             <div class="info-left"><strong>Payment Amount:</strong></div>
                             <div class="info-right">₱<?php echo number_format($row['payment_amount'], 2); ?></div>
                         </div>
+
+                        <?php if ($row['add_payment'] != 0): ?>
+                            <div class="info-row">
+                            <div class="info-left"><strong>Additional Payment</strong></div>
+                            <div class="info-right">₱<?php echo number_format(htmlspecialchars($row['add_payment']), 2); ?><div>
+                        </div>
+                        <?php endif; ?>
+                       
                         <div class="info-row">
                             <div class="info-left"><strong>Remaining:</strong></div>
-                            <div class="info-right">₱<?php echo number_format($row['cost'] - $row['payment_amount'], 2); ?></div>
+                            <div class="info-right">₱<?php echo number_format($row['cost'] - $row['payment_amount'] - $row['add_payment'], 2); ?></div>
                         </div>
                         </div>
                     </div>

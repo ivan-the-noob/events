@@ -13,6 +13,19 @@ $stmt = $conn->prepare($query);
 $stmt->execute();
 $result = $stmt->get_result();
 
+$email = $_SESSION['email'];
+$query = "SELECT image_profile FROM users WHERE email = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param('s', $email);
+$stmt->execute();
+$result = $stmt->get_result();
+
+$image = null;
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $image = $row['image_profile'];
+}
+
 
 ?>
 
@@ -138,10 +151,12 @@ $result = $stmt->get_result();
 
             <div class="profile-admin">
                 <div class="dropdown">
-                    <button class="" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="../../../assets/profile/user.png"
-                            style="width: 40px; height: 40px; object-fit: cover;">
-                    </button>
+                   <?php if (!empty($image)): ?>
+                        <button class="" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="../../../assets/profile/<?php echo htmlspecialchars($image); ?>" 
+                                style="width: 40px; height: 40px; object-fit: cover;">
+                        </button>
+                    <?php endif; ?>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="../../users/function/authentication/logout.php">Logout</a>
                         </li>
@@ -249,18 +264,68 @@ $result = $stmt->get_result();
                         <label for="amount" class="form-label"><strong>Amount: </strong></label>
                         <input type="text" id="amount" class="form-control" value="₱<?php echo number_format(($row['add_pax'] * 400) + ($row['corkage_fee'] == 1 ? 500 : 0), 2); ?>" readonly>
                     </div>
-    </div>
-    <div class="form-group mb-3 w-75 d-flex flex-column mt-4" style="margin-left: auto;">
-    <label for="total-amount" class="form-label"><strong>Total Amount: </strong></label>
-    <input type="text" id="total-amount" class="form-control" value="₱<?php echo number_format($totalAmount, 2); ?>" readonly>
-</div>
+                        </div>
+                        <div class="form-group mb-3 w-75 d-flex flex-column mt-4" style="margin-left: auto;">
+                        <label for="total-amount" class="form-label"><strong>Total Amount: </strong></label>
+                        <input type="text" id="total-amount" class="form-control" value="₱<?php echo number_format($totalAmount, 2); ?>" readonly>
+                    </div>
 
 
-    <input type="hidden" id="initial-cost" value="<?php echo number_format($row['cost'], 2); ?>" />
-    
-    <button type="submit" name="update" class="btn btn-primary mt-3 w-100 d-flex justify-content-center">Update</button>
-</form>
-                                        
+                        <input type="hidden" id="initial-cost" value="<?php echo number_format($row['cost'], 2); ?>" />
+
+                        <div class="d-flex gap-1">
+                            <?php 
+                             if (!is_null($row['payment_method']) || $row['add_payment'] != 0) {
+                                echo '<button type="button" class="btn btn-success mt-3 d-flex justify-content-center w-100">PAID</button>';
+                             }
+                            ?>
+                            <button type="submit" name="update" class="btn btn-primary mt-3 d-flex justify-content-center w-100">Update</button>
+                            </form>
+                            <?php 
+                                if ($addPaxCost != 0 || $corkageFee != 0 || $extendCost != 0){ 
+                                    echo '<button type="button" class="btn btn-warning mt-3 d-flex justify-content-center w-100 text-white" data-bs-toggle="modal" data-bs-target="#paymentModal_' . $row['id'] . '">Pay Now</button>';
+                                }
+                            ?>
+                          
+                        </div>
+
+                        <div class="modal fade" id="paymentModal_<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="paymentModalLabel">Payment Options</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                    <form action="../function/php/process_payment.php" method="POST">
+                                        <input type="hidden" name="id" value="<?php echo htmlspecialchars($row['id']); ?>">
+
+                                        <div class="mb-3">
+                                            <label for="payment-method" class="form-label"><strong>Select Payment Method:</strong></label>
+                                            <select id="payment-method" name="payment_method" class="form-control">
+                                                <option value="cash">Cash</option>
+                                                <option value="gcash">GCash</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="payment-amount" class="form-label"><strong>Amount:</strong></label>
+                                            <input type="number" id="payment-amount" name="add_payment" class="form-control" min="1" required>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <button type="submit" name="pay" class="btn btn-primary">Proceed</button>
+                                        </div>
+                                    </form>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                                                            
                     </div>
                     </div>       
                 </div>

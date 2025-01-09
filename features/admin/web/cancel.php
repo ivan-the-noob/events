@@ -17,7 +17,7 @@
     
     $search_term = "%" . $search . "%";
     
-    $total_query = "SELECT COUNT(*) as total FROM booking WHERE status = 'Cancel'";
+    $total_query = "SELECT COUNT(*) as total FROM bookingWHERE status = 'Cancel' OR refund_status IS NOT NULL";
     
     if (!empty($search)) {
         $total_query .= " AND (full_name LIKE ? OR celebrants_name LIKE ? OR email LIKE ?)";
@@ -38,7 +38,8 @@
     $total_records = $total_row['total'];
     $total_pages = ceil($total_records / $limit);
     
-    $query = "SELECT * FROM booking WHERE status = 'Cancel'";
+    $query = "SELECT * FROM booking WHERE status = 'Cancel' OR refund_status IS NOT NULL";
+
     
     if (!empty($search)) {
         $query .= " AND (full_name LIKE ? OR celebrants_name LIKE ? OR email LIKE ?)";
@@ -56,6 +57,19 @@
     }
     $stmt->execute();
     $result = $stmt->get_result();
+
+    $email = $_SESSION['email'];
+    $query = "SELECT image_profile FROM users WHERE email = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param('s', $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $image = null;
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $image = $row['image_profile'];
+    }
     
 ?>
 <!DOCTYPE html>
@@ -176,10 +190,12 @@
 
             <div class="profile-admin">
                 <div class="dropdown">
-                    <button class="" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="../../../assets/profile/user.png"
-                            style="width: 40px; height: 40px; object-fit: cover;">
-                    </button>
+                   <?php if (!empty($image)): ?>
+                        <button class="" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="../../../assets/profile/<?php echo htmlspecialchars($image); ?>" 
+                                style="width: 40px; height: 40px; object-fit: cover;">
+                        </button>
+                    <?php endif; ?>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="../../users/function/authentication/logout.php">Logout</a>
                         </li>
