@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     const calendarEl = document.getElementById('calendar'); 
     const eventStarttimeSelect = document.getElementById('event-starttime'); 
  
-    // Fetch unavailable days from the PHP file 
     let unavailableDays = []; 
     try { 
         const response = await fetch('../function/php/unavailable.php'); 
@@ -21,16 +20,16 @@ document.addEventListener('DOMContentLoaded', async function () {
             right: 'prev,next', 
         }, 
         dayCellDidMount: async function (info) { 
-            // Use local time for the selected date 
+
             const selectedDate = new Date(info.date); 
-            selectedDate.setHours(0, 0, 0, 0); // Clear time to midnight 
+            selectedDate.setHours(0, 0, 0, 0); 
  
-            // Get local date as YYYY-MM-DD 
-            const selectedDateStr = selectedDate.toLocaleDateString('en-CA'); // Use 'en-CA' for YYYY-MM-DD format 
+
+            const selectedDateStr = selectedDate.toLocaleDateString('en-CA'); 
  
             const today = new Date(); 
-            today.setHours(0, 0, 0, 0); // Ensure 'today' is set to midnight as well 
-            const todayStr = today.toLocaleDateString('en-CA'); // Format the same way 
+            today.setHours(0, 0, 0, 0); 
+            const todayStr = today.toLocaleDateString('en-CA'); 
  
             if (selectedDateStr < todayStr) { 
                 info.el.style.backgroundColor = 'white'; 

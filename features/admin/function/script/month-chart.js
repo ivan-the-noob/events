@@ -1,17 +1,17 @@
 document.addEventListener("DOMContentLoaded", function() {
     var ctx = document.getElementById('monthlySalesChart').getContext('2d');
 
-    // Labels for the months of the year
     var monthlyChartData = {
         labels: ['Jan', 'Feb', 'March', 'April', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
         datasets: [
             {
                 label: 'This Month Sales',
-                data: [],  // This will be populated by PHP/JS with current month's data
+                data: [],  // Current month's data
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
                 borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1,
+                borderWidth: 2,
                 fill: true,
+                tension: 0.4, // Smooth wavy line
                 pointBackgroundColor: 'rgba(75, 192, 192, 1)',
                 pointBorderColor: '#fff',
                 pointHoverBackgroundColor: '#fff',
@@ -19,11 +19,12 @@ document.addEventListener("DOMContentLoaded", function() {
             },
             {
                 label: 'Last Month Sales',
-                data: [],  // This will be populated by PHP/JS with last month's data
+                data: [],  // Last month's data
                 backgroundColor: 'rgba(153, 102, 255, 0.2)',
                 borderColor: 'rgba(153, 102, 255, 1)',
-                borderWidth: 1,
+                borderWidth: 2,
                 fill: true,
+                tension: 0.4, // Smooth wavy line
                 pointBackgroundColor: 'rgba(153, 102, 255, 1)',
                 pointBorderColor: '#fff',
                 pointHoverBackgroundColor: '#fff',

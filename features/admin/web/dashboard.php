@@ -67,7 +67,7 @@ if ($result && $row = $result->fetch_assoc()) {
                     <span>Pending Booking</span>
                 </a>
                 <a href="approve.php">
-                    <i class="fa-solid fa-check-circle"></i>
+                   <i class="fas fa-clipboard-check"></i>
                     <span>Approved Booking</span>
                 </a>
                 <a href="on-going.php">
@@ -198,7 +198,7 @@ if ($result && $row = $result->fetch_assoc()) {
                 </div>
                 <div class="col-md-5 mt-2 d-flex justify-content-center">
                     <div class="chart-container">
-                        <h5 class="chart-title">Monthly Sales</h5>
+                        <h5 class="chart-title">Weekly Sales</h5>
                         <canvas id="salesChart"></canvas>
                     </div>
                 </div>

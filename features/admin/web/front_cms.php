@@ -57,7 +57,7 @@ $result = $conn->query($query);
                     <span>Pending Booking</span>
                 </a>
                 <a href="approve.php">
-                    <i class="fa-solid fa-check-circle"></i>
+                   <i class="fas fa-clipboard-check"></i>
                     <span>Approved Booking</span>
                 </a>
                 <a href="on-going.php">

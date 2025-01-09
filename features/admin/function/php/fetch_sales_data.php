@@ -1,58 +1,45 @@
 <?php
 require '../../../../db.php'; // Database connection
 
-$today = date('Y-m-d');
-$yesterday = date('Y-m-d', strtotime('-1 day'));
+$chartData = [];
 
-// Query for today's data
-$stmtToday = $conn->prepare("
-    SELECT DAYNAME(created_at) AS day, SUM(payment_amount) AS total
+// Calculate the start and end dates of the current month
+$startOfMonth = date('Y-m-01');
+$endOfMonth = date('Y-m-t');
+
+// Fetch all booking records for the current month
+$stmt = $conn->prepare("
+    SELECT 
+        created_at, 
+        SUM(payment_amount) AS total
     FROM booking
-    WHERE DATE(created_at) = ? AND status = 'finished'
-    GROUP BY DAYNAME(created_at)
-    ORDER BY FIELD(DAYNAME(created_at), 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')
+    WHERE status = 'finished' AND DATE(created_at) BETWEEN ? AND ?
+    GROUP BY DATE(created_at)
+    ORDER BY created_at
 ");
-$stmtToday->bind_param('s', $today);
-$stmtToday->execute();
-$resultToday = $stmtToday->get_result();
-$todayData = $resultToday->fetch_all(MYSQLI_ASSOC);
+$stmt->bind_param('ss', $startOfMonth, $endOfMonth);
+$stmt->execute();
+$result = $stmt->get_result();
 
-// Query for yesterday's data
-$stmtYesterday = $conn->prepare("
-    SELECT DAYNAME(created_at) AS day, SUM(payment_amount) AS total
-    FROM booking
-    WHERE DATE(created_at) = ? AND status = 'finished'
-    GROUP BY DAYNAME(created_at)
-    ORDER BY FIELD(DAYNAME(created_at), 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')
-");
-$stmtYesterday->bind_param('s', $yesterday);
-$stmtYesterday->execute();
-$resultYesterday = $stmtYesterday->get_result();
-$yesterdayData = $resultYesterday->fetch_all(MYSQLI_ASSOC);
+// Initialize data for all weeks in the current month
+$numberOfWeeks = ceil(date('t') / 7); // Total weeks in the month
+for ($i = 1; $i <= $numberOfWeeks; $i++) {
+    $chartData[$i] = 0; // Default all weeks to 0
+}
 
-// Initialize arrays for chart data
-$todayChartData = array_fill(0, 7, 0);
-$yesterdayChartData = array_fill(0, 7, 0);
-$daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-
-// Fill today's data
-foreach ($todayData as $row) {
-    $dayIndex = array_search($row['day'], $daysOfWeek);
-    if ($dayIndex !== false) {
-        $todayChartData[$dayIndex] = (float) $row['total'];
+// Process query results and group data by week
+while ($row = $result->fetch_assoc()) {
+    $createdDate = $row['created_at'];
+    $dayOfMonth = (int)date('j', strtotime($createdDate)); // Get the day of the month
+    $weekIndex = (int)(($dayOfMonth - 1) / 7) + 1; // Calculate week number (1-based)
+    
+    if (isset($chartData[$weekIndex])) {
+        $chartData[$weekIndex] += (float)$row['total']; // Sum payments for the week
     }
 }
 
-// Fill yesterday's data
-foreach ($yesterdayData as $row) {
-    $dayIndex = array_search($row['day'], $daysOfWeek);
-    if ($dayIndex !== false) {
-        $yesterdayChartData[$dayIndex] = (float) $row['total'];
-    }
-}
-
-// Format response as `todayData|yesterdayData`
-echo implode(',', $todayChartData) . '|' . implode(',', $yesterdayChartData);
+// Output chart data as a comma-separated string
+echo implode(',', array_values($chartData));
 
 // Close the database connection
 $conn->close();

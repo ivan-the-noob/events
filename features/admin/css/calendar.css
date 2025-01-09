@@ -60,7 +60,7 @@ body {
 
 .navbar-highlight i{
     color: #fff !important;
-    background-color: #D100A9 !important;
+    background-color: #382D31 !important;
 }
 .navbar a:hover {
     background-color: #FFFFFF;
@@ -70,9 +70,9 @@ body {
 }
 
 .navbar a:hover i {
-    background-color: #D100A9;
+    background-color: #382D31;
     color: #FFFFFF;
-    border: 1px solid #D100A9;
+    border: 1px solid #382D31;
 }
 
 .navbar-brand {
