@@ -37,7 +37,8 @@ if (!(isset($_SESSION['email']) && $_SESSION['role'] === 'users')) {
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/packages.css">
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
-    <title>Document</title>
+    <title>Amiel's MOM Event's Place</title>
+    <link rel="icon" href="../../../assets/logo.png" type="image/png">
 </head>
 
 <body>

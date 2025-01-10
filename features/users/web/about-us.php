@@ -16,7 +16,8 @@
     <link rel="stylesheet" href="../../../features/users/css/about-us.css">
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDmgygVeipMUsrtGeZPZ9UzXRmcVdheIqw&libraries=places"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <title>Document</title>
+    <title>Amiel's MOM Event's Place</title>
+    <link rel="icon" href="../../../assets/logo.png" type="image/png">
 </head>
 <body>
         

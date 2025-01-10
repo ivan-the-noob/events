@@ -36,7 +36,8 @@
     <link rel="stylesheet" href="../css/appointment.css">
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <title>Document</title>
+    <title>Amiel's MOM Event's Place</title>
+    <link rel="icon" href="../../../assets/logo.png" type="image/png">
 </head>
 <body>
 <div class="navbar-container">
@@ -267,8 +268,20 @@
                     </div>
 
 
-                    <span class="status-badge <?php echo strtolower($booking['status']) === 'cancel' ? 'bg-danger text-white' : (strtolower($booking['status']) === 'cancel-pending' ? 'bg-warning text-black text-bold' : ''); ?>">
-                        <?php echo strtolower($booking['status']) === 'cancel' ? 'Cancelled' : (strtolower($booking['status']) === 'cancel-pending' ? 'Refund on Pending' : htmlspecialchars($booking['status'])); ?>
+                    <span class="status-badge <?php 
+                        echo strtolower($booking['status']) === 'cancel' ? 'bg-danger text-white' :
+                            (strtolower($booking['status']) === 'cancel-pending' ? 'bg-warning text-black text-bold' :
+                            (strtolower($booking['status']) === 'pending' ? 'bg-info text-white' :
+                            (strtolower($booking['status']) === 'waiting' ? 'bg-primary text-white' : 
+                            (strtolower($booking['status']) === 'approved' ? 'bg-success text-white' : ''))));
+                    ?>">
+                        <?php 
+                        echo strtolower($booking['status']) === 'cancel' ? 'Cancelled' :
+                            (strtolower($booking['status']) === 'cancel-pending' ? 'Refund on Pending' :
+                            (strtolower($booking['status']) === 'pending' ? 'Waiting' :
+                            (strtolower($booking['status']) === 'waiting' ? 'Approved' :
+                            htmlspecialchars($booking['status']))));
+                        ?>
                     </span>
 
                     <?php if ($booking['status'] === 'To-pay'): ?>
@@ -311,7 +324,7 @@
                     </div>
                 <div class="d-flex justify-content-between">
                     <p class="mb-1"><span class="info-label">Event's Time</span></p>
-                    <p><?php echo htmlspecialchars($booking['event_starttime']); ?> AM to <?php echo htmlspecialchars($booking['event_endtime']); ?>PM</p>
+                    <p><?php echo formatTime(htmlspecialchars($booking['event_starttime'])); ?> - <?php echo formatTime(htmlspecialchars($booking['event_endtime'])); ?></p>
                 </div>
                 <div class="d-flex justify-content-between">       
                     <p class="mb-1"><span class="info-label">Celebrant's Name</span></p>
@@ -442,12 +455,22 @@
 <?php else: ?>
     <p>No bookings found.</p>
 <?php endif; ?>
-
-
 </div>
-
-
 </section>
+
+<?php
+function formatTime($hour) {
+    if ($hour == 0) {
+        return '12:00 AM';
+    } elseif ($hour < 12) {
+        return $hour . ':00 AM';
+    } elseif ($hour == 12) {
+        return '12:00 PM';
+    } else {
+        return ($hour - 12) . ':00 PM';
+    }
+}
+?>
 
 
 

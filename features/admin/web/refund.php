@@ -57,18 +57,7 @@
     $stmt->execute();
     $result = $stmt->get_result();
 
-    $email = $_SESSION['email'];
-    $query = "SELECT image_profile FROM users WHERE email = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param('s', $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
 
-    $image = null;
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        $image = $row['image_profile'];
-    }
     
 ?>
 <!DOCTYPE html>
@@ -77,7 +66,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Refund History | Admin</title>
+    <title>Amiel's MOM Event's Place</title>
+<link rel="icon" href="../../../assets/logo.png" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -330,9 +320,10 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <label for="refundAmountInput" class="form-label">Enter Refund Amount:</label>
-                                                    <input type="number" class="form-control" id="refundAmountInput" min="0">
+                                                    <label for="refundAmountInput" class="form-label" val>Enter Refund Amount:</label>
+                                                    <input type="number" class="form-control" id="refundAmountInput" value="">
                                                 </div>
+
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                                     <button type="button" class="btn btn-primary" id="submitRefund">Submit</button>
@@ -504,6 +495,16 @@
         document.getElementById('refunded_amount').value = refundAmount; 
         refundModal.hide(); 
         refundForm.submit(); 
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('[data-bs-target="#refundModal"]').forEach(button => {
+        button.addEventListener('click', function () {
+            const paymentAmount = this.getAttribute('data-payment-amount');
+            const rowId = this.getAttribute('data-bs-target').split('_')[1];  // Assuming row_id in your modal targets
+            document.getElementById('refundAmountInput').value = paymentAmount;
+        });
     });
 });
 

@@ -9,7 +9,8 @@ include '../../../db.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AMIEL| Sign Up</title>
+    <title>Amiel's MOM Event's Place</title>
+    <link rel="icon" href="../../../assets/logo.png" type="image/png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/signup.css">
 </head>
@@ -59,12 +60,19 @@ include '../../../db.php';
         <div class="mb-3">
             <input type="email" name="email" class="form-control" placeholder="Enter your email" required>
         </div>
+        
         <div class="mb-3">
-            <input type="password" name="password" id="password" class="form-control" placeholder="Enter password" required>
+        <input type="password" name="password" id="password" class="form-control" placeholder="Enter password" required>
         </div>
         <div class="mb-3">
             <input type="password" name="confirm_password" id="confirm_password" class="form-control" placeholder="Confirm password" required>
         </div>
+        <div class="form-check mb-3">
+            <input type="checkbox" class="form-check-input" id="showPassword" onclick="togglePasswordVisibility()">
+            <label class="form-check-label" for="showPassword">Show Password</label>
+        </div>
+
+
         <button type="button" class="btn btn-secondary" onclick="showStep(1)">Back</button>
         <button type="button" class="btn btn-primary" onclick="validateStep2()">Next</button>
     </div>
@@ -307,6 +315,16 @@ function validateStep3(event) {
         xhr.send(data);
     }
 }
+
+            function togglePasswordVisibility() {
+                const passwordField = document.getElementById('password');
+                const confirmPasswordField = document.getElementById('confirm_password');
+                const showPassword = document.getElementById('showPassword').checked;
+
+                const newType = showPassword ? 'text' : 'password';
+                passwordField.type = newType;
+                confirmPasswordField.type = newType;
+            }
 
 
 

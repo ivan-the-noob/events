@@ -60,7 +60,8 @@ function isTimeAvailable($time, $bookedTimes) {
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/calendar.css">
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
-    <title>Document</title>
+    <title>Amiel's MOM Event's Place</title>
+    <link rel="icon" href="../../../assets/logo.png" type="image/png">
 </head>
 
 <body>
@@ -183,7 +184,7 @@ function isTimeAvailable($time, $bookedTimes) {
                                     <div class="form-group mt-4">
                                         <label for="celebrants-name" class="form-label">Celebrant's Name</label>
                                         <input type="text" id="celebrants-name" name="celebrants_name"
-                                            class="form-control" placeholder="Enter your text here">
+                                            class="form-control" placeholder="Enter your text here" required>
                                     </div>
                                     <div class="form-group mt-4">
                                         <label for="email" class="form-label">Email</label>
@@ -221,7 +222,7 @@ function isTimeAvailable($time, $bookedTimes) {
                                 <div class="col-md-2 mt-4">
                                     <div class="form-group mt-4">
                                         <label for="event-starttime" class="form-label">Event Start Time</label>
-                                        <select id="event-starttime" name="event_starttime" class="form-control">
+                                        <select id="event-starttime" name="event_starttime" class="form-control" required>
                                             <option value="8">8:00 AM</option>
                                             <option value="9">9:00 AM</option>
                                             <option value="10">10:00 AM</option>
@@ -249,7 +250,7 @@ function isTimeAvailable($time, $bookedTimes) {
                                     <h5 class="mb-4 eventss">Event Selection</h5>
                                     <div class="form-group mt-4">
                                         <label for="event-type" class="form-label">Type of Event</label>
-                                        <select id="event-type" name="event_type" class="form-control">
+                                        <select id="event-type" name="event_type" class="form-control" required>
                                             <option value="" disabled selected>Select an event</option>
                                             <?php
                                             require '../../../db.php';
@@ -268,7 +269,7 @@ function isTimeAvailable($time, $bookedTimes) {
                                     <div class="form-group mt-4">
                                             <label for="celebrants-name" class="form-label">Theme</label>
                                             <input type="text" id="celebrants-name" name="theme"
-                                                class="form-control" placeholder="Enter your text here">
+                                                class="form-control" placeholder="Enter your text here" required>
                                         </div>
                                     </div>
 
@@ -278,7 +279,7 @@ function isTimeAvailable($time, $bookedTimes) {
                                         <h5 class="mb-4">Event Packages</h5>
                                         <div class="form-group mt-4" id="event-package-options" style="display: none;">
                                             <label for="event-package" class="form-label">Select Event Package</label>
-                                            <select id="event-package" name="event_package" class="form-control">
+                                            <select id="event-package" name="event_package" class="form-control" required>
                                                 <option value="" disabled selected>Select a package</option>
                                               
                                             </select>
@@ -292,28 +293,28 @@ function isTimeAvailable($time, $bookedTimes) {
                                     </div>
                                     <div class="form-group mt-4" id="beef-options" style="display: none;">
                                         <label for="beef-select" class="form-label">Beef</label>
-                                        <select id="beef-select" name="beef_dish" class="form-control">
+                                        <select id="beef-select" name="beef_dish" class="form-control" required>
                                             <option value="" disabled selected>Select a dish</option>
                                         </select>
                                     </div>
 
                                     <div class="form-group mt-4" id="pork-options" style="display: none;">
                                         <label for="pork-select" class="form-label">Pork</label>
-                                        <select id="pork-select" name="pork_dish" class="form-control">
+                                        <select id="pork-select" name="pork_dish" class="form-control" required>
                                             <option value="" disabled selected>Select a dish</option>
                                         </select>
                                     </div>
 
                                     <div class="form-group mt-4" id="chicken-options" style="display: none;">
                                         <label for="chicken-select" class="form-label">Chicken</label>
-                                        <select id="chicken-select" name="chicken_dish" class="form-control">
+                                        <select id="chicken-select" name="chicken_dish" class="form-control" required>
                                             <option value="" disabled selected>Select a dish</option>
                                         </select>
                                     </div>
 
                                     <div class="form-group mt-4" id="pasta-options" style="display: none;">
                                         <label for="pasta-select" class="form-label">Pasta</label>
-                                        <select id="pasta-select" name="pasta_dish" class="form-control">
+                                        <select id="pasta-select" name="pasta_dish" class="form-control" required>
                                             <option value="" disabled selected>Select a dish</option>
                                         </select>
                                     </div>
@@ -321,7 +322,7 @@ function isTimeAvailable($time, $bookedTimes) {
                                     <!-- New Dessert Form Group -->
                                     <div class="form-group mt-4" id="dessert-options" style="display: none;">
                                         <label for="dessert-select" class="form-label">Dessert</label>
-                                        <select id="dessert-select" name="dessert_dish" class="form-control">
+                                        <select id="dessert-select" name="dessert_dish" class="form-control" required>
                                             <option value="" disabled selected>Select a dish</option>
                                         </select>
                                     </div>
@@ -329,7 +330,7 @@ function isTimeAvailable($time, $bookedTimes) {
                                     <!-- New Fish Form Group -->
                                     <div class="form-group mt-4" id="fish-options" style="display: none;">
                                         <label for="fish-select" class="form-label">Fish</label>
-                                        <select id="fish-select" name="fish_dish" class="form-control">
+                                        <select id="fish-select" name="fish_dish" class="form-control" required>
                                             <option value="" disabled selected>Select a dish</option>
                                         </select>
                                     </div>
@@ -337,13 +338,12 @@ function isTimeAvailable($time, $bookedTimes) {
                                     <!-- New Drinks Form Group -->
                                     <div class="form-group mt-4" id="drinks-options" style="display: none;">
                                         <label for="drinks-select" class="form-label">Drinks</label>
-                                        <select id="drinks-select" name="drinks_dish" class="form-control">
+                                        <select id="drinks-select" name="drinks_dish" class="form-control" required>
                                             <option value="" disabled selected>Select a dish</option>
                                         </select>
                                     </div>
 
                                     
-
                                   
                                 </div>
                                 <div class="col-md-4 justify-content-between">
@@ -364,8 +364,17 @@ function isTimeAvailable($time, $bookedTimes) {
                                                 <input type="hidden" id="event-cost" name="cost" value="">
                                             </div>          
                                         </div>
+                                        
                                     </div>
+                                    <div class="form-check mt-4">
+                                            <input type="checkbox" class="form-check-input" id="payment_confirmation" required>
+                                            <label class="form-check-label" for="payment_confirmation">
+                                                I confirm that all the payment credentials provided are correct
+                                            </label>
+                                        </div>
+
                                 </div>
+                                
                                 
                         </div>
                 </div>

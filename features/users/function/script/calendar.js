@@ -13,24 +13,35 @@ document.addEventListener('DOMContentLoaded', async function () {
     } catch (error) { 
         console.error('Error fetching unavailable days:', error); 
     } 
+
+    console.log('Initial unavailableDays:', unavailableDays);
  
     const calendar = new FullCalendar.Calendar(calendarEl, { 
         initialView: 'dayGridMonth', 
         headerToolbar: { 
             right: 'prev,next', 
         }, 
+       
         dayCellDidMount: async function (info) { 
-
             const selectedDate = new Date(info.date); 
             selectedDate.setHours(0, 0, 0, 0); 
- 
-
             const selectedDateStr = selectedDate.toLocaleDateString('en-CA'); 
- 
+        
             const today = new Date(); 
             today.setHours(0, 0, 0, 0); 
             const todayStr = today.toLocaleDateString('en-CA'); 
- 
+        
+            for (let i = 0; i <= 6; i++) {
+                const futureDate = new Date(today);
+                futureDate.setDate(today.getDate() + i);
+                const futureDateStr = futureDate.toLocaleDateString('en-CA');
+                if (!unavailableDays.includes(futureDateStr)) {
+                    unavailableDays.push(futureDateStr);
+                }
+            }
+        
+            console.log('Unavailable days after today:', unavailableDays);
+        
             if (selectedDateStr < todayStr) { 
                 info.el.style.backgroundColor = 'white'; 
                 info.el.style.opacity = 0.2; 
@@ -46,33 +57,53 @@ document.addEventListener('DOMContentLoaded', async function () {
                     if (!response.ok) { 
                         throw new Error(`HTTP error! Status: ${response.status}`); 
                     } 
- 
+        
                     const result = await response.json(); 
- 
-                    if (result.bookings_count >= 2) { 
+        
+                    if (result.bookings_count >= 1) { 
+                        console.log(`Booked Date: ${selectedDateStr}`); 
+                        console.log('Booking +7 days unavailable:');
+                        for (let i = 1; i <= 7; i++) {
+                            const futureDate = new Date(selectedDate);
+                            futureDate.setDate(selectedDate.getDate() + i);
+                            const futureDateStr = futureDate.toLocaleDateString('en-CA');
+                            console.log(futureDateStr);
+                            if (!unavailableDays.includes(futureDateStr)) {
+                                unavailableDays.push(futureDateStr);
+                            }
+                        }
+                        console.log('Unavailable days after booking +7 days:', unavailableDays);
+                    }
+        
+                    console.log(`Processing Date: ${selectedDateStr}`);
+                    console.log('Current unavailableDays:', unavailableDays);
+        
+                    if (unavailableDays.includes(selectedDateStr)) {
+                        info.el.style.backgroundColor = '#FFBFBD'; 
+                        info.el.style.cursor = 'not-allowed'; 
+                    } else if (result.bookings_count >= 2) { 
                         info.el.style.backgroundColor = '#D2B48C'; 
                         info.el.style.cursor = 'not-allowed'; 
                         info.el.style.setProperty('color', 'white', 'important'); 
                     } else { 
                         info.el.style.backgroundColor = '#FFFFFF'; 
- 
                         info.el.addEventListener('mouseenter', function () { 
                             info.el.style.backgroundColor = '#100E44'; 
                             info.el.style.color = '#FFFFFF'; 
                         }); 
- 
+        
                         info.el.addEventListener('mouseleave', function () { 
                             info.el.style.backgroundColor = '#FFFFFF'; 
                             info.el.style.color = ''; 
                         }); 
- 
+        
                         info.el.addEventListener('click', async function () { 
                             document.getElementById('events-date').value = selectedDateStr; 
- 
+        
                             Array.from(eventStarttimeSelect.options).forEach(option => { 
                                 option.hidden = false; 
                             }); 
- 
+        
                             if (Array.isArray(result.booked_times)) { 
                                 result.booked_times.forEach(startTime => { 
                                     const startTimeInt = parseInt(startTime, 10); 
@@ -82,7 +113,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                                             option.hidden = true; 
                                         } 
                                     } 
- 
+        
                                     for (let i = 1; i <= 5; i++) { 
                                         const option = eventStarttimeSelect.querySelector(`option[value='${startTimeInt - i}']`); 
                                         if (option) { 
@@ -91,7 +122,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                                     } 
                                 }); 
                             } 
- 
+        
                             const myModal = new bootstrap.Modal(document.getElementById('dateModal'), { 
                                 keyboard: false, 
                             }); 
@@ -102,8 +133,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                     console.error('Error fetching availability:', error); 
                 } 
             } 
-        }, 
+        },
+        
     }); 
  
     calendar.render(); 
-});
+}); 
