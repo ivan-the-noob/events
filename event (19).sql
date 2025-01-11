@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 10, 2025 at 08:21 AM
+-- Generation Time: Jan 11, 2025 at 05:46 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -106,6 +106,27 @@ CREATE TABLE `cms` (
 
 INSERT INTO `cms` (`id`, `system_name`, `front_line`, `welcome_message`, `bg_img`) VALUES
 (2, 'Amiel\'s MOM Event\'s Place', 'From weddings to birthdays, reunions, and baptisms, we can cater to all your special events with elegance and deliciousness', 'Where every celebration becomes extraordinary. Our elegant and versatile venue is designed to host weddings, corporate events, birthdays, and more, creating unforgettable moments for you and your guests. Experience the perfect blend of sophistication, comfort, and exceptional service at Amiel\'s MOM Events Place.', 'bg.png');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `contact`
+--
+
+CREATE TABLE `contact` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `message` text NOT NULL,
+  `submitted_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `contact`
+--
+
+INSERT INTO `contact` (`id`, `name`, `email`, `message`, `submitted_at`) VALUES
+(1, 'Ivn', 'ivan@gmail.com', 'hey hahah', '2025-01-11 15:20:44');
 
 -- --------------------------------------------------------
 
@@ -498,9 +519,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `email`, `image_profile`, `password`, `created_at`, `role`, `first_name`, `last_name`, `address`, `contact_number`, `verification_code`, `status`) VALUES
-(1, 'ejivancablanida@gmail.com', 'gallery-8.jpg', '$2y$10$4kqdeBcgEzF95Ng.uO7rkuj07O5aqKrulTQ7PTXbTDFqcVXPUol26', '2024-11-10 06:20:57', 'users', 'Ej Ivan', 'Ablanida', '', '09957939703', 0, NULL),
 (6, 'ejivan.ablanida@cvsu.edu.ph', 'gallery-8.jpg', '$2y$10$kElcBjIAZd4qfSTuatmD1eDAbimR3ZEQcn.L.Z8HcY8hOh3D4Zr3y', '2024-11-18 07:16:02', 'admin', 'Ej Ivan', 'Ablanida', '', '', 0, NULL),
-(46, 'ejthecoder@gmail.com', 'gallery-8.jpg', '$2y$10$8G9ZiY/6SnHdv8snELHXbenkh.Sqaiu0khKAO8UIqhHZj4f8kZUCy', '2024-12-15 08:18:50', 'users', 'Ej Ivan', 'Ablanida', 'Brgy.Agustin', '9957939', 4255, 1);
+(46, 'ejthecoder@gmail.com', 'gallery-8.jpg', '$2y$10$8G9ZiY/6SnHdv8snELHXbenkh.Sqaiu0khKAO8UIqhHZj4f8kZUCy', '2024-12-15 08:18:50', 'users', 'Ej Ivan', 'Ablanida', 'Brgy.Agustin', '9957939', 4255, 1),
+(47, 'ejivancablanida@gmail.com', 'default.png', '$2y$10$sqVk.XBGjkBJjRdU4GtcaufDPeKs3GPgmF8bnFUBBiT9KTrBIWIVm', '2025-01-11 16:20:09', 'users', 'Ivan', 'Ablanida', 'Blk 4 Lot 23', '09957939703', 4170, 1);
 
 --
 -- Indexes for dumped tables
@@ -516,6 +537,12 @@ ALTER TABLE `booking`
 -- Indexes for table `cms`
 --
 ALTER TABLE `cms`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `contact`
+--
+ALTER TABLE `contact`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -616,6 +643,12 @@ ALTER TABLE `cms`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT for table `contact`
+--
+ALTER TABLE `contact`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `dishes`
 --
 ALTER TABLE `dishes`
@@ -691,7 +724,7 @@ ALTER TABLE `unavailable_days`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- Constraints for dumped tables
