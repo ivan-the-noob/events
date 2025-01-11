@@ -1,0 +1,236 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Italianno&display=swap');
+*{
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+
+:root {
+    --button-color: #FFA800;
+    --background-color: #F5F0EB;
+    --blue-color: #100E44;
+    
+}
+
+body{
+  background-color: var(--background-color);
+}
+
+
+
+.bold{
+    font-weight: bold;
+}
+
+/* navbar */
+
+.navbar-toggler{
+    margin-left: auto;
+}
+.navbar-brand img{
+    width: 80px;
+    height: 50px;
+}
+.navbar-btn{
+  margin: 10px;
+}
+
+
+.navbar-toggler{
+    border: none;
+}
+
+.navbar-toggler:focus {
+    border: none;
+}
+
+.navbar-container {
+    width: 100%;
+    height: auto;
+    padding: 15px 0 10px 0;
+    display: flex;
+    justify-content: center;
+    margin: auto;
+}
+
+.navbar-toggler{
+
+}
+
+.navbar {
+    background-color: #fff;
+    border-radius: 50px;
+    margin: auto;
+    padding: 0;
+    border: none;
+}
+
+
+.navbar .profile{
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 1px solid #7A3015;
+}
+
+.navbar a{
+  color: #000;
+  font-weight: 14px;
+  line-height: 20px;
+  font-weight: 600;
+
+}
+
+.navbar-brand img{
+    width: 40px !important;
+    height: 40px !important;
+    padding: 0;
+}
+
+.navbar a:hover{
+  color: var(--hover-button)
+}
+
+.dropdown button{
+  border: none !important;
+  background-color: transparent !important;
+}
+.btn-theme{
+    background-color: #7A3015;
+    color: #fff !important;
+    border: none;
+    border-radius: 3px;
+    padding: 10px 15px;
+    text-decoration: none;
+}
+
+.btn-theme-profile{
+  cursor: pointer;
+}
+
+.navbar .sign-in{
+    border: 1px solid #000;
+    padding: 5px 24px 5px 24px;
+    color: #000;
+    background-color: transparent;
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+}
+
+.sign-in{
+  text-decoration: none !important;
+}
+
+
+.navbar .book-event{
+    border: 1px solid var(--button-color);
+    padding: 12px 24px 12px 24px;
+    background-color: var(--button-color);
+    color: #fff;
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+/* navbar end */
+
+/*Body Section*/
+
+.calendar-title {
+    font-family: "Italianno", cursive;
+    font-weight: 400;
+    font-size: 32px;
+    color: var(--button-color);
+    margin-top: 2%;
+    text-align: center;
+    line-height: 40px;
+  }
+  input[type="number"]::-webkit-inner-spin-button, 
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    }
+
+  .calendar-h3 {
+    font-family: "Inter", sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    margin-bottom: 5%;
+    color: #100E44;
+    line-height: 38px;
+  }
+  .card {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.card-title {
+    font-weight: bold;
+}
+.status-badge {
+    background-color: #FFD966; 
+    color: #000;
+    font-weight: bold;
+    border-radius: 20px;
+    padding: 5px 15px;
+}
+
+.status-badge.success {
+    background-color: #28a745 !important; 
+    color: #fff;
+}
+.card-text {
+    margin: 0;
+}
+.info-label {
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.remaining{
+    border-top: 2px solid #808080 !important;
+    padding-top: 3px;
+}
+
+/*Body Section End*/
+
+/*Star Section*/
+
+.star-rating {
+    display: flex;
+    direction: row-reverse;
+}
+
+.star-rating input[type="radio"] {
+    display: none;
+}
+
+.star-rating label {
+    font-size: 2rem;
+    color: #ccc;
+    cursor: pointer;
+}
+
+.star-rating input:checked ~ label {
+    color: #ffc107; /* Gold color when selected */
+}
+
+.star-rating input:checked ~ label:hover,
+.star-rating label:hover {
+    color: #ffb84d; /* Hover effect */
+}
+
+.star-rating input:checked + label:hover {
+    color: #ffcc00; /* Hover effect */
+}
+
+
+/*Star Section End*/

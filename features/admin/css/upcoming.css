@@ -1,0 +1,58 @@
+/* General Styling for the Card */
+.reminder-card {
+    width: 100%;
+    max-width: 350px; /* Set a max-width to prevent the card from becoming too large */
+    margin: 20px auto; /* Center the card horizontally with some spacing around */
+    border: none; /* Remove default border */
+    border-radius: 15px; /* Slightly rounded corners */
+    padding: 25px; /* More padding for comfortable spacing */
+    background: linear-gradient(145deg, #f5f5f5, #e0e0e0); /* Subtle gradient background */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    transition: all 0.3s ease; /* Smooth transition for hover effect */
+}
+
+/* Card Hover Effect */
+.reminder-card:hover {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
+    transform: translateY(-5px); /* Slight elevation when hovered */
+}
+
+/* Card Header Styling */
+.card-header {
+    font-size: 1.25rem; /* Bigger, bold text */
+    font-weight: 600; /* Bold text for emphasis */
+    text-align: center; /* Center-align the header */
+    color: #333; /* Dark text color for readability */
+    padding-bottom: 15px; /* Space below the header */
+}
+
+/* Card Body Styling */
+.card-body {
+    text-align: center; /* Center content inside the card */
+    padding: 15px; /* Spacing inside the card body */
+}
+
+/* Event Item Styling */
+.event-item {
+    font-size: 0.95rem;
+    color: #333;
+}
+
+/* Reminder Modal Styling */
+.modal-content {
+    border-radius: 10px; /* Rounded corners for the modal */
+}
+
+.modal-header {
+    background-color: #007bff; /* Blue header background */
+    color: white;
+    font-weight: bold;
+}
+
+.modal-body {
+    padding: 20px; /* Added padding inside the modal */
+}
+
+.modal-footer {
+    background-color: #f8f9fa; /* Light background for the footer */
+}
