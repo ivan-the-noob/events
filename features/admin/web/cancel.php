@@ -60,7 +60,7 @@
     $result = $stmt->get_result();
 
 
-   
+        
     function formatTime($hour) {
         if ($hour == 0) {
             return '12:00 AM';
@@ -71,7 +71,7 @@
         } else {
             return ($hour - 12) . ':00 PM';
         }
-    }
+    } 
     
 ?>
 <!DOCTYPE html>
@@ -338,11 +338,11 @@
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="event_start_<?php echo $row['id']; ?>" class="form-label">Event Start</label>
-                                                    <input type="text" class="form-control" id="event_start_<?php echo $row['id']; ?>" value="<?php echo htmlspecialchars($row['event_starttime']); ?>:00" readonly>
+                                                    <input type="text" class="form-control" id="event_start_<?php echo $row['id']; ?>" value="<?php echo formatTime(htmlspecialchars($row['event_starttime'])); ?>" readonly>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="event_end_<?php echo $row['id']; ?>" class="form-label">Event End</label>
-                                                    <input type="text" class="form-control" id="event_end_<?php echo $row['id']; ?>" value="<?php echo htmlspecialchars($row['event_endtime']); ?>:00" readonly>
+                                                    <input type="text" class="form-control" id="event_end_<?php echo $row['id']; ?>" value="<?php echo htmlspecialchars($row['event_endtime']); ?>:00 PM" readonly>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="event_type_<?php echo $row['id']; ?>" class="form-label">Event Type</label>

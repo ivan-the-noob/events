@@ -31,7 +31,11 @@
 
 
     $conn->close();
+
+    
 ?>
+
+
 
 
 
@@ -401,7 +405,7 @@
                     </div>
                 <div class="d-flex justify-content-between">
                     <p class="mb-1"><span class="info-label">Event's Time</span></p>
-                    <p><?php echo formatTime(htmlspecialchars($booking['event_starttime'])); ?> - <?php echo formatTime(htmlspecialchars($booking['event_endtime'])); ?></p>
+                    <p><?php echo formatTime(htmlspecialchars($booking['event_starttime'])); ?> - <?php echo htmlspecialchars($booking['event_endtime']); ?>: 00 PM</p>
                 </div>
                 <div class="d-flex justify-content-between">       
                     <p class="mb-1"><span class="info-label">Celebrant's Name</span></p>

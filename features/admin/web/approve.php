@@ -314,7 +314,7 @@ function formatTime($hour) {
                                 <td><?php echo htmlspecialchars($row['created_at']); ?></td>
                                 <td><?php echo htmlspecialchars($row['events_date']); ?></td>
                                 <td><?php echo formatTime(htmlspecialchars($row['event_starttime'])); ?></td>
-                                <td><?php echo formatTime(htmlspecialchars($row['event_endtime'])); ?></td>
+                                <td><?php echohtmlspecialchars($row['event_endtime']); ?>:00 PM</td>
                                 <td>
                                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#viewModal<?php echo $row['id']; ?>">View</button>
                                 </td>
@@ -369,7 +369,7 @@ function formatTime($hour) {
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="event_end_<?php echo $row['id']; ?>" class="form-label">Event End</label>
-                                                    <input type="text" class="form-control" id="event_end_<?php echo $row['id']; ?>" value="<?php echo formatTime(htmlspecialchars($row['event_endtime'])); ?>" readonly>
+                                                    <input type="text" class="form-control" id="event_end_<?php echo $row['id']; ?>" value="<?php echohtmlspecialchars($row['event_endtime']); ?>:00 PM" readonly>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="event_type_<?php echo $row['id']; ?>" class="form-label">Event Type</label>
