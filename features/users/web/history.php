@@ -118,7 +118,7 @@
                                         style="width: 30px; height: 30px; object-fit: cover; border: 1px solid #7A3015;">
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                                    <li><a class="dropdown-item" href="dashboard.php">Profile</a></li>
+                                    <li><a class="dropdown-item" href="profile.php">Profile</a></li>
                                     <li><a class="dropdown-item" href="../function/authentication/logout.php">Logout</a></li>
                                 </ul>
                             </div>

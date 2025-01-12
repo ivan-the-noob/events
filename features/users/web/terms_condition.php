@@ -103,7 +103,7 @@ if (!(isset($_SESSION['email']) && $_SESSION['role'] === 'users')) {
                                     <img src="../../../assets/profile/user.png" alt="Profile Image" class="profile" style="width: 30px; height: 30px; margin-left: 5px; margin-right: 5px;">
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                                    <li><a class="dropdown-item" href="dashboard.php">Profile</a></li>
+                                    <li><a class="dropdown-item" href="profile.php">Profile</a></li>
                                     <li><a class="dropdown-item" href="../function/authentication/logout.php">Logout</a></li>
                                 </ul>
                             </div>
