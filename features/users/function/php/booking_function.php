@@ -1,27 +1,19 @@
 <?php
 require '../../../../db.php';
+require '../../../../PHPMailer/src/PHPMailer.php'; 
+require '../../../../PHPMailer/src/SMTP.php'; 
+require '../../../../PHPMailer/src/Exception.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-<<<<<<< Updated upstream
 
-    echo '<pre>';
-    print_r($_POST); 
-    echo '</pre>';
-
-=======
-    var_dump($_POST);  // Display the form data
-
-    // Get data from form
->>>>>>> Stashed changes
     $full_name = $_POST['full_name'];
     $celebrants_name = $_POST['celebrants_name'];
     $email = $_POST['email'];
     $phone_number = $_POST['phone_number'];
-<<<<<<< Updated upstream
-    $events_date = $_POST['events_date'];
-=======
-    $event_date = $_POST['event_date'];  // Make sure this field is populated correctly
->>>>>>> Stashed changes
+    $event_date = $_POST['events_date']; 
     $guest_count = $_POST['guest_count'];
     $event_duration = $_POST['event_duration'];
     $event_starttime = $_POST['event_starttime'];
@@ -31,61 +23,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $cost = $_POST['cost'];
     $theme = $_POST['theme'];
 
-<<<<<<< Updated upstream
-    // Get dish options
-    $beef_dish = isset($_POST['beef_dish']) ? $_POST['beef_dish'] : null;
-    $pork_dish = isset($_POST['pork_dish']) ? $_POST['pork_dish'] : null;
-    $chicken_dish = isset($_POST['chicken_dish']) ? $_POST['chicken_dish'] : null;
-    $pasta_dish = isset($_POST['pasta_dish']) ? $_POST['pasta_dish'] : null;
-    $dessert_dish = isset($_POST['dessert_dish']) ? $_POST['dessert_dish'] : null;
-    $fish_dish = isset($_POST['fish_dish']) ? $_POST['fish_dish'] : null;
-    $drinks_dish = isset($_POST['drinks_dish']) ? $_POST['drinks_dish'] : null;
-
-    $event_options = isset($_POST['event_options']) ? implode(", ", $_POST['event_options']) : 'None';  
-
-    echo 'Event Options: ' . $event_options;
-
-    $status = 'To-pay';
-
-    // Prepare the SQL query
-    $sql = "INSERT INTO booking (full_name, celebrants_name, email, phone_number, events_date, guest_count, event_duration, event_starttime, event_endtime, event_type, event_package, event_options, cost, theme, status, beef_dish, pork_dish, chicken_dish, pasta_dish, dessert_dish, fish_dish, drinks_dish) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-    if ($stmt = $conn->prepare($sql)) {
-        // Bind the parameters
-        $stmt->bind_param("sssssiisssssssssssssss", $full_name, $celebrants_name, $email, $phone_number, $events_date, $guest_count, $event_duration, $event_starttime, $event_endtime, $event_type, $event_package, $event_options, $cost, $theme, $status, $beef_dish, $pork_dish, $chicken_dish, $pasta_dish, $dessert_dish, $fish_dish, $drinks_dish);
-
-        if ($stmt->execute()) {
-            header("Location: ../../web/history.php");
-            exit();
-=======
-    // Prepare the SQL statement
-    $sql = "INSERT INTO booking (full_name, celebrants_name, email, phone_number, event_date, guest_count, event_duration, event_starttime, event_endtime, event_type, event_package, event_options) 
+    $sql = "INSERT INTO booking (full_name, celebrants_name, email, phone_number, events_date, guest_count, event_duration, event_starttime, event_endtime, event_type, event_package, event_options) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-    // Prepare statement
     if ($stmt = $conn->prepare($sql)) {
-        // Bind parameters
         $stmt->bind_param("sssssiisssss", $full_name, $celebrants_name, $email, $phone_number, $event_date, $guest_count, $event_duration, $event_starttime, $event_endtime, $event_type, $event_package, $event_options);
 
-        // Execute the query
         if ($stmt->execute()) {
-            echo "Booking successfully created!";
->>>>>>> Stashed changes
+            sendEmailNotification($email, $event_date);
         } else {
             echo "Error: " . $stmt->error;
         }
 
-<<<<<<< Updated upstream
-=======
-        // Close the statement
->>>>>>> Stashed changes
         $stmt->close();
     } else {
         echo "Error preparing statement: " . $conn->error;
     }
 
-    // Close the database connection
     $conn->close();
+}
+
+function sendEmailNotification($email, $event_date) {
+    $mail = new PHPMailer(true);
+    
+    try {
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'amielsmomeventsplace@gmail.com'; 
+        $mail->Password = 'frfl cfpq ylav clic';  
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = 587;
+        $mail->setFrom('amielsmomeventsplace@gmail.com', 'Amiels MOM Events');
+        $mail->addAddress($email); 
+        $mail->addAddress('amielsmomeventsplace@gmail.com');  
+        $mail->isHTML(true);
+        $mail->Subject = 'Booked Successfully! Thank you for trusting Amiels\' MOM';
+        $mail->Body    = "Hello!<br><br>You have a new booking scheduled for <strong>{$event_date}</strong>.<br>Thank you for trusting Amiels' MOM for your event.<br><br>Best regards,<br>Amiels MOM Events Team";
+
+        $mail->send();
+        header('Location: ../../web/history.php');
+    } catch (Exception $e) {
+        echo "Email could not be sent. Mailer Error: {$mail->ErrorInfo}";
+    }
 }
 ?>

@@ -187,12 +187,10 @@
 
             <div class="profile-admin">
                 <div class="dropdown">
-                   <?php if (!empty($image)): ?>
-                        <button class="" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="../../../assets/profile/<?php echo htmlspecialchars($image); ?>" 
+                    <button class="" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                             <img src="../../../assets/logo.png" 
                                 style="width: 40px; height: 40px; object-fit: cover;">
                         </button>
-                    <?php endif; ?>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="../../users/function/authentication/logout.php">Logout</a>
                         </li>
@@ -278,8 +276,6 @@
                         while ($row = $result->fetch_assoc()): ?>
                             <tr>
                                 <td><?php echo $id++; ?></td>
-                                
-                                
                                 <td><?php echo htmlspecialchars($row['full_name']); ?></td>
                                 <td><?php echo htmlspecialchars($row['celebrants_name']); ?></td>
                                 <td><?php echo htmlspecialchars($row['email']); ?></td>
@@ -320,34 +316,40 @@
                                     </select>
                                 </form>
 
-    <!-- Bootstrap Modal -->
-    <div class="modal fade" id="refundModal" tabindex="-1" aria-labelledby="refundModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="refundModalLabel">Refund Amount</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Refund Amount: ₱<span id="refundAmountDisplay">0.00</span></p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" id="submitRefund" onclick="submitRefund()">Submit</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</td>
+                                <div class="modal fade" id="refundModal" tabindex="-1" aria-labelledby="refundModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="refundModalLabel">Refund Amount</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p class="fs-4">Refund Amount: ₱<span id="refundAmountDisplay">0.00</span></p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <button type="button" class="btn btn-primary" id="submitRefund" onclick="submitRefund()">Submit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                                    </div>
+                                </div>
+                            </div>
 
-<?php else: ?>
-    <td>
-        <div class="btn btn-success">
-            <?php echo ucfirst(str_replace('-', ' ', $row['refund_status'])); ?> - 
-            ₱<?php echo number_format($row['refunded_amount'], 2); ?>
-        </div>
-    </td>
-<?php endif; ?>
+                            </tbody>
+                            </table>  
+                        </td>
+
+                        <?php else: ?>
+                        <td>
+                            <div class="btn btn-success">
+                                <?php echo ucfirst(str_replace('-', ' ', $row['refund_status'])); ?> - 
+                                ₱<?php echo number_format($row['refunded_amount'], 2); ?>
+                            </div>
+                        </td>
+                        <?php endif; ?>
 
 <script>
     // Assuming 'payment_amount' is available and is the total amount to be refunded
@@ -430,13 +432,9 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                    
                         <?php endwhile; ?>
-                </tbody>
-            </table>
+               
             </div>
 
             <div class="modal fade" id="paymentImageModal" tabindex="-1" aria-labelledby="paymentImageModalLabel" aria-hidden="true">

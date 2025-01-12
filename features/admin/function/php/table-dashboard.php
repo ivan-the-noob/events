@@ -1,6 +1,6 @@
 <?php
     function getLatestWaitingBookings($conn) {
-        $query = "SELECT * FROM booking WHERE status = 'Waiting' ORDER BY id DESC LIMIT 3";
+        $query = "SELECT * FROM booking WHERE status = 'Pending' ORDER BY id DESC LIMIT 3";
         $result = $conn->query($query);
 
         if (!$result) {
@@ -11,7 +11,7 @@
     }
 
     function getLatestDeclinedBookings($conn) {
-    $query = "SELECT * FROM booking WHERE status = 'Declined' ORDER BY id DESC LIMIT 3";
+    $query = "SELECT * FROM booking WHERE status = 'Cancel' ORDER BY id DESC LIMIT 3";
     $result = $conn->query($query);
 
     if (!$result) {

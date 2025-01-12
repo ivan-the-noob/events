@@ -173,12 +173,10 @@
 
             <div class="profile-admin">
                 <div class="dropdown">
-                   <?php if (!empty($image)): ?>
                         <button class="" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="../../../assets/profile/<?php echo htmlspecialchars($image); ?>" 
+                             <img src="../../../assets/logo.png" 
                                 style="width: 40px; height: 40px; object-fit: cover;">
                         </button>
-                    <?php endif; ?>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="../../users/function/authentication/logout.php">Logout</a>
                         </li>
@@ -224,7 +222,7 @@
                                 <td><?php echo htmlspecialchars($row['created_at']); ?></td>
                                 <td><?php echo htmlspecialchars($row['events_date']); ?></td>
                                 <td><?php echo formatTime(htmlspecialchars($row['event_starttime'])); ?></td>
-                                <td><?php echo formatTime(htmlspecialchars($row['event_endtime'])); ?></td>
+                                <td><?php echo htmlspecialchars($row['event_endtime']); ?>:00 PM</td>
                                 <td>
                                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#viewModal<?php echo $row['id']; ?>">View</button>
                                 </td>
@@ -279,7 +277,7 @@
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="event_end_<?php echo $row['id']; ?>" class="form-label">Event End</label>
-                                                    <input type="text" class="form-control" id="event_end_<?php echo $row['id']; ?>" value="<?php echo formatTime(htmlspecialchars($row['event_endtime'])); ?>" readonly>
+                                                    <input type="text" class="form-control" id="event_end_<?php echo $row['id']; ?>" value="<?php echo htmlspecialchars($row['event_endtime']); ?>:00 PM" readonly>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="event_type_<?php echo $row['id']; ?>" class="form-label">Event Type</label>

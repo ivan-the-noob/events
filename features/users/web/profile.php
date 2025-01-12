@@ -1,6 +1,6 @@
 <?php
 session_start();
-$email = isset($_SESSION['email']);
+$email = isset($_SESSION['email']) ? $_SESSION['email'] : '';
 
 // Check if the user is logged in and has the correct role
 if (!(isset($_SESSION['email']) && $_SESSION['role'] === 'users')) {
@@ -19,11 +19,11 @@ $stmt->execute();
 $result = $stmt->get_result();
 if ($row = $result->fetch_assoc()) {
     $name = $row['first_name'] . ' ' . $row['last_name'];
-    $imageProfile = isset($row['image_profile']) ? $row['image_profile'] : '';
+    $imageProfile = isset($row['image_profile']) && !empty($row['image_profile']) ? $row['image_profile'] : 'default_profile.jpg'; // Add fallback image
 }
 
 $passwordError = '';
-?>
+?> 
 
 <!DOCTYPE html>
 <html lang="en">
@@ -98,10 +98,10 @@ $passwordError = '';
                                 <div class="dropdown second-dropdown d-flex align-items-center">
                                 <button class="btn" type="button" id="dropdownMenuButton2"
                                         data-bs-toggle="dropdown" aria-expanded="false" style="padding: 0; margin-top: 2px;">
-                                        <img src="../../assets/profile/<?php echo $imageProfile; ?>" 
+                                        <img src="../../../assets/profile/<?php echo htmlspecialchars($imageProfile); ?>" alt="Profile Picture" 
                                         alt="Profile Image" 
-                                        class="rounded-circle mb-3" 
-                                        style="width: 120px; height: 120px; object-fit: cover; border: 1px solid #7A3015;">
+                                        class="rounded-circle" 
+                                        style="width: 30px; height: 30px; object-fit: cover; border: 1px solid #7A3015;">
                                                                     </button>
                                                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
                                                                         <li><a class="dropdown-item" href="dashboard.php">Profile</a></li>
@@ -129,7 +129,7 @@ $passwordError = '';
 
                         <!-- Profile Picture -->
                         <form action="../function/php/profile_logic.php" method="POST" enctype="multipart/form-data" class="text-center mb-4">
-                        <img src="../../../assets/profile/<?php echo $row['image_profile']; ?>" 
+                        <img src="../../../assets/profile/<?php echo htmlspecialchars($imageProfile); ?>" alt="Profile Picture"
                             alt="Profile Image" 
                             class="rounded-circle mb-3" 
                             style="width: 120px; height: 120px; object-fit: cover; border: 1px solid #7A3015;">

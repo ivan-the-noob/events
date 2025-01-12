@@ -4,12 +4,24 @@
     session_start();
     $email = $_SESSION['email'] ?? '';
 
+    // Fetch CMS data
     $query = "SELECT * FROM cms";
     $result = $conn->query($query);
     $row = $result->fetch_assoc();
     
+    // Fetch scope services
     $query = "SELECT image, title, description FROM scope_services";
     $result = $conn->query($query);
+
+    // Fetch user's profile image based on email
+    $query = "SELECT image_profile FROM users WHERE email = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param('s', $email);
+    $stmt->execute();
+    $stmt->bind_result($imageProfile);
+    $stmt->fetch();
+    $stmt->close();
+    
 ?>
 
 <!DOCTYPE html>
@@ -25,7 +37,9 @@
 </head>
 <body>
         
-        <section class="display">
+<section class="display" style="background-image: url('<?php echo htmlspecialchars("http://localhost/events/assets/" . $row['bg_img']); ?>'); background-position: center; background-repeat: no-repeat; background-size: cover; width: 100%; height: 100vh;">
+
+
             <div class="navbar-container">
                 <div class="col-10 col-md-10">
                     <div class="d-flex justify-content-between">
@@ -85,8 +99,10 @@
                                 <div class="dropdown second-dropdown d-flex align-items-center">
                                 <button class="btn" type="button" id="dropdownMenuButton2"
                                         data-bs-toggle="dropdown" aria-expanded="false" style="padding: 0; margin-top: 2px;">
-                                    <img src="assets/profile/user.png" alt="Profile Image" class="profile" style="width: 30px; height: 30px; margin-left: 5px; margin-right: 5px;">
-                                </button>
+                                        <img src="assets/profile/<?php echo htmlspecialchars($imageProfile); ?>" alt="Profile Picture" 
+                                        alt="Profile Image" 
+                                        class="rounded-circle" 
+                                        style="width: 30px; height: 30px; object-fit: cover; border: 1px solid #7A3015;">
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
                                     <li><a class="dropdown-item" href="features/users/web/profile.php">Profile</a></li>
                                     <li><a class="dropdown-item" href="features/users/function/authentication/logout.php">Logout</a></li>

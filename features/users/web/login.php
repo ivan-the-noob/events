@@ -46,6 +46,9 @@ include '../function/authentication/login.php';
                             <?php if (isset($_SESSION['error'])): ?>
                                 <div class="error mb-3"><?php echo $_SESSION['error']; unset($_SESSION['error']); ?></div>
                             <?php endif; ?>
+                            <div class="d-flex justify-content-end">
+                                <a href="forgot.php" class="text-decoration-underline">Forgot Password?</a>
+                            </div>
                             <div class="form-check mb-3">
                                 <input type="checkbox" class="form-check-input" id="showPassword">
                                 <label class="form-check-label" for="showPassword">Show Password</label>

@@ -171,12 +171,10 @@ if ($result->num_rows > 0) {
 
             <div class="profile-admin">
                 <div class="dropdown">
-                   <?php if (!empty($image)): ?>
-                        <button class="" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="../../../assets/profile/<?php echo htmlspecialchars($image); ?>" 
+                    <button class="" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                             <img src="../../../assets/logo.png" 
                                 style="width: 40px; height: 40px; object-fit: cover;">
                         </button>
-                    <?php endif; ?>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="../../users/function/authentication/logout.php">Logout</a>
                         </li>
@@ -195,28 +193,26 @@ if ($result->num_rows > 0) {
 
                 
                  
-    <?php
-    require '../../../db.php'; 
+                <?php
+require '../../../db.php'; 
 
-    $query = "SELECT full_name, event_type, events_date
-              FROM booking
-              WHERE events_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 3 DAY)";
-    $result = mysqli_query($conn, $query);
+$query = "SELECT *
+          FROM booking
+          WHERE events_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 3 DAY)";
+$result = mysqli_query($conn, $query);
 
-    $upcomingEvents = [];
+$upcomingEvents = [];
 
-    if (mysqli_num_rows($result) > 0) {
-        while ($row = mysqli_fetch_assoc($result)) {
-            $upcomingEvents[] = $row;   
-        }
-    } else {
-        $upcomingEvents = null;  
+if (mysqli_num_rows($result) > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        $upcomingEvents[] = $row;   
     }
-    ?>
+} else {
+    $upcomingEvents = null;  
+}
+?>
 
-   
-        </div>
-        <div class="row">
+<div class="row">
     <?php if ($upcomingEvents): ?>
         <?php foreach ($upcomingEvents as $event): ?>
             <div class="col-md-4 mb-4">
@@ -234,6 +230,28 @@ if ($result->num_rows > 0) {
                                 <strong>Event's Date:</strong> <?php echo htmlspecialchars($event['events_date']); ?>
                             </li>
                         </ul>
+                        <button class="btn btn-primary m-2 d-flex mx-auto" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#eventModal" 
+                            data-celebrants-name="<?php echo htmlspecialchars($event['celebrants_name']); ?>" 
+                            data-phone-number="<?php echo htmlspecialchars($event['phone_number']); ?>" 
+                            data-email="<?php echo htmlspecialchars($event['email']); ?>" 
+                            data-events-date="<?php echo htmlspecialchars($event['events_date']); ?>" 
+                            data-guest-count="<?php echo htmlspecialchars($event['guest_count']); ?>" 
+                            data-event-starttime="<?php echo htmlspecialchars($event['event_starttime']); ?>" 
+                            data-event-options="<?php echo htmlspecialchars($event['event_options']); ?>" 
+                            data-reference-no="<?php echo htmlspecialchars($event['reference_no']); ?>" 
+                            data-cost="<?php echo htmlspecialchars($event['cost']); ?>" 
+                            data-payment-amount="<?php echo htmlspecialchars($event['payment_amount']); ?>" 
+                            data-beef-dish="<?php echo htmlspecialchars($event['beef_dish']); ?>" 
+                            data-pork-dish="<?php echo htmlspecialchars($event['pork_dish']); ?>" 
+                            data-chicken-dish="<?php echo htmlspecialchars($event['chicken_dish']); ?>" 
+                            data-pasta-dish="<?php echo htmlspecialchars($event['pasta_dish']); ?>" 
+                            data-dessert-dish="<?php echo htmlspecialchars($event['dessert_dish']); ?>" 
+                            data-fish-dish="<?php echo htmlspecialchars($event['fish_dish']); ?>" 
+                            data-drinks-dish="<?php echo htmlspecialchars($event['drinks_dish']); ?>">
+                            View Full Info
+                        </button>
                     </div>
                 </div>
             </div>
@@ -243,6 +261,93 @@ if ($result->num_rows > 0) {
             <p class="text-muted text-center">No upcoming events within the next 3 days.</p>
         </div>
     <?php endif; ?>
+</div>
+
+<!-- Modal Structure -->
+<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="eventModalLabel">Event Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Event Details Section -->
+                <h5 class="text-primary">Event Details</h5>
+                <p><strong>Celebrant's Name:</strong> <span id="modalCelebrantsName"></span></p>
+                <p><strong>Phone Number:</strong> <span id="modalPhoneNumber"></span></p>
+                <p><strong>Email:</strong> <span id="modalEmail"></span></p>
+                <p><strong>Event Date:</strong> <span id="modalEventDate"></span></p>
+                <p><strong>Guest Count:</strong> <span id="modalGuestCount"></span> guests</p>
+                <p><strong>Event Start Time:</strong> <span id="modalEventStartTime"></span>:00</p>
+                <p><strong>Event Options:</strong> <span id="modalEventOptions"></span></p>
+                <p><strong>Reference No:</strong> <span id="modalReferenceNo"></span></p>
+                <p><strong>Total Cost:</strong> ₱<span id="modalTotalCost"></span></p>
+                <p><strong>Remaining Balance:</strong> ₱<span id="modalRemainingBalance"></span></p>
+
+                <!-- Food Details Section -->
+                <h5 class="text-primary mt-4">Food Details</h5>
+                <p><strong>Beef Dish:</strong> <span id="modalBeefDish"></span></p>
+                <p><strong>Pork Dish:</strong> <span id="modalPorkDish"></span></p>
+                <p><strong>Chicken Dish:</strong> <span id="modalChickenDish"></span></p>
+                <p><strong>Pasta Dish:</strong> <span id="modalPastaDish"></span></p>
+                <p><strong>Dessert Dish:</strong> <span id="modalDessertDish"></span></p>
+                <p><strong>Fish Dish:</strong> <span id="modalFishDish"></span></p>
+                <p><strong>Drinks:</strong> <span id="modalDrinksDish"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const eventModal = document.getElementById('eventModal');
+    eventModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+
+        const celebrantsName = button.getAttribute('data-celebrants-name');
+        const phoneNumber = button.getAttribute('data-phone-number');
+        const email = button.getAttribute('data-email');
+        const eventDate = button.getAttribute('data-events-date');
+        const guestCount = button.getAttribute('data-guest-count');
+        const eventStartTime = button.getAttribute('data-event-starttime');
+        const eventOptions = button.getAttribute('data-event-options');
+        const referenceNo = button.getAttribute('data-reference-no');
+        const totalCost = button.getAttribute('data-cost');
+        const paymentAmount = button.getAttribute('data-payment-amount');
+        const remainingBalance = parseFloat(totalCost) - parseFloat(paymentAmount);
+
+        const beefDish = button.getAttribute('data-beef-dish');
+        const porkDish = button.getAttribute('data-pork-dish');
+        const chickenDish = button.getAttribute('data-chicken-dish');
+        const pastaDish = button.getAttribute('data-pasta-dish');
+        const dessertDish = button.getAttribute('data-dessert-dish');
+        const fishDish = button.getAttribute('data-fish-dish');
+        const drinksDish = button.getAttribute('data-drinks-dish');
+
+        document.getElementById('modalCelebrantsName').textContent = celebrantsName;
+        document.getElementById('modalPhoneNumber').textContent = phoneNumber;
+        document.getElementById('modalEmail').textContent = email;
+        document.getElementById('modalEventDate').textContent = eventDate;
+        document.getElementById('modalGuestCount').textContent = guestCount;
+        document.getElementById('modalEventStartTime').textContent = eventStartTime;
+        document.getElementById('modalEventOptions').textContent = eventOptions;
+        document.getElementById('modalReferenceNo').textContent = referenceNo;
+        document.getElementById('modalTotalCost').textContent = parseFloat(totalCost).toFixed(2);
+        document.getElementById('modalRemainingBalance').textContent = remainingBalance.toFixed(2);
+
+        document.getElementById('modalBeefDish').textContent = beefDish;
+        document.getElementById('modalPorkDish').textContent = porkDish;
+        document.getElementById('modalChickenDish').textContent = chickenDish;
+        document.getElementById('modalPastaDish').textContent = pastaDish;
+        document.getElementById('modalDessertDish').textContent = dessertDish;
+        document.getElementById('modalFishDish').textContent = fishDish;
+        document.getElementById('modalDrinksDish').textContent = drinksDish;
+    });
+</script>
+
 </div>
 
     </div>

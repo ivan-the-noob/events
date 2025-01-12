@@ -162,12 +162,10 @@ if ($result->num_rows > 0) {
 
             <div class="profile-admin">
                 <div class="dropdown">
-                   <?php if (!empty($image)): ?>
-                        <button class="" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="../../../assets/profile/<?php echo htmlspecialchars($image); ?>" 
+                    <button class="" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                             <img src="../../../assets/logo.png" 
                                 style="width: 40px; height: 40px; object-fit: cover;">
                         </button>
-                    <?php endif; ?>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="../../users/function/authentication/logout.php">Logout</a>
                         </li>
@@ -198,11 +196,11 @@ if ($result->num_rows > 0) {
                 </tr>
             </thead>
             <tbody>
-                <?php 
-                $query = "SELECT * FROM event_packages";
+            <?php 
+                $query = "SELECT * FROM event_packages ORDER BY id DESC";
                 $result = $conn->query($query);
                 while ($row = $result->fetch_assoc()): 
-                ?>
+            ?>
                     <tr>
                         <td>
                             <?php if (!empty($row['package_image'])): ?>

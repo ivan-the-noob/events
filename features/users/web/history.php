@@ -21,6 +21,14 @@
     while ($row = $result->fetch_assoc()) {
         $bookings[] = $row; 
     }
+    $query = "SELECT image_profile FROM users WHERE email = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param('s', $email);
+    $stmt->execute();
+    $stmt->bind_result($imageProfile);
+    $stmt->fetch();
+    $stmt->close();
+
 
     $conn->close();
 ?>
@@ -36,8 +44,10 @@
     <link rel="stylesheet" href="../css/appointment.css">
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
     <title>Amiel's MOM Event's Place</title>
     <link rel="icon" href="../../../assets/logo.png" type="image/png">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 <div class="navbar-container">
@@ -98,7 +108,10 @@
                                 <div class="dropdown second-dropdown d-flex align-items-center">
                                 <button class="btn" type="button" id="dropdownMenuButton2"
                                         data-bs-toggle="dropdown" aria-expanded="false" style="padding: 0; margin-top: 2px;">
-                                    <img src="../../../assets/profile/user.png" alt="Profile Image" class="profile" style="width: 30px; height: 30px; margin-left: 5px; margin-right: 5px;">
+                                        <img src="../../../assets/profile/<?php echo htmlspecialchars($imageProfile); ?>" alt="Profile Picture" 
+                                        alt="Profile Image" 
+                                        class="rounded-circle" 
+                                        style="width: 30px; height: 30px; object-fit: cover; border: 1px solid #7A3015;">
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
                                     <li><a class="dropdown-item" href="dashboard.php">Profile</a></li>
@@ -211,6 +224,10 @@
                                             <label for="referenceNo-<?php echo $booking['id']; ?>" class="form-label">Reference Number</label>
                                             <input type="text" class="form-control" id="referenceNo-<?php echo $booking['id']; ?>" name="reference_no" placeholder="Enter your payment reference number" required>
                                         </div>
+                                        <div class="mb-3 form-check">
+                                            <input type="checkbox" class="form-check-input" id="confirmation-<?php echo $booking['id']; ?>" name="confirmation" required>
+                                            <label class="form-check-label" for="confirmation-<?php echo $booking['id']; ?>">I confirm that all data is correct.</label>
+                                        </div>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -226,6 +243,9 @@
                             Rate our service
                         </button>
                     <?php endif; ?>
+
+                    
+
 
                     <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
@@ -270,22 +290,76 @@
                         </div>
                     </div>
 
-
                     <span class="status-badge <?php 
-                        echo strtolower($booking['status']) === 'cancel' ? 'bg-danger text-white' :
-                            (strtolower($booking['status']) === 'cancel-pending' ? 'bg-warning text-black text-bold' :
-                            (strtolower($booking['status']) === 'pending' ? 'bg-info text-white' :
-                            (strtolower($booking['status']) === 'waiting' ? 'bg-primary text-white' : 
-                            (strtolower($booking['status']) === 'approved' ? 'bg-success text-white' : ''))));
+                        if (strtolower($booking['status']) === 'resched') {
+                            echo 'bg-transparent'; 
+                        } else {
+                            echo strtolower($booking['status']) === 'cancel' ? 'bg-danger text-white' :
+                                (strtolower($booking['status']) === 'cancel-pending' ? 'bg-warning text-black text-bold' :
+                                (strtolower($booking['status']) === 'pending' ? 'bg-info text-white' :
+                                (strtolower($booking['status']) === 'waiting' ? 'bg-primary text-white' : 
+                                (strtolower($booking['status']) === 'approved' ? 'bg-success text-white' : ''))));
+                        }
                     ?>">
                         <?php 
-                        echo strtolower($booking['status']) === 'cancel' ? 'Cancelled' :
-                            (strtolower($booking['status']) === 'cancel-pending' ? 'Refund on Pending' :
-                            (strtolower($booking['status']) === 'pending' ? 'Waiting' :
-                            (strtolower($booking['status']) === 'waiting' ? 'Approved' :
-                            htmlspecialchars($booking['status']))));
+                        if (strtolower($booking['status']) === 'resched') {
+                            echo ''; 
+                        } else {
+                            echo strtolower($booking['status']) === 'cancel' ? 'Cancelled' :
+                                (strtolower($booking['status']) === 'cancel-pending' ? 'Refund on Pending' :
+                                (strtolower($booking['status']) === 'pending' ? 'Waiting' :
+                                (strtolower($booking['status']) === 'waiting' ? 'Approved' :
+                                htmlspecialchars($booking['status']))));
+                        }
                         ?>
                     </span>
+
+
+                    <?php if ($booking['status'] === 'resched'): ?>
+                        <?php if (isset($booking['events_date'])): ?>
+                            <!-- Button to trigger modal with booking data -->
+                            <button 
+                                class="btn btn-danger text-white fw-bold" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#resched"
+                                data-booking-id="<?= $booking['id']; ?>" 
+                                data-booking-date="<?= date('F j, Y', strtotime($booking['events_date'])); ?>"
+                            >
+                                Re-sched
+                            </button>
+                        <?php else: ?>
+                            <!-- Handle missing event_date, maybe display a default message -->
+                            <p>Event date not available</p>
+                        <?php endif; ?>
+                    <?php endif; ?>
+
+                  
+                    <div class="modal fade" id="resched" tabindex="-1" aria-labelledby="reschedLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-xl">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="reschedLabel">Select Reschedule Date</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- FullCalendar will be placed here -->
+                                     <div class="d-flex gap-2" style="font-size: 20px; padding-left: 50px;">
+                                        <p>Selected Date:</p>
+                                        <div class="selected-date">
+                                            <p></p>
+                                        </div>
+                                    </div>
+                                    <div id="calendar"></div>
+                                    <input type="hidden" id="selected-date">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="button" class="btn btn-primary" id="confirm-reschedule">Confirm Reschedule</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
 
                     <?php if ($booking['status'] === 'To-pay'): ?>
                         <?php if ($booking['status_paid'] != 1): ?>
@@ -475,11 +549,168 @@ function formatTime($hour) {
 }
 ?>
 
+<script>
+document.addEventListener('DOMContentLoaded', async function () {
+    const calendarEl = document.getElementById('calendar');
+    const selectedDateDiv = document.querySelector('.selected-date p'); // Selecting the <p> tag inside the div
+
+    // Fetch unavailable days
+    let unavailableDays = [];
+    try {
+        const response = await fetch('../function/php/unavailable.php');
+        if (response.ok) {
+            unavailableDays = await response.json();
+        } else {
+            console.error('Failed to fetch unavailable days:', response.status);
+        }
+    } catch (error) {
+        console.error('Error fetching unavailable days:', error);
+    }
+
+    console.log('Initial unavailableDays:', unavailableDays);
+
+    // Calendar initialization
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+            right: 'prev,next',
+        },
+        dayCellDidMount: async function (info) {
+            const selectedDate = new Date(info.date);
+            selectedDate.setHours(0, 0, 0, 0);
+            const selectedDateStr = selectedDate.toLocaleDateString('en-CA');
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const todayStr = today.toLocaleDateString('en-CA');
+
+            // Disable past days
+            if (selectedDateStr < todayStr) {
+                info.el.style.backgroundColor = 'white';
+                info.el.style.opacity = 0.2;
+                info.el.style.cursor = 'not-allowed';
+            } else if (unavailableDays.includes(selectedDateStr)) {
+                // Disable unavailable days
+                info.el.style.backgroundColor = '#FFBFBD';
+                info.el.style.cursor = 'not-allowed';
+            } else {
+                try {
+                    const response = await fetch(`../function/php/check_date_availability.php?date=${selectedDateStr}`);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+
+                    if (result.bookings_count >= 1) {
+                        console.log(`Booked Date: ${selectedDateStr}`);
+                        console.log('Booking +7 days unavailable:');
+                        // Mark the next 7 days as unavailable
+                        for (let i = 1; i <= 7; i++) {
+                            const futureDate = new Date(selectedDate);
+                            futureDate.setDate(selectedDate.getDate() + i);
+                            const futureDateStr = futureDate.toLocaleDateString('en-CA');
+                            console.log(futureDateStr);
+                            if (!unavailableDays.includes(futureDateStr)) {
+                                unavailableDays.push(futureDateStr);
+                            }
+                        }
+                        console.log('Unavailable days after booking +7 days:', unavailableDays);
+                    }
+
+                    console.log(`Processing Date: ${selectedDateStr}`);
+                    console.log('Current unavailableDays:', unavailableDays);
+
+                    if (unavailableDays.includes(selectedDateStr)) {
+                        info.el.style.backgroundColor = '#FFBFBD';
+                        info.el.style.cursor = 'not-allowed';
+                    } else if (result.bookings_count >= 2) {
+                        info.el.style.backgroundColor = '#D2B48C';
+                        info.el.style.cursor = 'not-allowed';
+                        info.el.style.setProperty('color', 'white', 'important');
+                    } else {
+                        info.el.style.backgroundColor = '#FFFFFF';
+                        info.el.addEventListener('mouseenter', function () {
+                            info.el.style.backgroundColor = '#100E44';
+                            info.el.style.color = '#FFFFFF';
+                        });
+
+                        info.el.addEventListener('mouseleave', function () {
+                            info.el.style.backgroundColor = '#FFFFFF';
+                            info.el.style.color = '';
+                        });
+
+                        // Update the selected date value when a day is clicked, no modal opening
+                        info.el.addEventListener('click', async function () {
+                            // Update the content of the <div class="selected-date">
+                            if (selectedDateDiv) {
+                                selectedDateDiv.textContent = selectedDateStr; // Set the selected date as text inside <p>
+                            }
+
+                            // Optionally, you can add any extra logic here if needed
+                            console.log(`Selected date: ${selectedDateStr}`);
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error fetching availability:', error);
+                }
+            }
+        }
+    });
+
+    // Re-render FullCalendar when the modal is shown
+    $('#resched').on('shown.bs.modal', function () {
+        calendar.render();
+    });
+
+    // Initial rendering of the calendar
+    calendar.render();
+
+    // When the "Confirm Reschedule" button is clicked
+    document.getElementById('confirm-reschedule').addEventListener('click', function () {
+        const newDate = document.getElementById('selected-date').value;
+
+        // Get the booking ID from the button (stored as data attribute)
+        const bookingId = document.querySelector('[data-bs-toggle="modal"][data-bs-target="#resched"]').getAttribute('data-booking-id');
+
+        // Make sure the new date is selected
+        if (newDate) {
+            // Update the booking with new date (via Pure AJAX)
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '../function/php/reschedule.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    const response = xhr.responseText;
+                    console.log('Response from reschedule:', response); // Inspect the response
+                    if (response === 'Booking rescheduled successfully') {
+                        alert('Booking successfully rescheduled!');
+                        location.reload();
+                    } else {
+                        alert(response); // Display error message
+                    }
+                }
+            };
+
+            // Send bookingId and newDate as form data
+            const data = `bookingId=${encodeURIComponent(bookingId)}&newDate=${encodeURIComponent(newDate)}`;
+            xhr.send(data);
+        } else {
+            alert('Please select a date before confirming.');
+        }
+    });
+});
+
+
+
+
+</script>
+
 
 
    
 
-
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 

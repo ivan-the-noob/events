@@ -3,7 +3,13 @@
     require '../../../db.php';
     session_start();
     $email = $_SESSION['email'] ?? '';
-
+    $query = "SELECT image_profile FROM users WHERE email = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param('s', $email);
+    $stmt->execute();
+    $stmt->bind_result($imageProfile);
+    $stmt->fetch();
+    $stmt->close();
     
 
 
@@ -80,9 +86,13 @@
                                     <a class="nav-link" href="terms_condition.php">Terms & Conditions</a>
                                 </li>
                                 <div class="dropdown second-dropdown d-flex align-items-center">
+                               
                                 <button class="btn" type="button" id="dropdownMenuButton2"
                                         data-bs-toggle="dropdown" aria-expanded="false" style="padding: 0; margin-top: 2px;">
-                                    <img src="../../../assets/profile/user.png" alt="Profile Image" class="profile" style="width: 30px; height: 30px; margin-left: 5px; margin-right: 5px;">
+                                        <img src="../../../assets/profile/<?php echo htmlspecialchars($imageProfile); ?>" alt="Profile Picture" 
+                                        alt="Profile Image" 
+                                        class="rounded-circle" 
+                                        style="width: 30px; height: 30px; object-fit: cover; border: 1px solid #7A3015;">
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
                                     <li><a class="dropdown-item" href="dashboard.php">Profile</a></li>

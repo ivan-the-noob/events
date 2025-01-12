@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 11, 2025 at 05:46 PM
+-- Generation Time: Jan 12, 2025 at 05:44 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -56,8 +56,8 @@ CREATE TABLE `booking` (
   `fish_dish` varchar(255) DEFAULT NULL,
   `drinks_dish` varchar(255) DEFAULT NULL,
   `created_at` datetime DEFAULT current_timestamp(),
-  `gcash_name` varchar(255) NOT NULL,
-  `gcash_number` varchar(20) NOT NULL,
+  `gcash_name` varchar(255) DEFAULT NULL,
+  `gcash_number` varchar(20) DEFAULT NULL,
   `review_status` int(11) DEFAULT 0,
   `second_payment_amount` decimal(10,2) NOT NULL DEFAULT 0.00,
   `second_reference_no` int(11) DEFAULT NULL,
@@ -78,13 +78,8 @@ CREATE TABLE `booking` (
 --
 
 INSERT INTO `booking` (`id`, `status`, `full_name`, `celebrants_name`, `email`, `phone_number`, `events_date`, `guest_count`, `event_duration`, `event_starttime`, `event_endtime`, `event_type`, `event_package`, `event_options`, `cost`, `cancel_reason`, `payment_image`, `reference_no`, `payment_amount`, `status_paid`, `beef_dish`, `pork_dish`, `chicken_dish`, `pasta_dish`, `dessert_dish`, `fish_dish`, `drinks_dish`, `created_at`, `gcash_name`, `gcash_number`, `review_status`, `second_payment_amount`, `second_reference_no`, `second_payment_image`, `add_pax`, `corkage_fee`, `theme`, `refund_status`, `refunded_amount`, `cancel_time`, `add_extend`, `payment_method`, `add_payment`) VALUES
-(126, 'On-going', 'Ej Ivan Ablanida', 'dasdasdas', 'ejthecoder@gmail.com', '9957939', '2025-01-03', 50, 5, 9, 2, 'Debut', 'Package A (Debut (50 pax)', 'None', 25000.00, NULL, 'gcash.jpg', '312312', 12506.00, 1, 'Beef Caldereta', 'Pork Menudo', 'Sweet & Sour Chicken', 'Carbonara', 'Fruit Salad', 'Fish Fillet', 'Blue Lemonade', '2025-01-03 12:59:34', '', '', 0, 5.00, NULL, NULL, 0, 0, 'dsadasdas', 'full-refund', 0.00, NULL, 1, 'gcash', 1000.00),
-(128, 'Waiting', 'test', 'dasdasdas', 'ejthecodesr@gmail.com', '9957939', '2025-04-30', 50, 5, 10, 3, 'Despedida', 'Package A (Despedida (50 pax)', 'None', 20000.00, NULL, 'gcash.jpg', '12312312', 10062.00, 1, 'Creamy Beef with Mushroom', 'Pork Menudo', 'Sweet & Sour Chicken', 'Pancit', 'Buko Pandan', 'Fish Fillet', 'Blue Lemonade', '2025-01-03 14:26:29', '', '', 0, 12.00, NULL, NULL, 12, 0, 'dsadasdas', NULL, 0.00, NULL, 2, NULL, 0.00),
-(130, 'Cancel', 'Ej Ivan Ablanida', 'Ivan', 'ejthecoders@gmail.com', '9957939', '2025-01-08', 50, 5, 9, 2, 'Despedida', 'Package A (Despedida (50 pax)', 'None', 20000.00, NULL, 'gcash.jpg', '312312', 10000.00, 1, 'Beef Caldereta', 'Pork Menudo', 'Sweet & Sour Chicken', 'Pancit', 'Fruit Salad', 'Fish Fillet', 'Red Tea', '2025-01-05 00:18:59', '', '', 0, 0.00, NULL, NULL, 0, 0, 'dsadsads', NULL, 0.00, NULL, 0, NULL, 0.00),
-(131, 'Cancel-pending', 'Ej Ivan Ablanida', 'Ivan', 'ejthecoder@gmail.com', '9957939', '2025-01-09', 50, 5, 19, 12, 'Adult Party', 'Package A (Adult Birthday Party (50 pax)', 'None', 25000.00, 'dsdas', 'gcash.jpg', '321321312312', 123412.00, 1, 'Beef Caldereta', 'Pork Menudo', 'Sweet & Sour Chicken', 'Pancit', 'Fruit Salad', 'Fish Fillet', 'Blue Lemonade', '2025-01-09 08:05:37', '321312', '312312', 0, 0.00, NULL, NULL, 0, 0, '12321321', 'full-refund', 312321.00, '2025-01-09 16:06:19', 0, NULL, 0.00),
-(132, 'Pending', 'Ej Ivan Ablanida', 'Ivan', 'ejthecoder@gmail.com', '9957939', '2025-01-10', 50, 5, 9, 2, 'Despedida', 'Package B (Despedida (60 pax)', 'None', 25000.00, NULL, 'gcash.jpg', '321312', 25000.00, 1, 'Beef Caldereta', 'Pork Menudo', 'Sweet & Sour Chicken', 'Carbonara', 'Fruit Salad', 'Fish Fillet', 'Red Tea', '2025-01-09 09:53:23', '', '', 0, 1.00, 123312312, '1736446303_about2.jpg', 0, 0, '312321', NULL, 0.00, NULL, 0, NULL, 0.00),
-(133, 'Cancel-pending', 'Ej Ivan Ablanida', 'dasdasdas', 'ejivancablanida@gmail.com', '09957939703', '2025-01-16', 50, 5, 9, 2, 'Debut', 'Package A (Debut (50 pax)', 'None', 25000.00, 'dasdasdsa', 'Star 1.png', 'dasdasdas', 12500.00, 1, 'Beef Caldereta', 'Pork Menudo', 'Chicken Afritada', 'Pancit', 'Fruit Salad', 'Fish Fillet', 'Blue Lemonade', '2025-01-09 16:06:28', 'dasdas', '312321', 0, 0.00, NULL, NULL, 0, 0, 'dsadsa', NULL, 0.00, '2025-01-10 00:25:54', 0, NULL, 0.00),
-(135, 'Pending', 'Ej Ivan Ablanida', 'dasdas', 'ejivancablanida@gmail.com', '09957939703', '2025-01-16', 50, 5, 13, 18, 'Christmas Year End party', 'Package A (Christmas / Year end party (50 pax)', 'None', 20000.00, NULL, 'gcash.jpg', '312312312', 10000.00, 1, 'Beef Caldereta', 'Pork Menudo', 'Sweet & Sour Chicken', 'Pancit', 'Fruit Salad', 'Fish Fillet', 'Blue Lemonade', '2025-01-09 21:32:20', '', '', 0, 0.00, NULL, NULL, 0, 0, 'dasds', NULL, 0.00, NULL, 0, NULL, 0.00);
+(126, 'Pending', 'Ej Ivan Ablanida', 'dasdasdas', 'ejthecoder@gmail.com', '9957939', '2025-01-27', 50, 5, 9, 2, 'Debut', 'Package A (Debut (50 pax)', 'None', 25000.00, NULL, 'gcash.jpg', '312312', 12506.00, 1, 'Beef Caldereta', 'Pork Menudo', 'Sweet & Sour Chicken', 'Carbonara', 'Fruit Salad', 'Fish Fillet', 'Blue Lemonade', '2025-01-03 12:59:34', '', '', 0, 5.00, NULL, NULL, 0, 0, 'dsadasdas', 'full-refund', 1500.00, NULL, 1, 'gcash', 1000.00),
+(128, 'Finished', 'test', 'dasdasdas', 'ejthecodesr@gmail.com', '9957939', '2025-04-30', 50, 5, 10, 3, 'Despedida', 'Package A (Despedida (50 pax)', 'None', 20000.00, NULL, 'gcash.jpg', '12312312', 10062.00, 1, 'Creamy Beef with Mushroom', 'Pork Menudo', 'Sweet & Sour Chicken', 'Pancit', 'Buko Pandan', 'Fish Fillet', 'Blue Lemonade', '2025-01-03 14:26:29', '', '', 0, 12.00, NULL, NULL, 12, 0, 'dsadasdas', NULL, 0.00, NULL, 2, NULL, 0.00);
 
 -- --------------------------------------------------------
 
@@ -206,42 +201,43 @@ CREATE TABLE `event_packages` (
   `type_of_event` varchar(255) NOT NULL,
   `description` text NOT NULL,
   `price` decimal(10,2) NOT NULL,
-  `package_image` varchar(255) DEFAULT NULL
+  `package_image` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `event_packages`
 --
 
-INSERT INTO `event_packages` (`id`, `type_of_event`, `description`, `price`, `package_image`) VALUES
-(5, 'Kiddie Party', 'Package A (Kiddie Birthday Party (50 pax)', 25000.00, '1733635045_2.png'),
-(10, 'Kiddie Party', 'Package B (Kiddie Birthday Party (60 pax)', 30000.00, '1733635968_3.png'),
-(13, 'Kiddie Party', 'Package C (Kiddie Birthday Party (80 pax)', 40000.00, '1733636035_4.png'),
-(14, 'Kiddie Party', 'Package D (Kiddie Birthday Party (100 pax)', 45000.00, '1733636047_5.png'),
-(16, 'Adult Party', 'Package A (Adult Birthday Party (50 pax)	', 25000.00, '1733636170_14.png'),
-(17, 'Adult Party', 'Package B (Adult Birthday Party (60 pax)	', 30000.00, '1733636175_15.png'),
-(18, 'Adult Party', 'Package C (Adult Birthday Party (80 pax)	', 35000.00, '1733636182_16.png'),
-(19, 'Adult Party', 'Package D (Adult Birthday Party (100 pax)	', 40000.00, '1733636189_17.png'),
-(20, 'Christening', 'Package A (Christening (50 pax)	', 20000.00, '1733636237_6.png'),
-(21, 'Christening', 'Package B (Christening (60 pax)', 25000.00, '1733636244_7.png'),
-(22, 'Christening', 'Package C (Christening (80 pax)', 35000.00, '1733636250_8.png'),
-(23, 'Christening', 'Package D (Christening (100 pax)', 40000.00, '1733636257_9.png'),
-(24, 'Christmas Year End party', 'Package A (Christmas / Year end party (50 pax)', 20000.00, '1733636306_20.png'),
-(25, 'Christmas Year End party', 'Package B (Christmas / Year end party (60 pax)', 25000.00, '1733636313_21.png'),
-(27, 'Christmas Year End party', 'Package D (Christmas / Year end party (100 pax)', 40000.00, '1733637160_23.png'),
-(28, 'Debut', 'Package A (Debut (50 pax)', 25000.00, '1733637411_10.png'),
-(29, 'Debut', 'Package B (Debut (60 pax)', 30000.00, '1733637418_11.png'),
-(30, 'Debut', 'Package C (Debut (80 pax)', 40000.00, '1733637425_12.png'),
-(31, 'Debut', 'Package D (Debut (100 pax)', 45000.00, '1733637430_13.png'),
-(32, 'Despedida', 'Package A (Despedida (50 pax)', 20000.00, '1733637368_28.png'),
-(33, 'Despedida', 'Package B (Despedida (60 pax)', 25000.00, '1733637375_29.png'),
-(34, 'Despedida', 'Package C (Despedida (80 pax)', 35000.00, '1733637383_30.png'),
-(35, 'Despedida', 'Package D (Despedida (100 pax)', 40000.00, '1733637389_31.png'),
-(36, 'Wedding', 'Package A (Wedding (50 pax)', 30000.00, '1733637332_24.png'),
-(37, 'Wedding', 'Package B (Wedding (60 pax)', 35000.00, '1733637339_25.png'),
-(38, 'Wedding', 'Package C (Wedding (80 pax)', 45000.00, '1733637346_26.png'),
-(39, 'Wedding', 'Package D (Wedding (100 pax)', 55000.00, '1733637352_27.png'),
-(46, 'Christmas Year End party', 'Package C (Christmas / Year end party (80 pax)', 35000.00, '1733637148_22.png');
+INSERT INTO `event_packages` (`id`, `type_of_event`, `description`, `price`, `package_image`, `created_at`) VALUES
+(5, 'Kiddie Party', 'Package A (Kiddie Birthday Party (50 pax)', 25000.00, '1733635045_2.png', '2025-01-12 08:22:20'),
+(10, 'Kiddie Party', 'Package B (Kiddie Birthday Party (60 pax)', 30000.00, '1733635968_3.png', '2025-01-12 08:22:20'),
+(13, 'Kiddie Party', 'Package C (Kiddie Birthday Party (80 pax)', 40000.00, '1733636035_4.png', '2025-01-12 08:22:20'),
+(14, 'Kiddie Party', 'Package D (Kiddie Birthday Party (100 pax)', 45000.00, '1733636047_5.png', '2025-01-12 08:22:20'),
+(16, 'Adult Party', 'Package A (Adult Birthday Party (50 pax)	', 25000.00, '1733636170_14.png', '2025-01-12 08:22:20'),
+(17, 'Adult Party', 'Package B (Adult Birthday Party (60 pax)	', 30000.00, '1733636175_15.png', '2025-01-12 08:22:20'),
+(18, 'Adult Party', 'Package C (Adult Birthday Party (80 pax)	', 35000.00, '1733636182_16.png', '2025-01-12 08:22:20'),
+(19, 'Adult Party', 'Package D (Adult Birthday Party (100 pax)	', 40000.00, '1733636189_17.png', '2025-01-12 08:22:20'),
+(20, 'Christening', 'Package A (Christening (50 pax)	', 20000.00, '1733636237_6.png', '2025-01-12 08:22:20'),
+(21, 'Christening', 'Package B (Christening (60 pax)', 25000.00, '1733636244_7.png', '2025-01-12 08:22:20'),
+(22, 'Christening', 'Package C (Christening (80 pax)', 35000.00, '1733636250_8.png', '2025-01-12 08:22:20'),
+(23, 'Christening', 'Package D (Christening (100 pax)', 40000.00, '1733636257_9.png', '2025-01-12 08:22:20'),
+(24, 'Christmas Year End party', 'Package A (Christmas / Year end party (50 pax)', 20000.00, '1733636306_20.png', '2025-01-12 08:22:20'),
+(25, 'Christmas Year End party', 'Package B (Christmas / Year end party (60 pax)', 25000.00, '1733636313_21.png', '2025-01-12 08:22:20'),
+(27, 'Christmas Year End party', 'Package D (Christmas / Year end party (100 pax)', 40000.00, '1733637160_23.png', '2025-01-12 08:22:20'),
+(28, 'Debut', 'Package A (Debut (50 pax)', 25000.00, '1733637411_10.png', '2025-01-12 08:22:20'),
+(29, 'Debut', 'Package B (Debut (60 pax)', 30000.00, '1733637418_11.png', '2025-01-12 08:22:20'),
+(30, 'Debut', 'Package C (Debut (80 pax)', 40000.00, '1733637425_12.png', '2025-01-12 08:22:20'),
+(31, 'Debut', 'Package D (Debut (100 pax)', 45000.00, '1733637430_13.png', '2025-01-12 08:22:20'),
+(32, 'Despedida', 'Package A (Despedida (50 pax)', 20000.00, '1733637368_28.png', '2025-01-12 08:22:20'),
+(33, 'Despedida', 'Package B (Despedida (60 pax)', 25000.00, '1733637375_29.png', '2025-01-12 08:22:20'),
+(34, 'Despedida', 'Package C (Despedida (80 pax)', 35000.00, '1733637383_30.png', '2025-01-12 08:22:20'),
+(35, 'Despedida', 'Package D (Despedida (100 pax)', 40000.00, '1733637389_31.png', '2025-01-12 08:22:20'),
+(36, 'Wedding', 'Package A (Wedding (50 pax)', 30000.00, '1733637332_24.png', '2025-01-12 08:22:20'),
+(37, 'Wedding', 'Package B (Wedding (60 pax)', 35000.00, '1733637339_25.png', '2025-01-12 08:22:20'),
+(38, 'Wedding', 'Package C (Wedding (80 pax)', 45000.00, '1733637346_26.png', '2025-01-12 08:22:20'),
+(39, 'Wedding', 'Package D (Wedding (100 pax)', 55000.00, '1733637352_27.png', '2025-01-12 08:22:20'),
+(46, 'Christmas Year End party', 'Package C (Christmas / Year end party (80 pax)', 35000.00, '1733637148_22.png', '2025-01-12 08:22:20');
 
 -- --------------------------------------------------------
 
@@ -490,7 +486,7 @@ CREATE TABLE `unavailable_days` (
 --
 
 INSERT INTO `unavailable_days` (`id`, `date`, `reason`) VALUES
-(11, '2025-01-04', 'dasdsa'),
+(11, '2025-01-29', 'dasdsa'),
 (12, '2025-01-07', 'wala');
 
 -- --------------------------------------------------------
@@ -511,17 +507,19 @@ CREATE TABLE `users` (
   `address` varchar(255) NOT NULL,
   `contact_number` varchar(15) NOT NULL,
   `verification_code` int(11) NOT NULL,
-  `status` int(11) DEFAULT 0
+  `status` int(11) DEFAULT 0,
+  `recovery_code` varchar(4) DEFAULT NULL,
+  `code_expires` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `email`, `image_profile`, `password`, `created_at`, `role`, `first_name`, `last_name`, `address`, `contact_number`, `verification_code`, `status`) VALUES
-(6, 'ejivan.ablanida@cvsu.edu.ph', 'gallery-8.jpg', '$2y$10$kElcBjIAZd4qfSTuatmD1eDAbimR3ZEQcn.L.Z8HcY8hOh3D4Zr3y', '2024-11-18 07:16:02', 'admin', 'Ej Ivan', 'Ablanida', '', '', 0, NULL),
-(46, 'ejthecoder@gmail.com', 'gallery-8.jpg', '$2y$10$8G9ZiY/6SnHdv8snELHXbenkh.Sqaiu0khKAO8UIqhHZj4f8kZUCy', '2024-12-15 08:18:50', 'users', 'Ej Ivan', 'Ablanida', 'Brgy.Agustin', '9957939', 4255, 1),
-(47, 'ejivancablanida@gmail.com', 'default.png', '$2y$10$sqVk.XBGjkBJjRdU4GtcaufDPeKs3GPgmF8bnFUBBiT9KTrBIWIVm', '2025-01-11 16:20:09', 'users', 'Ivan', 'Ablanida', 'Blk 4 Lot 23', '09957939703', 4170, 1);
+INSERT INTO `users` (`id`, `email`, `image_profile`, `password`, `created_at`, `role`, `first_name`, `last_name`, `address`, `contact_number`, `verification_code`, `status`, `recovery_code`, `code_expires`) VALUES
+(6, 'ejivan.ablanida@cvsu.edu.ph', 'gallery-8.jpg', '$2y$10$SqAOQ0QTqzY75OZ9b4CbfOo3JAD5fXXbjlqYnxfy43ponlLYrlEgm', '2024-11-18 07:16:02', 'admin', 'Ej Ivan', 'Ablanida', '', '', 0, 1, '3301', '2025-01-12 13:50:58'),
+(47, 'ejivancablanida@gmail.com', 'default.png', '$2y$10$WQVeV2P3K3e94jci7cwUI.MTP4ZZEGqskGfQFSMM.2I/4waI0K0Za', '2025-01-11 16:20:09', 'users', 'Ivan', 'Ablanida', 'Blk 4 Lot 23', '09957939703', 4170, 1, '6295', '2025-01-12 14:21:56'),
+(48, 'ejthecoder@gmail.com', 'check.png', '$2y$10$sK2aUqOqwxpVGr7PMbZn/emmdmiMmiT5dDABUtw0ppR88o/TiF7I2', '2025-01-12 10:17:17', 'users', 'Ivan', 'Ablanida', 'Blk 4 Lot 23', '09957939703', 1726, 1, '9516', '2025-01-12 14:09:24');
 
 --
 -- Indexes for dumped tables
@@ -634,7 +632,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=136;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=142;
 
 --
 -- AUTO_INCREMENT for table `cms`
@@ -664,7 +662,7 @@ ALTER TABLE `event_list`
 -- AUTO_INCREMENT for table `event_packages`
 --
 ALTER TABLE `event_packages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 
 --
 -- AUTO_INCREMENT for table `extra`
@@ -724,7 +722,7 @@ ALTER TABLE `unavailable_days`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- Constraints for dumped tables

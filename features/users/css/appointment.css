@@ -234,3 +234,109 @@ body{
 
 
 /*Star Section End*/
+
+#calendar{
+    height: 80vh;
+    width: 80%;
+    display: flex;
+    margin: auto;
+    justify-content: center;
+}
+
+
+
+
+.fc-view-harness .fc-view-harness-active{
+    background-color: #FFFFFF;
+}
+
+.fc-daygrid-day-events{
+    display: none;
+}
+
+.fc .fc-daygrid-day-top{
+    position: relative;
+    bottom: 10px;
+}
+
+.calendar-container {
+    width: 70%;
+    margin: 0 auto;
+    padding-bottom: 30px;
+}
+
+.fc-toolbar-title{
+    padding-top: 15px;
+    font-size: 20px !important;
+}
+.fc-daygrid-day {
+    position: relative;
+    cursor: pointer;
+}
+.fc-daygrid-day:hover {
+    background-color: var(--blue-color);
+}
+
+
+.fc-daygrid-day-top a {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    font-weight: bold;
+    font-size: 25px;
+    height: 80px;
+    align-items: center;
+}
+.fc-daygrid-day:hover .fc-daygrid-day-top a {
+    color: white;
+}
+
+.fc-day-hidden {
+    display: none;
+}
+.fc-toolbar-chunk {
+    color: var(--blue-color);
+}
+.fc-scrollgrid-sync-inner a {
+    color: var(--blue-color);
+    text-decoration: none;
+}
+
+.fc-day, .fc-day-sat, .fc-day-past, .fc-daygrid-day{
+    height: 5vh;
+}
+
+.available{
+    width: 30px;
+    height: 30px;
+    background-color: #FFFFFF;
+    border: 1px solid #000;
+    flex-shrink: 0;
+}
+
+.booked{
+    width: 30px;
+    height: 30px;
+    background-color: #D2B48C;
+    border: 1px solid #000;
+    flex-shrink: 0;
+}
+.unavailable{
+    width: 30px;
+    height: 30px;
+    background-color: #FFBFBD;
+    border: 1px solid #000;
+    flex-shrink: 0;
+}
+
+
+.calendar-card{
+    height: 150px;
+    margin-top: 62px;
+    width: auto;
+    max-width: 50%;
+    padding: 10px;
+    flex-shrink: 0;
+}

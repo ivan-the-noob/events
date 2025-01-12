@@ -237,13 +237,10 @@ function formatTime($hour) {
 
             <div class="profile-admin">
                 <div class="dropdown">
-                   
-                   <?php if (!empty($image)): ?>
                         <button class="" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="../../../assets/profile/<?php echo htmlspecialchars($image); ?>" 
+                             <img src="../../../assets/logo.png" 
                                 style="width: 40px; height: 40px; object-fit: cover;">
                         </button>
-                    <?php endif; ?>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="../../users/function/authentication/logout.php">Logout</a>
                         </li>

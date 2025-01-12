@@ -59,18 +59,8 @@
     $stmt->execute();
     $result = $stmt->get_result();
 
-    $email = $_SESSION['email'];
-    $query = "SELECT image_profile FROM users WHERE email = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param('s', $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
 
-    $image = null;
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        $image = $row['image_profile'];
-    }
+   
     function formatTime($hour) {
         if ($hour == 0) {
             return '12:00 AM';
@@ -211,12 +201,10 @@
 
             <div class="profile-admin">
                 <div class="dropdown">
-                   <?php if (!empty($image)): ?>
-                        <button class="" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="../../../assets/profile/<?php echo htmlspecialchars($image); ?>" 
+                    <button class="" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                             <img src="../../../assets/logo.png" 
                                 style="width: 40px; height: 40px; object-fit: cover;">
                         </button>
-                    <?php endif; ?>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="../../users/function/authentication/logout.php">Logout</a>
                         </li>
@@ -270,49 +258,53 @@
 
             <div class="table-responsive">
             <table class="table mt-4">
-                <thead class="table-booking">
+        <thead class="table-booking">
+            <tr>
+                <th scope="col">Booking ID</th>
+                <th scope="col">Customer's Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Booking Date</th>
+                <th scope="col">Event Date</th>
+                <th scope="col">Event Start</th>
+                <th scope="col">Event End</th>
+                <th scope="col">View</th>
+                <th scope="col">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php 
+                $id = 1; 
+                while ($row = $result->fetch_assoc()): ?>
                     <tr>
-                        <th scope="col">Booking ID</th>
-                        <th scope="col">Customer's Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Booking Date</th>
-                        <th scope="col">Event Date</th>
-                        <th scope="col">Event Start</th>
-                        <th scope="col">Event End</th>
-                        <th scope="col">View</th>
-                        <th scope="col">Actions</th>
+                        <td><?php echo $id++; ?></td>
+                        <td><?php echo htmlspecialchars($row['full_name']); ?></td>
+                        <td><?php echo htmlspecialchars($row['email']); ?></td>
+                        <td><?php echo htmlspecialchars($row['created_at']); ?></td>
+                        <td><?php echo htmlspecialchars($row['events_date']); ?></td>
+                        <td><?php echo htmlspecialchars($row['event_starttime']); ?>:00</td>
+                        <td><?php echo htmlspecialchars($row['event_endtime']); ?>:00</td>
+                        <td>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#viewModal<?php echo $row['id']; ?>">View</button>
+                        </td>
+                        <td>
+                            <?php
+                            // Determine status
+                            if ($row['refund_status'] === 'full-refund' || $row['refund_status'] === 'half-refund') {
+                                echo '<span class="badge bg-danger">Refund</span>';
+                            } elseif ($row['status'] === 'Cancelled') {
+                                echo '<span class="badge bg-secondary">Cancelled</span>';
+                            } elseif ($row['status'] === 'Finished') {
+                                echo '<span class="badge bg-success">Finished</span>';
+                            } elseif ($row['status'] === 'Approved') {
+                                echo '<span class="badge bg-primary">Approved</span>';
+                            } else {
+                                echo '<span class="badge bg-warning">Pending</span>';
+                            }
+                            ?>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    <?php 
-                        $id = 1; 
-                        while ($row = $result->fetch_assoc()): ?>
-                            <tr>
-                            <td><?php echo $id++; ?></td>
-                                <td><?php echo htmlspecialchars($row['full_name']); ?></td>
-                                <td><?php echo htmlspecialchars($row['email']); ?></td>
-                                <td><?php echo htmlspecialchars($row['created_at']); ?></td>
-                                <td><?php echo htmlspecialchars($row['events_date']); ?></td>
-                                <td><?php echo formatTime(htmlspecialchars($row['event_starttime'])); ?></td>
-                                <td><?php echo formatTime(htmlspecialchars($row['event_endtime'])); ?></td>
-                                <td>
-                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#viewModal<?php echo $row['id']; ?>">View</button>
-                                </td>
-                                <td>
-                                    <!-- View button for opening the modal -->
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#foodModal_<?php echo $row['id']; ?>">View</button>
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#paymentImageModal" data-payment-image="<?php echo htmlspecialchars($row['payment_image']); ?>">View</button>
-                                </td>
-                                <td><?php echo htmlspecialchars($row['reference_no']); ?></td>
-                                <td>₱<?php echo number_format($row['cost'], 2); ?></td>
-                                <td>₱<?php echo number_format($row['payment_amount'], 2); ?></td>
-                                <td>₱<?php echo number_format($row['cost'] - $row['payment_amount'], 2); ?></td>
-                                
-                            </tr>
-
-                            <div class="modal fade" id="viewModal<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="viewModalLabel<?php echo $row['id']; ?>" aria-hidden="true">
+                    
+                    <div class="modal fade" id="viewModal<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="viewModalLabel<?php echo $row['id']; ?>" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -346,11 +338,11 @@
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="event_start_<?php echo $row['id']; ?>" class="form-label">Event Start</label>
-                                                    <input type="text" class="form-control" id="event_start_<?php echo $row['id']; ?>" value="<?php echo formatTime(htmlspecialchars($row['event_starttime'])); ?>" readonly>
+                                                    <input type="text" class="form-control" id="event_start_<?php echo $row['id']; ?>" value="<?php echo htmlspecialchars($row['event_starttime']); ?>:00" readonly>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="event_end_<?php echo $row['id']; ?>" class="form-label">Event End</label>
-                                                    <input type="text" class="form-control" id="event_end_<?php echo $row['id']; ?>" value="<?php echo formatTime(htmlspecialchars($row['event_endtime'])); ?>" readonly>
+                                                    <input type="text" class="form-control" id="event_end_<?php echo $row['id']; ?>" value="<?php echo htmlspecialchars($row['event_endtime']); ?>:00" readonly>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="event_type_<?php echo $row['id']; ?>" class="form-label">Event Type</label>
@@ -432,6 +424,33 @@
                                                     <?php endif; ?>
                                                 </div>
 
+                                                <div class="mb-3">
+                                                    <?php if (!is_null($row['gcash_name']) && !empty($row['gcash_name'])): ?>
+                                                        <label for="gcash_name<?php echo $row['id']; ?>" class="form-label">Gcash Name</label>
+                                                        <input type="text" class="form-control" id="gcash_name<?php echo $row['id']; ?>" value="<?php echo htmlspecialchars($row['gcash_name']); ?>" readonly>
+                                                    <?php endif; ?>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <?php if (!is_null($row['gcash_number']) && !empty($row['gcash_number'])): ?>
+                                                        <label for="gcash_number<?php echo $row['id']; ?>" class="form-label">Gcash Number</label>
+                                                        <input type="text" class="form-control" id="gcash_number<?php echo $row['id']; ?>" value="<?php echo htmlspecialchars($row['gcash_number']); ?>" readonly>
+                                                    <?php endif; ?>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <?php if (!is_null($row['refund_status']) && !empty($row['refund_status'])): ?>
+                                                        <label for="refund_status<?php echo $row['id']; ?>" class="form-label">Refund Status</label>
+                                                        <input type="text" class="form-control" id="refund_status<?php echo $row['id']; ?>" value="<?php echo htmlspecialchars($row['refund_status']); ?>" readonly>
+                                                    <?php endif; ?>
+                                                </div>
+
+                                               
+                                                
+
+
+
+
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -439,9 +458,9 @@
                                         </div>
                                     </div>
                                 </div>
-                        <?php endwhile; ?>
-                </tbody>
-            </table>
+                            <?php endwhile; ?>
+                        </tbody>
+                    </table>
             </div>
 
             <div class="modal fade" id="paymentImageModal" tabindex="-1" aria-labelledby="paymentImageModalLabel" aria-hidden="true">

@@ -39,7 +39,7 @@ if (isset($_POST['refund_status'], $_POST['id'], $_POST['refunded_amount'])) {
     $user_name = $user['full_name'];
 
     // Update refund_status and refunded_amount
-    $update_query = "UPDATE booking SET refund_status = ?, refunded_amount = ? WHERE id = ?";
+    $update_query = "UPDATE booking SET refund_status = ?, refunded_amount = ?, status = 'cancel' WHERE id = ?";
     $stmt = $conn->prepare($update_query);
     $stmt->bind_param('sdi', $refund_status, $refunded_amount, $id);
 

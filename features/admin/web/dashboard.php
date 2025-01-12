@@ -18,14 +18,25 @@ $rowDeclined = $resultDeclined->fetch_assoc();
 $waitingCount = $rowWaiting['waiting_count'];
 $declinedCount = $rowDeclined['declined_count'];
 
-$query = "SELECT SUM(cost) AS payment_amount FROM booking WHERE status = 'Finished'";
-$result = $conn->query($query);
+$query_payment = "SELECT SUM(cost) AS payment_amount FROM booking WHERE status = 'Finished'";
+$result_payment = $conn->query($query_payment);
 
-if ($result && $row = $result->fetch_assoc()) {
-    $payment_amount = $row['payment_amount'];
+if ($result_payment && $row_payment = $result_payment->fetch_assoc()) {
+    $payment_amount = $row_payment['payment_amount'];
 } else {
     $payment_amount = 0; 
 }
+
+$query_refund = "SELECT SUM(refunded_amount) AS refunded_amount FROM booking WHERE status = 'Finished' AND refund_status IN ('full-refund', 'half-refund')";
+$result_refund = $conn->query($query_refund);
+
+if ($result_refund && $row_refund = $result_refund->fetch_assoc()) {
+    $refund_amount = $row_refund['refunded_amount'];
+} else {
+    $refund_amount = 0; 
+}
+
+$total_sales = $payment_amount - $refund_amount;
 
 $email = $_SESSION['email'];
 $query = "SELECT image_profile FROM users WHERE email = ?";
@@ -173,7 +184,7 @@ if ($result->num_rows > 0) {
                 <div class="dropdown">
                    <?php if (!empty($image)): ?>
                         <button class="" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="../../../assets/profile/<?php echo htmlspecialchars($image); ?>" 
+                            <img src="../../../assets/logo.png" 
                                 style="width: 40px; height: 40px; object-fit: cover;">
                         </button>
                     <?php endif; ?>
@@ -195,7 +206,7 @@ if ($result->num_rows > 0) {
                             <div class="d-flex">
                                 <div class="col-md-12">
                                     <p class="mb-1">Total Sales</p>
-                                    <h5>₱<?php echo number_format($payment_amount, 2); ?></h5>
+                                    <h5>₱<?php echo number_format($total_sales, 2); ?></h5>
                                 </div>
                             </div>
                         </div>
@@ -241,7 +252,7 @@ if ($result->num_rows > 0) {
                 
                
                 <div class="col-md-9 mt-4">
-                    <h5>Approve Bookings</h5>
+                    <h5>Pending Bookings</h5>
                     <div class="card">
                         <table class="table">
                             <thead>
@@ -268,7 +279,7 @@ if ($result->num_rows > 0) {
                             </tbody>
                         </table>
                     </div>
-                    <a href="approve.php" class="d-flex justify-content-center text-decoration-none mt-2">Show all</a>
+                    <a href="pending.php" class="d-flex justify-content-center text-decoration-none mt-2">Show all</a>
 
                     <h5 class="mt-4">Cancelled Bookings</h5>
                     <div class="card">
