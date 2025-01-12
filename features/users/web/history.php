@@ -218,10 +218,22 @@
                                        
 
                                         <!-- Payment Amount -->
-                                        <div class="mb-3">
-                                            <label for="paymentAmount-<?php echo $booking['id']; ?>" class="form-label">Payment Amount</label>
-                                            <input type="number" class="form-control" id="paymentAmount-<?php echo $booking['id']; ?>" name="payment_amount" placeholder="Enter payment amount (min: PHP <?php echo number_format($min_payment, 2); ?>)" min="<?php echo $min_payment; ?>" required>
-                                        </div>
+                                        <?php if (!empty($booking['payment_amount']) && !empty($booking['reference_no'])): ?>
+                                                <div class="d-flex justify-content-between">
+                                                    <p class="mb-1"><span class="info-label">Downpayment</span></p>
+                                                    <p>₱<?php echo number_format($booking['payment_amount'], 2); ?></p>
+                                                </div>
+                                                <?php if ($booking['add_payment'] != 0): ?>
+                                                    <div class="d-flex justify-content-between">
+                                                        <p class="mb-1"><span class="info-label">Additional Payment</span></p>
+                                                        <p>₱<?php echo number_format(htmlspecialchars($booking['add_payment']), 2); ?></p>
+                                                    </div>
+                                                <?php endif; ?>
+                                                <div class="d-flex justify-content-between">
+                                                    <p class="mb-1"><span class="info-label">Remaining Amount</span></p>
+                                                    <p class="remaining">₱<?php echo number_format($booking['cost'] - $booking['payment_amount'] - $booking['add_payment'], 2); ?></p>
+                                                </div>
+                                            <?php endif; ?>
 
                                         <!-- Reference Number -->
                                         <div class="mb-3">
@@ -421,8 +433,9 @@
                 </div>
                 <div class="d-flex justify-content-between">
                     <p class="mb-1"><span class="info-label">Event Options:</span></p>
-                    <p><?php echo htmlspecialchars($booking['event_options']); ?></p>
+                    <p><?php echo htmlspecialchars($booking['event_options'] ?? 'None'); ?></p>
                 </div>
+
                 <div class="d-flex justify-content-between">
                     <p class="mb-1"><span class="info-label">Type of Event:</span></p>
                     <p><?php echo htmlspecialchars($booking['event_type']); ?></p>
@@ -455,6 +468,9 @@
                         <p>₱<?php echo number_format(htmlspecialchars($booking['corkage_fee']), 2); ?></p>
                     </div>
                 <?php endif; ?>
+
+
+
 
                 <?php if (!empty($booking['payment_amount']) && !empty($booking['reference_no'])): ?>
                     <div class="d-flex justify-content-between">
