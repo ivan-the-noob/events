@@ -17,18 +17,6 @@ $total_pages = ceil($total_records / $limit);
 $query = "SELECT * FROM booking LIMIT $limit OFFSET $offset";
 $result = $conn->query($query);
 
-$email = $_SESSION['email'];
-$query = "SELECT image_profile FROM users WHERE email = ?";
-$stmt = $conn->prepare($query);
-$stmt->bind_param('s', $email);
-$stmt->execute();
-$result = $stmt->get_result();
-
-$image = null;
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    $image = $row['image_profile'];
-}
 
 
 ?>

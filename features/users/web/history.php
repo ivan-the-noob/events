@@ -405,7 +405,7 @@
                     </div>
                 <div class="d-flex justify-content-between">
                     <p class="mb-1"><span class="info-label">Event's Time</span></p>
-                    <p><?php echo formatTime(htmlspecialchars($booking['event_starttime'])); ?> - <?php echo htmlspecialchars($booking['event_endtime']); ?>: 00 PM</p>
+                    <p><?php echo formatTime(htmlspecialchars($booking['event_starttime'])); ?> - <?php echo formatTime(htmlspecialchars($booking['event_endtime'])); ?></p>
                 </div>
                 <div class="d-flex justify-content-between">       
                     <p class="mb-1"><span class="info-label">Celebrant's Name</span></p>
@@ -455,9 +455,6 @@
                         <p>₱<?php echo number_format(htmlspecialchars($booking['corkage_fee']), 2); ?></p>
                     </div>
                 <?php endif; ?>
-
-
-
 
                 <?php if (!empty($booking['payment_amount']) && !empty($booking['reference_no'])): ?>
                     <div class="d-flex justify-content-between">

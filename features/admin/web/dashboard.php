@@ -38,18 +38,7 @@ if ($result_refund && $row_refund = $result_refund->fetch_assoc()) {
 
 $total_sales = $payment_amount - $refund_amount;
 
-$email = $_SESSION['email'];
-$query = "SELECT image_profile FROM users WHERE email = ?";
-$stmt = $conn->prepare($query);
-$stmt->bind_param('s', $email);
-$stmt->execute();
-$result = $stmt->get_result();
 
-$image = null;
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    $image = $row['image_profile'];
-}
 
 
 ?>
