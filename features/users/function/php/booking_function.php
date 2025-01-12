@@ -2,16 +2,26 @@
 require '../../../../db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+<<<<<<< Updated upstream
 
     echo '<pre>';
     print_r($_POST); 
     echo '</pre>';
 
+=======
+    var_dump($_POST);  // Display the form data
+
+    // Get data from form
+>>>>>>> Stashed changes
     $full_name = $_POST['full_name'];
     $celebrants_name = $_POST['celebrants_name'];
     $email = $_POST['email'];
     $phone_number = $_POST['phone_number'];
+<<<<<<< Updated upstream
     $events_date = $_POST['events_date'];
+=======
+    $event_date = $_POST['event_date'];  // Make sure this field is populated correctly
+>>>>>>> Stashed changes
     $guest_count = $_POST['guest_count'];
     $event_duration = $_POST['event_duration'];
     $event_starttime = $_POST['event_starttime'];
@@ -21,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $cost = $_POST['cost'];
     $theme = $_POST['theme'];
 
+<<<<<<< Updated upstream
     // Get dish options
     $beef_dish = isset($_POST['beef_dish']) ? $_POST['beef_dish'] : null;
     $pork_dish = isset($_POST['pork_dish']) ? $_POST['pork_dish'] : null;
@@ -47,15 +58,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($stmt->execute()) {
             header("Location: ../../web/history.php");
             exit();
+=======
+    // Prepare the SQL statement
+    $sql = "INSERT INTO booking (full_name, celebrants_name, email, phone_number, event_date, guest_count, event_duration, event_starttime, event_endtime, event_type, event_package, event_options) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+    // Prepare statement
+    if ($stmt = $conn->prepare($sql)) {
+        // Bind parameters
+        $stmt->bind_param("sssssiisssss", $full_name, $celebrants_name, $email, $phone_number, $event_date, $guest_count, $event_duration, $event_starttime, $event_endtime, $event_type, $event_package, $event_options);
+
+        // Execute the query
+        if ($stmt->execute()) {
+            echo "Booking successfully created!";
+>>>>>>> Stashed changes
         } else {
             echo "Error: " . $stmt->error;
         }
 
+<<<<<<< Updated upstream
+=======
+        // Close the statement
+>>>>>>> Stashed changes
         $stmt->close();
     } else {
         echo "Error preparing statement: " . $conn->error;
     }
 
+    // Close the database connection
     $conn->close();
 }
 ?>
