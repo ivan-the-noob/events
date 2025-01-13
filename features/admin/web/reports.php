@@ -280,7 +280,6 @@
                         </td>
                         <td>
                             <?php
-                            // Determine status
                             if ($row['refund_status'] === 'full-refund' || $row['refund_status'] === 'half-refund') {
                                 echo '<span class="badge bg-danger">Refund</span>';
                             } elseif ($row['status'] === 'Cancelled') {
